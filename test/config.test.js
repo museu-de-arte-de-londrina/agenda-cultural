@@ -61,7 +61,7 @@ test('seo.description cai para a tagline quando existe', () => {
 
 test('campo obrigatório faltando quebra o build', () => {
   rejects({ profile: {}, links: [] }, /profile\.name: campo obrigatório/);
-  rejects({ links: [] }, /profile: campo obrigatório|profile: Required/);
+  rejects({ links: [] }, /profile: campo obrigatório/);
   rejects({ profile: { name: 'Ada' }, links: [{ label: 'Site' }] }, /links\[0\]\.url: campo obrigatório/);
 });
 
@@ -109,7 +109,7 @@ test('footer é opcional e passa pela mesma allowlist de URL', () => {
 
   rejects({ ...minimal(), footer: { url: 'javascript:alert(1)' } }, /footer\.url: URL inválida/);
   rejects({ ...minimal(), footer: { logo: '//evil.example.com/a.png' } }, /footer\.logo: imagem inválida/);
-  rejects({ ...minimal(), footer: { txt: 'x' } }, /footer: Unrecognized key/);
+  rejects({ ...minimal(), footer: { txt: 'x' } }, /footer: chave desconhecida: "txt"/);
 });
 
 test('ícone desconhecido quebra o build e sugere alternativas', () => {
@@ -120,8 +120,8 @@ test('ícone desconhecido quebra o build e sugere alternativas', () => {
 });
 
 test('chave desconhecida quebra o build (pega erro de digitação)', () => {
-  rejects({ ...minimal(), profiel: {} }, /Unrecognized key/);
-  rejects({ ...minimal(), profile: { name: 'Ada', taglines: 'x' } }, /profile: Unrecognized key/);
+  rejects({ ...minimal(), profiel: {} }, /\(raiz\): chave desconhecida: "profiel"/);
+  rejects({ ...minimal(), profile: { name: 'Ada', taglines: 'x' } }, /profile: chave desconhecida: "taglines"/);
 });
 
 test('todos os problemas são reportados de uma vez', () => {
