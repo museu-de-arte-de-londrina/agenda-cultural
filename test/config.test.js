@@ -31,7 +31,7 @@ test('config válido é aceito e normalizado', () => {
     profile: { name: '  Ada Lovelace  ', tagline: 'Matemática', avatar: 'assets/avatar.svg' },
     theme: { mode: 'dark', accent: '#2563eb' },
     links: [{ label: 'Site', url: 'https://example.com', icon: 'github', highlight: true }],
-    social: [{ platform: 'linkedin', url: 'https://linkedin.com/in/ada' }],
+    social: [{ platform: 'mastodon', url: 'https://mastodon.social/@ada' }],
     seo: { title: 'Ada', description: 'links', base_url: 'https://ada.example.com/links' },
   });
 

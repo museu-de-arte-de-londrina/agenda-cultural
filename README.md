@@ -167,14 +167,19 @@ seo:
 O campo `icon` (em `links`) e `platform` (em `social`) aceitam:
 
 - **qualquer slug do [Simple Icons](https://simpleicons.org)** — `github`,
-  `linkedin`, `instagram`, `whatsapp`, `youtube`, `mastodon`, `spotify`,
-  `bluesky`, `tiktok`, `telegram`, e mais de 3 mil outros;
+  `instagram`, `whatsapp`, `youtube`, `mastodon`, `spotify`, `bluesky`,
+  `tiktok`, `telegram`, e mais de 3 mil outros;
 - **três genéricos**, para o que não é marca: `email`, `website`, `link`.
 
 Os ícones são embutidos no HTML durante o build. Nada é baixado de CDN, então
 o IP do visitante nunca chega a um terceiro.
 
 Nome errado quebra o build com a lista de alternativas — sem ícone fantasma.
+
+> Marcas entram e saem do Simple Icons: a LinkedIn, por exemplo, pediu a
+> remoção do próprio logo e ele não existe mais a partir da versão 14. Quando
+> uma atualização remove um ícone que você usa, o build falha apontando o
+> campo — troque por outro slug ou por um genérico.
 
 ## Desenvolvimento local
 
