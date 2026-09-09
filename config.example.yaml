@@ -1,0 +1,87 @@
+# ---------------------------------------------------------------------------
+# config.example.yaml — modelo comentado.
+#
+# Copie para config.yaml e edite. Esse é o ÚNICO arquivo que você precisa
+# tocar: nada de HTML, CSS ou JS. Rode `npm run validate` antes de publicar.
+#
+# Campos marcados (opcional) podem ser removidos; o default está indicado.
+# ---------------------------------------------------------------------------
+
+# (opcional, default: pt-BR) Tag BCP 47 usada no <html lang>. Importante para
+# leitores de tela e para a hifenização do navegador.
+lang: pt-BR
+
+profile:
+  # (obrigatório) Até 80 caracteres.
+  name: Ada Lovelace
+
+  # (opcional, default: vazio — o parágrafo some) Até 160 caracteres.
+  tagline: Matemática. Primeira programadora do mundo.
+
+  # (opcional, default: nenhum — vira um círculo com as iniciais)
+  # Caminho relativo dentro de src/assets/, ou uma URL https://
+  avatar: assets/avatar.svg
+
+# (opcional, o bloco inteiro pode sumir)
+theme:
+  # (opcional, default: auto) light | dark | auto
+  # auto respeita o prefers-color-scheme do sistema do visitante.
+  mode: auto
+
+  # (opcional, default: "#3b82f6") Cor hex, #rgb ou #rrggbb.
+  # A cor do texto sobre o accent é calculada no build para garantir AA.
+  accent: "#2563eb"
+
+# (opcional, default: lista vazia) Os botões principais, na ordem em que aparecem.
+links:
+  - # (obrigatório) Até 80 caracteres.
+    label: Meu site
+    # (obrigatório) Só https://, mailto: ou tel:. Qualquer outro esquema
+    # (javascript:, data:, vbscript:) quebra o build de propósito.
+    url: https://example.com
+    # (opcional, default: sem ícone) Slug do simple-icons (github, linkedin,
+    # instagram, mastodon, youtube, ...) ou um genérico: email, website, link.
+    icon: website
+    # (opcional, default: false) Pinta o botão com a cor de destaque.
+    highlight: true
+
+  - label: Código no GitHub
+    url: https://github.com/octocat
+    icon: github
+
+  - label: Me manda um e-mail
+    url: mailto:ada@example.com
+    icon: email
+
+  - label: Me liga
+    url: tel:+5543999999999
+
+# (opcional, default: lista vazia) Ícones redondos no rodapé do cartão.
+social:
+  - # (obrigatório) Mesmo conjunto de nomes do campo `icon`.
+    # Vira também o rótulo acessível do link.
+    platform: github
+    # (obrigatório) Mesma allowlist de esquemas.
+    url: https://github.com/octocat
+
+  - platform: linkedin
+    url: https://www.linkedin.com/in/octocat
+
+  - platform: mastodon
+    url: https://mastodon.social/@octocat
+
+# (opcional, o bloco inteiro pode sumir)
+seo:
+  # (opcional, default: profile.name) Até 70 caracteres.
+  title: Ada Lovelace — links
+
+  # (opcional, default: profile.tagline, ou profile.name) Até 200 caracteres.
+  description: Todos os meus links em um lugar só.
+
+  # (opcional, default: profile.avatar) Imagem do card de compartilhamento.
+  og_image: assets/avatar.svg
+
+  # (opcional, default: nenhum) Endereço final do site, com https://.
+  # Sem ele, og:image e <link rel="canonical"> são omitidos quando as imagens
+  # são caminhos relativos — porque Open Graph exige URL absoluta.
+  base_url: https://octocat.github.io/links
