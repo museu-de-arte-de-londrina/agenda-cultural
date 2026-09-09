@@ -85,6 +85,33 @@ test('URL com javascript: quebra o build em vez de virar página', () => {
   rejects({ profile: { name: 'Ada', avatar: 'javascript:alert(1)' } }, /profile\.avatar: imagem inválida/);
 });
 
+test('avatar_shape tem default e recusa valor fora do enum', () => {
+  assert.equal(parseConfig(minimal()).profile.avatar_shape, 'circle');
+  assert.equal(
+    parseConfig({ ...minimal(), profile: { name: 'Ada', avatar_shape: 'square' } }).profile.avatar_shape,
+    'square',
+  );
+  rejects(
+    { ...minimal(), profile: { name: 'Ada', avatar_shape: 'redondo' } },
+    /profile\.avatar_shape: deve ser 'circle' ou 'square'/,
+  );
+});
+
+test('footer é opcional e passa pela mesma allowlist de URL', () => {
+  assert.equal(parseConfig(minimal()).footer, undefined);
+
+  const config = parseConfig({
+    ...minimal(),
+    footer: { logo: 'assets/orgao.png', text: 'Secretaria', url: 'https://example.org' },
+  });
+  assert.equal(config.footer.text, 'Secretaria');
+  assert.equal(config.footer.url, 'https://example.org/');
+
+  rejects({ ...minimal(), footer: { url: 'javascript:alert(1)' } }, /footer\.url: URL inválida/);
+  rejects({ ...minimal(), footer: { logo: '//evil.example.com/a.png' } }, /footer\.logo: imagem inválida/);
+  rejects({ ...minimal(), footer: { txt: 'x' } }, /footer: Unrecognized key/);
+});
+
 test('ícone desconhecido quebra o build e sugere alternativas', () => {
   rejects(
     { ...minimal(), links: [{ label: 'x', url: 'https://a.example.com', icon: 'naoexiste' }] },

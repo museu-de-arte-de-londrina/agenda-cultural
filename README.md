@@ -105,6 +105,7 @@ Campos sem "obrigatório" podem ser omitidos — o default entra no lugar.
 | `profile.name` | texto, até 80 | **sim** | — | Título da página e `<h1>`. |
 | `profile.tagline` | texto, até 160 | não | vazio | Linha sob o nome. Omitida, o parágrafo some. |
 | `profile.avatar` | caminho ou URL `https://` | não | nenhum | Sem avatar, aparece um círculo com as iniciais do nome. |
+| `profile.avatar_shape` | `circle` \| `square` | não | `circle` | `square` para logotipos: o círculo corta os cantos e come o nome da marca. |
 
 Imagens locais vão em `src/assets/` e são referenciadas como
 `assets/nome-do-arquivo.png`.
@@ -161,6 +162,17 @@ relativos. Com ele, tudo é resolvido corretamente:
 seo:
   base_url: https://seu-usuario.github.io/nome-do-repo
 ```
+
+### `footer`
+
+Selo institucional abaixo do cartão — útil quando a página pertence a um órgão
+ou a uma organização maior. O bloco inteiro é opcional.
+
+| Campo | Tipo | Obrigatório | Default | Descrição |
+| --- | --- | --- | --- | --- |
+| `footer.logo` | caminho ou URL `https://` | não | nenhum | Logotipo. Fica num box de tamanho fixo, então não causa layout shift. |
+| `footer.text` | texto, até 120 | não | nenhum | Texto ao lado do logotipo. Havendo texto, o logotipo vira decorativo (`alt=""`) e não é lido duas vezes. |
+| `footer.url` | URL `https:`, `mailto:` ou `tel:` | não | nenhum | Havendo URL, o selo inteiro vira link. Mesma allowlist dos demais campos. |
 
 ### Ícones
 
@@ -230,6 +242,14 @@ direto pelo `actions/deploy-pages`, sem branch `gh-pages`.
 
 Se preferir versionar o domínio junto com o código, crie um arquivo
 `src/CNAME` com o domínio em uma linha — ele é copiado para a raiz do site.
+
+## Limitações conhecidas
+
+- **Os textos da interface são fixos em português.** `lang` muda o atributo do
+  `<html>`, mas o skip link e os rótulos de navegação continuam em pt-BR.
+  Traduzi-los exige editar `src/index.njk`. i18n de verdade está fora do escopo.
+- **CSP por `<meta>`** não aplica `frame-ancestors`
+  ([detalhes](SECURITY.md#limitação-conhecida-csp-por-meta)).
 
 ## Segurança e acessibilidade
 

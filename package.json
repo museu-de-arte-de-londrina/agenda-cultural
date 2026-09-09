@@ -17,7 +17,7 @@
   },
   "devDependencies": {
     "@11ty/eleventy": "^3.1.6",
-    "@eslint/js": "^9.39.5",
+    "@eslint/js": "^10.0.1",
     "eslint": "^10.10.0",
     "simple-icons": "^16.30.0",
     "yaml": "^2.9.0",
