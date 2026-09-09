@@ -1,0 +1,64 @@
+# Único arquivo que precisa ser editado para mudar o site.
+# Referência completa dos campos: README.md
+# Antes de publicar, confira: npm run validate
+
+lang: pt-BR
+
+profile:
+  name: Museu de Arte de Londrina
+  tagline: Agenda, exposições e canais oficiais do museu em um só lugar.
+  avatar: assets/avatar.svg
+
+theme:
+  mode: auto
+  accent: "#a4343a"
+
+links:
+  - label: Programação e visitação
+    url: https://londrinacultura.londrina.pr.gov.br/espaco/1/
+    icon: website
+    highlight: true
+
+  - label: O museu no portal da Prefeitura
+    url: https://portal.londrina.pr.gov.br/espacos-culturais/museu-arte-sec-cultura
+    icon: link
+
+  - label: Instagram do museu
+    url: https://www.instagram.com/museudeartedelondrina/
+    icon: instagram
+
+  - label: Fale conosco no WhatsApp
+    url: https://wa.me/554333716607
+    icon: whatsapp
+
+  - label: Vídeos no Londrina Cultura
+    url: https://www.youtube.com/@LondrinaCultura
+    icon: youtube
+
+  - label: Coleção Vladimir Kozák — Semana Nacional de Museus
+    url: https://visite.museus.gov.br/24a-semana-nacional-de-museus/a-riqueza-de-um-patrimonio-em-movimento-por-dentro-da-vida-e-da-colecao-vladimir-kozaz/
+    icon: link
+
+  - label: Notícias do museu no blog da Prefeitura
+    url: https://blog.londrina.pr.gov.br/?s=museu+de+arte
+    icon: link
+
+  - label: Instagram da Secretaria de Cultura
+    url: https://www.instagram.com/secretariadeculturalondrina/
+    icon: instagram
+
+social:
+  - platform: instagram
+    url: https://www.instagram.com/museudeartedelondrina/
+
+  - platform: youtube
+    url: https://www.youtube.com/@LondrinaCultura
+
+  - platform: whatsapp
+    url: https://wa.me/554333716607
+
+seo:
+  title: Museu de Arte de Londrina
+  description: Links oficiais do Museu de Arte de Londrina — programação, exposições, redes sociais e contato.
+  og_image: assets/avatar.svg
+  base_url: https://egydiobneto.github.io/agenda-cultural
