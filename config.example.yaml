@@ -43,8 +43,8 @@ links:
     # (obrigatório) Só https://, mailto: ou tel:. Qualquer outro esquema
     # (javascript:, data:, vbscript:) quebra o build de propósito.
     url: https://example.com
-    # (opcional, default: sem ícone) Slug do simple-icons (github, linkedin,
-    # instagram, mastodon, youtube, ...) ou um genérico: email, website, link.
+    # (opcional, default: sem ícone) Slug do simple-icons (github, instagram,
+    # mastodon, youtube, ...) ou um genérico: email, website, link.
     icon: website
     # (opcional, default: false) Pinta o botão com a cor de destaque.
     highlight: true
@@ -68,8 +68,8 @@ social:
     # (obrigatório) Mesma allowlist de esquemas.
     url: https://github.com/octocat
 
-  - platform: linkedin
-    url: https://www.linkedin.com/in/octocat
+  - platform: bluesky
+    url: https://bsky.app/profile/octocat.bsky.social
 
   - platform: mastodon
     url: https://mastodon.social/@octocat
