@@ -112,7 +112,7 @@ const iconField = z
     if (resolveIcon(slug) === null) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: `ícone desconhecido: ${JSON.stringify(value)}. Use um slug do simple-icons (github, linkedin, instagram, ...) ou um genérico: ${GENERIC_ICON_NAMES.join(', ')}`,
+        message: `ícone desconhecido: ${JSON.stringify(value)}. Use um slug listado em simpleicons.org, ou um genérico: ${GENERIC_ICON_NAMES.join(', ')}`,
       });
       return z.NEVER;
     }
