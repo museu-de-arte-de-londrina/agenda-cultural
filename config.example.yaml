@@ -22,6 +22,10 @@ profile:
   # Caminho relativo dentro de src/assets/, ou uma URL https://
   avatar: assets/avatar.svg
 
+  # (opcional, default: circle) circle | square
+  # Use square para logotipos: o círculo corta os cantos e come o nome da marca.
+  avatar_shape: circle
+
 # (opcional, o bloco inteiro pode sumir)
 theme:
   # (opcional, default: auto) light | dark | auto
@@ -85,3 +89,13 @@ seo:
   # Sem ele, og:image e <link rel="canonical"> são omitidos quando as imagens
   # são caminhos relativos — porque Open Graph exige URL absoluta.
   base_url: https://octocat.github.io/links
+
+# (opcional, o bloco inteiro pode sumir) Selo institucional abaixo do cartão.
+footer:
+  # (opcional) Caminho ou URL https:// do logotipo.
+  logo: assets/avatar.svg
+  # (opcional) Texto ao lado do logotipo. Existindo, o logotipo vira
+  # decorativo e não é lido duas vezes pelo leitor de tela.
+  text: Uma organização qualquer
+  # (opcional) Mesma allowlist de esquemas dos demais links.
+  url: https://example.org

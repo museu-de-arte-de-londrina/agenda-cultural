@@ -131,6 +131,12 @@ const profileSchema = z
     name: text(80),
     tagline: text(160).optional(),
     avatar: imageField.optional(),
+    // A circle crops the corners, which eats the wordmark on most logos.
+    avatar_shape: z
+      .enum(['circle', 'square'], {
+        errorMap: () => ({ message: "deve ser 'circle' ou 'square'" }),
+      })
+      .default('circle'),
   })
   .strict();
 
@@ -158,6 +164,16 @@ const linkSchema = z
     highlight: z.boolean({ invalid_type_error: 'deve ser true ou false' }).default(false),
   })
   .strict();
+
+/** Institutional mark shown under the card. */
+const footerSchema = z
+  .object({
+    logo: imageField.optional(),
+    text: text(120).optional(),
+    url: urlField.optional(),
+  })
+  .strict()
+  .optional();
 
 const socialSchema = z
   .object({
@@ -207,6 +223,7 @@ export const configSchema = z
     social: z.array(socialSchema, { invalid_type_error: 'deve ser uma lista' }).default([]),
     theme: themeSchema,
     seo: seoSchema,
+    footer: footerSchema,
   })
   .strict()
   .transform(applyDerivedDefaults);
