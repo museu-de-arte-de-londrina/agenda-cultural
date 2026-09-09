@@ -1,0 +1,33 @@
+{
+  "name": "agenda-cultural",
+  "version": "1.0.0",
+  "private": false,
+  "description": "Agregador de links estatico, editavel por um unico config.yaml, publicado no GitHub Pages.",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "validate": "node scripts/validate-config.js",
+    "test": "node --test \"test/*.test.js\"",
+    "lint": "eslint .",
+    "build": "npm run validate && eleventy",
+    "dev": "eleventy --serve"
+  },
+  "devDependencies": {
+    "@11ty/eleventy": "^3.1.6",
+    "@eslint/js": "^9.39.5",
+    "eslint": "^9.39.5",
+    "simple-icons": "^13.21.0",
+    "yaml": "^2.9.0",
+    "zod": "^3.25.76"
+  },
+  "keywords": [
+    "linktree",
+    "eleventy",
+    "github-pages",
+    "static-site",
+    "yaml"
+  ]
+}
