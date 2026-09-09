@@ -7,12 +7,12 @@ lang: pt-BR
 profile:
   name: Museu de Arte de Londrina
   tagline: Agenda, exposições e canais oficiais do museu em um só lugar.
-  avatar: assets/museu-de-arte-de-londrina.png
+  avatar: assets/museu-33-anos.png
   avatar_shape: square
 
 theme:
   mode: auto
-  accent: "#106070"
+  accent: "#004080"
 
 links:
   - label: Programação e visitação
@@ -63,7 +63,7 @@ social:
 seo:
   title: Museu de Arte de Londrina
   description: Links oficiais do Museu de Arte de Londrina — programação, exposições, redes sociais e contato.
-  og_image: assets/og-museu-de-arte-de-londrina.png
+  og_image: assets/og-museu-33-anos.png
   base_url: https://museu-de-arte-de-londrina.github.io/agenda-cultural
 
 footer:

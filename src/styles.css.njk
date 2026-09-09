@@ -118,12 +118,13 @@ body {
 }
 
 /* Logos carry a wordmark that a circle would crop, so they get a box and
-   are contained rather than cropped. */
+   are contained rather than cropped. The plate follows the theme instead of
+   being hardcoded white, so a logo that brings its own background fills the
+   box cleanly and one that does not still sits on a readable surface. */
 .avatar--square {
   border-radius: 1rem;
   object-fit: contain;
-  background: #ffffff;
-  padding: 0.375rem;
+  background: var(--surface);
 }
 
 .avatar--initials {
