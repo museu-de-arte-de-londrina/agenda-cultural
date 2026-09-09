@@ -4,11 +4,9 @@
 
 Encontrou uma vulnerabilidade? **Não abra uma issue pública.**
 
-Use um destes canais:
-
-1. **GitHub Security Advisories** (preferido) — aba *Security* > *Report a
-   vulnerability*. O relato fica privado até existir correção.
-2. **E-mail** — <egydiobolonhezi@gmail.com>, com `[security]` no assunto.
+Use o **GitHub Security Advisories**: aba *Security* > *Report a
+vulnerability*, neste repositório. O relato fica privado entre você e os
+mantenedores até existir correção, e não expõe endereço de e-mail de ninguém.
 
 Ajuda muito incluir: o que acontece, como reproduzir, versão/commit afetado e
 o impacto que você enxerga.
