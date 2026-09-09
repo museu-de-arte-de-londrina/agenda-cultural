@@ -21,7 +21,7 @@
     "eslint": "^10.10.0",
     "simple-icons": "^13.21.0",
     "yaml": "^2.9.0",
-    "zod": "^3.25.76"
+    "zod": "^4.5.4"
   },
   "keywords": [
     "linktree",
