@@ -7,11 +7,12 @@ lang: pt-BR
 profile:
   name: Museu de Arte de Londrina
   tagline: Agenda, exposições e canais oficiais do museu em um só lugar.
-  avatar: assets/avatar.svg
+  avatar: assets/museu-de-arte-de-londrina.png
+  avatar_shape: square
 
 theme:
   mode: auto
-  accent: "#a4343a"
+  accent: "#106070"
 
 links:
   - label: Programação e visitação
@@ -42,7 +43,7 @@ links:
     url: https://blog.londrina.pr.gov.br/?s=museu+de+arte
     icon: link
 
-  - label: Instagram da Secretaria de Cultura
+  - label: Secretaria Municipal de Cultura
     url: https://www.instagram.com/secretariadeculturalondrina/
     icon: instagram
 
@@ -62,5 +63,10 @@ social:
 seo:
   title: Museu de Arte de Londrina
   description: Links oficiais do Museu de Arte de Londrina — programação, exposições, redes sociais e contato.
-  og_image: assets/avatar.svg
+  og_image: assets/og-museu-de-arte-de-londrina.png
   base_url: https://museu-de-arte-de-londrina.github.io/agenda-cultural
+
+footer:
+  logo: assets/prefeitura-londrina.png
+  text: Secretaria Municipal de Cultura
+  url: https://portal.londrina.pr.gov.br

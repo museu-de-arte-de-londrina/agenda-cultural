@@ -49,9 +49,9 @@ permalink: /index.html
     <main class="card">
       <header class="profile">
         {%- if site.profile.avatar %}
-        <img class="avatar" src="{{ site.profile.avatar }}" width="112" height="112" alt="Foto de {{ site.profile.name }}">
+        <img class="avatar avatar--{{ site.profile.avatar_shape }}" src="{{ site.profile.avatar }}" width="112" height="112" alt="{{ site.profile.name }}">
         {%- else %}
-        <p class="avatar avatar--initials" aria-hidden="true">{{ site.initials }}</p>
+        <p class="avatar avatar--{{ site.profile.avatar_shape }} avatar--initials" aria-hidden="true">{{ site.initials }}</p>
         {%- endif %}
         <h1>{{ site.profile.name }}</h1>
         {%- if site.profile.tagline %}
@@ -89,5 +89,27 @@ permalink: /index.html
       </nav>
       {%- endif %}
     </main>
+
+    {%- if site.footer %}
+    <footer class="footer">
+      {%- if site.footer.url %}
+      <a class="footer__inner" href="{{ site.footer.url }}" target="_blank" rel="noopener noreferrer">
+        {%- if site.footer.logo %}
+        {#- Decorative when the text below already names it, so it is not read twice. -#}
+        <img class="footer__logo" src="{{ site.footer.logo }}" width="128" height="32" alt="{{ '' if site.footer.text else 'Logotipo institucional' }}">
+        {%- endif %}
+        {%- if site.footer.text %}<span class="footer__text">{{ site.footer.text }}</span>{% endif %}
+      </a>
+      {%- else %}
+      <div class="footer__inner">
+        {%- if site.footer.logo %}
+        {#- Decorative when the text below already names it, so it is not read twice. -#}
+        <img class="footer__logo" src="{{ site.footer.logo }}" width="128" height="32" alt="{{ '' if site.footer.text else 'Logotipo institucional' }}">
+        {%- endif %}
+        {%- if site.footer.text %}<span class="footer__text">{{ site.footer.text }}</span>{% endif %}
+      </div>
+      {%- endif %}
+    </footer>
+    {%- endif %}
   </body>
 </html>

@@ -100,6 +100,24 @@ test('sem avatar, cai para as iniciais e não gera img quebrada', async () => {
   assert.match(html, /avatar--initials[^>]*>AL</);
 });
 
+test('o selo do rodapé não faz o leitor de tela repetir o texto', async () => {
+  const html = await render(`
+profile:
+  name: Ada
+footer:
+  logo: assets/avatar.svg
+  text: Secretaria Municipal de Cultura
+  url: https://example.org
+`);
+
+  assert.match(html, /<img class="footer__logo"[^>]*alt=""/, 'logo com texto ao lado deve ser decorativa');
+  assert.match(html, /<img class="footer__logo"[^>]*width="128"[^>]*height="32"/, 'espaço reservado');
+  assert.match(html, /class="footer__inner" href="https:\/\/example\.org\/"[^>]*rel="noopener noreferrer"/);
+
+  const semTexto = await render('profile:\n  name: Ada\nfooter:\n  logo: assets/avatar.svg\n');
+  assert.match(semTexto, /<img class="footer__logo"[^>]*alt="Logotipo institucional"/, 'sem texto, precisa de alt');
+});
+
 test('config inválido derruba o build em vez de renderizar', async () => {
   await assert.rejects(
     () => render('profile:\n  name: Ada\nlinks:\n  - label: x\n    url: "javascript:alert(1)"\n'),
