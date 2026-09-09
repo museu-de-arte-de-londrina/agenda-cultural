@@ -1,0 +1,93 @@
+---
+permalink: /index.html
+---
+{#-
+  Every value below comes from config.yaml and is rendered through Nunjucks
+  autoescaping. Nothing is marked `| safe`: icons are drawn from validated
+  path data, never from raw markup. See SECURITY.md.
+-#}
+{%- macro icon(data) -%}
+<svg class="icon{% if not data.fill %} icon--stroke{% endif %}" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">{% for d in data.paths %}<path d="{{ d }}"/>{% endfor %}</svg>
+{%- endmacro -%}
+<!doctype html>
+<html lang="{{ site.lang }}">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {#- GitHub Pages cannot set response headers, so the policy ships as a meta tag. -#}
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https:; style-src 'self'; script-src 'none'; font-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'">
+    <meta name="referrer" content="no-referrer">
+    <meta name="color-scheme" content="{{ 'light dark' if site.theme.mode == 'auto' else site.theme.mode }}">
+
+    <title>{{ site.seo.title }}</title>
+    <meta name="description" content="{{ site.seo.description }}">
+    {%- if site.canonical %}
+    <link rel="canonical" href="{{ site.canonical }}">
+    {%- endif %}
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="{{ site.seo.title }}">
+    <meta property="og:description" content="{{ site.seo.description }}">
+    {%- if site.ogImage %}
+    <meta property="og:image" content="{{ site.ogImage }}">
+    <meta name="twitter:card" content="summary_large_image">
+    {%- else %}
+    <meta name="twitter:card" content="summary">
+    {%- endif %}
+
+    {%- if site.profile.avatar %}
+    <link rel="icon" href="{{ site.profile.avatar }}">
+    {%- endif %}
+    <link rel="stylesheet" href="styles.css">
+  </head>
+
+  <body>
+    {%- if site.links.length %}
+    <a class="skip-link" href="#links">Pular para os links</a>
+    {%- endif %}
+
+    <main class="card">
+      <header class="profile">
+        {%- if site.profile.avatar %}
+        <img class="avatar" src="{{ site.profile.avatar }}" width="112" height="112" alt="Foto de {{ site.profile.name }}">
+        {%- else %}
+        <p class="avatar avatar--initials" aria-hidden="true">{{ site.initials }}</p>
+        {%- endif %}
+        <h1>{{ site.profile.name }}</h1>
+        {%- if site.profile.tagline %}
+        <p class="tagline">{{ site.profile.tagline }}</p>
+        {%- endif %}
+      </header>
+
+      {%- if site.links.length %}
+      <nav id="links" aria-label="Links">
+        <ul class="links">
+          {%- for link in site.links %}
+          <li>
+            <a class="link{% if link.highlight %} link--highlight{% endif %}" href="{{ link.url }}" target="_blank" rel="noopener noreferrer">
+              {%- if link.iconData %}{{ icon(link.iconData) }}{% endif %}
+              <span class="link__label">{{ link.label }}</span>
+            </a>
+          </li>
+          {%- endfor %}
+        </ul>
+      </nav>
+      {%- endif %}
+
+      {%- if site.social.length %}
+      <nav class="social" aria-label="Redes sociais">
+        <ul>
+          {%- for entry in site.social %}
+          <li>
+            <a class="social__link" href="{{ entry.url }}" target="_blank" rel="noopener noreferrer">
+              {{ icon(entry.iconData) }}
+              <span class="visually-hidden">{{ entry.iconData.title }}</span>
+            </a>
+          </li>
+          {%- endfor %}
+        </ul>
+      </nav>
+      {%- endif %}
+    </main>
+  </body>
+</html>

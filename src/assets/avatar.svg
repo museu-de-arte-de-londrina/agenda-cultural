@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 112 112" width="112" height="112" role="img" aria-label="Museu de Arte de Londrina">
+  <rect width="112" height="112" rx="56" fill="#a4343a"/>
+  <!-- Moldura -->
+  <rect x="30" y="28" width="52" height="44" rx="3" fill="none" stroke="#ffffff" stroke-width="4"/>
+  <!-- Paisagem dentro da moldura -->
+  <path d="M36 66l12-15 8 9 7-9 13 15Z" fill="#ffffff"/>
+  <circle cx="66" cy="40" r="5" fill="#ffffff"/>
+  <!-- Base / pedestal -->
+  <path d="M40 80h32M56 72v8" stroke="#ffffff" stroke-width="4" stroke-linecap="round"/>
+</svg>
