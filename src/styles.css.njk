@@ -1,0 +1,248 @@
+---
+permalink: /styles.css
+---
+/*
+  Generated at build time so `theme.accent` can be baked in as a custom
+  property. Shipping it as a real file (instead of an inline <style>) is what
+  lets the CSP stay at `style-src 'self'` with no 'unsafe-inline'.
+*/
+
+:root {
+  color-scheme: {{ 'light dark' if site.theme.mode == 'auto' else site.theme.mode }};
+
+  --accent: {{ site.theme.accent }};
+  --accent-fg: {{ site.accentForeground }};
+
+  --bg: #f6f7fb;
+  --surface: #ffffff;
+  --surface-hover: #f0f2f8;
+  --text: #10151f;
+  --muted: #4b5666;
+  --border: #e3e7ef;
+  --shadow: rgba(16, 21, 31, 0.08);
+  --focus: {{ site.focusRing.light }};
+}
+
+{% set darkTokens %}
+  --bg: #070b14;
+  --surface: #101828;
+  --surface-hover: #18233a;
+  --text: #eaeff8;
+  --muted: #9fb0c9;
+  --border: #24304a;
+  --shadow: rgba(0, 0, 0, 0.45);
+  --focus: {{ site.focusRing.dark }};
+{% endset %}
+
+{%- if site.theme.mode == 'auto' %}
+@media (prefers-color-scheme: dark) {
+  :root {
+    {{- darkTokens -}}
+  }
+}
+{%- elif site.theme.mode == 'dark' %}
+:root {
+  {{- darkTokens -}}
+}
+{%- endif %}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 2rem 1rem 3rem;
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 1rem;
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* Keyboard users get here first; it stays off-screen until focused. */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  padding: 0.75rem 1rem;
+  background: var(--surface);
+  color: var(--text);
+  border-radius: 0 0 0.5rem 0;
+}
+
+.skip-link:focus {
+  left: 0;
+  z-index: 1;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.card {
+  width: 100%;
+  max-width: 32rem;
+}
+
+.profile {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.avatar {
+  width: 7rem;
+  height: 7rem;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--border);
+  background: var(--surface);
+}
+
+.avatar--initials {
+  display: grid;
+  place-items: center;
+  margin: 0 auto;
+  font-size: 2.25rem;
+  font-weight: 600;
+  color: var(--accent-fg);
+  background: var(--accent);
+  border-color: transparent;
+}
+
+h1 {
+  margin: 1rem 0 0;
+  font-size: 1.5rem;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  overflow-wrap: anywhere;
+}
+
+.tagline {
+  margin: 0.5rem 0 0;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+
+.links,
+.social ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.links {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
+  min-height: 3.25rem;
+  padding: 0.75rem 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  background: var(--surface);
+  color: inherit;
+  font-weight: 500;
+  text-decoration: none;
+  box-shadow: 0 1px 2px var(--shadow);
+}
+
+.link:hover {
+  background: var(--surface-hover);
+}
+
+.link--highlight {
+  background: var(--accent);
+  border-color: transparent;
+  color: var(--accent-fg);
+}
+
+.link--highlight:hover {
+  background: var(--accent);
+  filter: brightness(0.94);
+}
+
+.link__label {
+  overflow-wrap: anywhere;
+}
+
+.social {
+  margin-top: 2rem;
+}
+
+.social ul {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.social__link {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.social__link:hover {
+  color: var(--text);
+  background: var(--surface-hover);
+}
+
+.icon {
+  flex: none;
+  fill: currentColor;
+}
+
+.icon--stroke {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: 0.25rem;
+}
+
+@media (min-width: 40rem) {
+  body {
+    padding-top: 4rem;
+  }
+
+  h1 {
+    font-size: 1.75rem;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .link,
+  .social__link {
+    transition: background-color 150ms ease, filter 150ms ease, color 150ms ease;
+  }
+}
