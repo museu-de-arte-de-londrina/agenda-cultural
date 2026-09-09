@@ -56,8 +56,8 @@ social:
   - platform: whatsapp
     url: https://wa.me/554333716607
 
-  - plataform: email
-    url: acaocultural@londrina.pr.gov.br
+  - platform: email
+    url: mailto:acaocultural@londrina.pr.gov.br
 
 seo:
   title: Museu de Arte de Londrina
