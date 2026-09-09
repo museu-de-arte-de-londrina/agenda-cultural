@@ -1,0 +1,7 @@
+node_modules/
+_site/
+.cache/
+.eleventy.cache/
+*.log
+.DS_Store
+.omc/
