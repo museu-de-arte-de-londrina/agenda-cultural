@@ -146,9 +146,6 @@ permalink: /index.html
                     {%- if event.kind %}<span class="entry__kind">{{ event.kind }}</span>{% endif %}
                     {%- if event.runsUntil %}<span class="entry__until">até {{ event.runsUntil }}</span>{% endif %}
                   </p>
-                  {%- if event.featured and event.description %}
-                  <p class="entry__description">{{ event.description }}</p>
-                  {%- endif %}
                 </div>
 
                 {%- if event.image %}
@@ -156,6 +153,12 @@ permalink: /index.html
                 <div class="entry__media">
                   <img class="entry__image" src="{{ event.image }}" width="256" height="256" alt="" loading="lazy" decoding="async">
                 </div>
+                {%- endif %}
+
+                {#- Full width, under the row: beside the thumbnail the column is
+                    too narrow on a phone and every description clipped. -#}
+                {%- if event.description %}
+                <p class="entry__description">{{ event.description }}</p>
                 {%- endif %}
               </li>
               {%- endfor %}
@@ -175,10 +178,7 @@ permalink: /index.html
             <li>
               <a class="link{% if link.highlight %} link--highlight{% endif %}" href="{{ link.url }}" target="_blank" rel="noopener noreferrer">
                 {%- if link.iconData %}{{ icon(link.iconData) }}{% endif %}
-                <span class="link__text">
-                  <span class="link__label">{{ link.label }}</span>
-                  {%- if link.description %}<span class="link__description">{{ link.description }}</span>{% endif %}
-                </span>
+                <span class="link__label">{{ link.label }}</span>
               </a>
             </li>
             {%- endfor %}

@@ -149,7 +149,7 @@ hora e título.
 | `kind` | texto, até 40 | não | nenhum | Etiqueta do tipo (Oficina, Exposição...). |
 | `image` | caminho ou URL `https://` | não | ladrilho com a data | Miniatura quadrada; 320×320 basta. |
 | `url` | URL `https:`, `mailto:` ou `tel:` | não | nenhum | Página do evento. Com ela, o cartão inteiro vira clicável. |
-| `description` | texto, até 400 | não | nenhum | Uma linha de contexto. |
+| `description` | texto, até 300 | não | nenhum | Uma ou duas frases sobre o que acontece. Aparece em todos os eventos, então não repita o título. |
 
 Três comportamentos que valem saber:
 
@@ -174,7 +174,6 @@ escolha legítima.
 | `label` | texto, até 80 | **sim** | — | Texto do botão. |
 | `url` | URL `https:`, `mailto:` ou `tel:` | **sim** | — | Qualquer outro esquema **quebra o build**. |
 | `icon` | nome de ícone | não | sem ícone | Veja [Ícones](#ícones). |
-| `description` | texto, até 200 | não | nenhum | Uma linha sobre o que há do outro lado. O rótulo diz para onde vai; isto diz o que tem lá. |
 | `highlight` | `true` \| `false` | não | `false` | Pinta o botão com a cor de destaque. |
 
 ### `social[]`
@@ -309,15 +308,12 @@ Decisões que não são óbvias lendo o CSS:
 - **A agenda é agrupada por dia.** A data fica num trilho à esquerda e é
   impressa uma vez por dia, não uma vez por evento — seis atividades no mesmo
   dia imprimiam a mesma data seis vezes.
-- **A zebra é do dia, não do item.** A faixa de cada dia alterna de fundo, e as
-  linhas dentro dela são todas iguais. O que precisa ser distinguido aqui é um
-  dia do seguinte — um único dia chega a ter seis atividades. Nenhum evento
-  recebe tratamento visual próprio, e os links do rodapé não entram na
-  alternância.
-- **O tom da zebra mora no `src/_data/site.js`, não no CSS.** O cálculo do
-  accent legível precisa do valor exato que a linha vai usar; manter uma
-  segunda cópia no CSS foi como os horários escorregaram para 4,41:1 quando a
-  zebra foi escurecida.
+- **Nenhum evento recebe tratamento visual próprio.** Os dias são separados
+  por um fio e pelo trilho de data; dentro do dia, todas as linhas são iguais.
+- **Os tons extremos de superfície moram no `src/_data/site.js`, não no CSS.**
+  O cálculo do accent legível precisa do valor exato que a linha vai usar, e
+  manter uma segunda cópia no CSS já deixou os horários escorregarem para
+  4,41:1 sem ninguém notar.
 - **Profundidade é uma escala de três níveis**, com sombra tingida do ink da
   paleta e um filete de luz no topo das superfícies elevadas. Só o frame, o
   destaque e o botão de tema sobem; o resto fica plano.

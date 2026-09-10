@@ -180,41 +180,35 @@ events:
   assert.equal((html.match(/class="entry__title"/g) ?? []).length, 4);
 });
 
-test('só o próximo evento mostra descrição', async () => {
+test('todo evento mostra sua descrição', async () => {
   const html = await render(`
 profile:
   name: Museu
 events:
   - title: Primeiro
     start: 2099-05-04T09:00
-    description: Este texto deve aparecer.
+    description: Contexto do primeiro.
   - title: Segundo
     start: 2099-05-04T14:00
-    description: Este texto não deve aparecer.
+    description: Contexto do segundo.
+  - title: Terceiro
+    start: 2099-05-04T18:00
 `);
 
-  assert.ok(html.includes('Este texto deve aparecer.'));
-  assert.ok(!html.includes('Este texto não deve aparecer.'), 'descrição em toda linha polui a lista');
+  assert.ok(html.includes('Contexto do primeiro.'));
+  assert.ok(html.includes('Contexto do segundo.'), 'a descrição não é privilégio do primeiro');
+  assert.equal((html.match(/class="entry__description"/g) ?? []).length, 2, 'sem description, nada é renderizado');
 
-  // Nada distingue o primeiro visualmente: a zebra é quem dá o ritmo.
-  assert.ok(!html.includes('entry--featured'), 'o destaque visual foi removido de propósito');
+  // Nenhum evento recebe tratamento visual próprio.
+  assert.ok(!html.includes('entry--featured'));
 });
 
-test('links podem explicar para onde levam', async () => {
-  const html = await render(`
-profile:
-  name: Museu
-links:
-  - label: Portal
-    url: https://example.org
-    description: O que você encontra quando chega lá.
-  - label: Sem explicação
-    url: https://example.com
-`);
-
-  assert.match(html, /class="link__label">Portal<[\s\S]*?class="link__description">O que você encontra quando chega lá\./);
-  const semDescricao = html.slice(html.indexOf('Sem explicação'));
-  assert.ok(!semDescricao.includes('link__description'), 'sem description, nada é renderizado');
+test('a lista de links não carrega descrição', async () => {
+  const html = await render(
+    'profile:\n  name: Museu\nlinks:\n  - label: Portal\n    url: https://example.org\n',
+  );
+  assert.match(html, /class="link__label">Portal</);
+  assert.ok(!html.includes('link__description'));
 });
 
 test('temporada de vários dias diz até quando vai', async () => {

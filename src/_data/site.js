@@ -19,17 +19,13 @@ import {
 const DEFAULT_CONFIG = new URL('../../config.yaml', import.meta.url);
 
 /**
- * The zebra tones, defined here and handed to the stylesheet, because the
- * readable-accent calculation below needs the exact value the row will use.
- * Keeping a second copy in the CSS is how the time labels quietly slipped
- * under AA when the zebra was darkened.
- *
- * These are the worst case for accent-coloured text: in the light theme the
- * accent is dark, so the tinted row is the least contrasty background it sits
- * on; in the dark theme the accent is light, so the tinted row is again the
- * closest to it.
+ * The furthest surface accent-coloured text ever lands on, handed to the
+ * stylesheet so the contrast calculation below and the rendered background
+ * cannot drift apart. In the light theme the accent is dark, so the deepest
+ * tint is its worst case; in the dark theme the accent is light, so the
+ * lightest tint is.
  */
-const ZEBRA = { light: '#eaf0f9', dark: '#17233d' };
+const SURFACE_HOVER = { light: '#e8eef7', dark: '#1a2540' };
 
 /** Two initials, used when no avatar is set. */
 function initials(name) {
@@ -84,9 +80,6 @@ function buildAgenda(config, now) {
     .filter((event) => isUpcoming(event.start, event.end, now))
     .sort((a, b) => a.startsAt - b.startsAt);
 
-  // The soonest event leads, and is the only one that shows its description.
-  if (upcoming.length > 0) upcoming[0].featured = true;
-
   const days = [];
   for (const event of upcoming) {
     const key = event.iso.slice(0, 10);
@@ -116,10 +109,10 @@ export default async function site() {
     // legible and on the other nearly invisible, so each theme gets a version
     // lightened or darkened until it clears AA against its own surface.
     accentText: {
-      light: readableOn(ZEBRA.light, accent, '#0c1220'),
-      dark: readableOn(ZEBRA.dark, accent, '#e9eff8'),
+      light: readableOn(SURFACE_HOVER.light, accent, '#0c1220'),
+      dark: readableOn(SURFACE_HOVER.dark, accent, '#e9eff8'),
     },
-    zebra: ZEBRA,
+    surfaceHover: SURFACE_HOVER,
     focusRing: {
       light: contrastRatio(accent, '#ffffff') >= 3 ? accent : '#0f172a',
       dark: contrastRatio(accent, '#0b1120') >= 3 ? accent : '#e8edf7',

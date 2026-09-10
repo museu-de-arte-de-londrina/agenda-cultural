@@ -71,8 +71,9 @@ events:
     # (opcional) Página do evento. Mesma allowlist de esquemas.
     url: https://example.org/evento
 
-    # (opcional) Uma linha de contexto. Até 400 caracteres.
-    description: Uma frase curta sobre o que é o evento.
+    # (opcional) Uma ou duas frases sobre o que acontece. Até 300 caracteres.
+    # Aparece em todos os eventos, então evite repetir o título.
+    description: O que acontece, em uma ou duas frases.
 
   - title: Oficina de gravura
     start: 2026-09-22T14:00
@@ -89,9 +90,6 @@ links:
     # (opcional, default: sem ícone) Slug do simple-icons (github, instagram,
     # mastodon, youtube, ...) ou um genérico: email, website, link.
     icon: website
-    # (opcional) Uma linha dizendo o que a pessoa encontra ao chegar lá.
-    # O rótulo diz para onde vai; isto diz o que tem quando chega.
-    description: O que você encontra do outro lado do link.
     # (opcional, default: false) Pinta o botão com a cor de destaque.
     highlight: true
 
