@@ -371,6 +371,27 @@ Detalhe completo em [SECURITY.md](SECURITY.md). Em resumo:
 - HTML semântico, contraste AA calculado, foco visível, navegação por teclado
   com skip link, `prefers-color-scheme` e `prefers-reduced-motion` respeitados.
 
+## Créditos e licenças dos arquivos
+
+A [licença MIT](LICENSE) cobre o **código**. Os arquivos em `src/assets/` não
+são todos do museu e têm termos próprios:
+
+| Arquivo | Origem | Termos |
+| --- | --- | --- |
+| `fonts/archivo-*.woff2` | Archivo, da Omnibus-Type | SIL Open Font License 1.1 — texto em [`fonts/OFL.txt`](src/assets/fonts/OFL.txt) |
+| `museu-33-anos.webp`, `museu-de-arte-de-londrina.webp`, `og-museu-33-anos.jpg` | Museu de Arte de Londrina | Marca do museu |
+| `prefeitura-londrina.png` | Prefeitura de Londrina | Marca do município |
+| `fundo-museu.webp` | Foto de Emerson Dias, do portal da Prefeitura | Direitos do autor e da Prefeitura |
+| `eventos/*.webp` | Fichas do museu no catálogo da Primavera dos Museus (IBRAM) | Direitos dos respectivos autores |
+| `avatar.svg` | Deste repositório | MIT, como o código |
+
+Os ícones de marcas no HTML vêm do [Simple Icons](https://simpleicons.org)
+(CC0). Os logotipos em si continuam sendo marcas de seus donos.
+
+Quem for reaproveitar este projeto deve trocar as imagens pelas suas: elas
+estão aqui porque são do museu ou porque ele tem autorização de uso, o que não
+se transfere junto com o código.
+
 ## Licença
 
-[MIT](LICENSE).
+[MIT](LICENSE) para o código. Veja a seção acima para os demais arquivos.
