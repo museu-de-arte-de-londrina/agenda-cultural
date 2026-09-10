@@ -7,6 +7,7 @@ import {
   toIsoString,
   isUpcoming,
   formatEventWhen,
+  wallClockNow,
 } from '../lib/datetime.js';
 
 /** Intl pontua intervalos com espaço fino + travessão; escrito por extenso
@@ -122,4 +123,35 @@ test('o idioma do config manda na formatação', () => {
   const parts = parseDateTime('2026-09-21T19:00');
   assert.match(formatEventWhen(parts, null, 'en-US').date, /September/);
   assert.match(formatEventWhen(parts, null, 'pt-BR').date, /setembro/);
+});
+
+test('agora é lido no relógio do museu, não em UTC', () => {
+  // 10/09/2026 16:56 UTC, que em Londrina são 13:56 do mesmo dia.
+  const instante = Date.UTC(2026, 8, 10, 16, 56, 0);
+  const agora = wallClockNow('America/Sao_Paulo', instante);
+
+  assert.equal(new Date(agora).toISOString(), '2026-09-10T13:56:00.000Z');
+});
+
+test('um evento marcado para hoje mais tarde continua na agenda', () => {
+  // O caso que sumiu do site: oficina das 12:00 às 15:00, conferida às 13:56
+  // de Londrina. Faltava mais de uma hora para acabar.
+  const agora = wallClockNow('America/Sao_Paulo', Date.UTC(2026, 8, 10, 16, 56, 0));
+  const inicio = parseDateTime('2026-09-10T12:00');
+  const fim = parseDateTime('2026-09-10T15:00');
+
+  assert.equal(isUpcoming(inicio, fim, agora), true);
+  assert.equal(
+    isUpcoming(inicio, fim, Date.UTC(2026, 8, 10, 16, 56, 0)),
+    false,
+    'medido contra UTC de verdade, sumia três horas antes da hora',
+  );
+});
+
+test('o que terminou de verdade sai da agenda', () => {
+  const agora = wallClockNow('America/Sao_Paulo', Date.UTC(2026, 8, 10, 21, 30, 0)); // 18:30 daqui
+  const inicio = parseDateTime('2026-09-10T12:00');
+  const fim = parseDateTime('2026-09-10T15:00');
+
+  assert.equal(isUpcoming(inicio, fim, agora), false);
 });

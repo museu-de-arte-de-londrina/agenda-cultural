@@ -17,6 +17,8 @@ import {
   formatDayHeading,
   formatShortDate,
   isSameDay,
+  wallClockNow,
+  TIMEZONE,
 } from '../../lib/datetime.js';
 import { slugify } from '../../lib/slug.js';
 
@@ -199,7 +201,7 @@ function formatUpdatedAt(iso, locale) {
       day: 'numeric',
       month: 'long',
       year: 'numeric',
-      timeZone: 'America/Sao_Paulo',
+      timeZone: TIMEZONE,
     }).format(date),
   };
 }
@@ -208,7 +210,7 @@ export default async function site() {
   // Read at call time, not import time, so tests can point at a fixture.
   const config = await loadConfigFile(process.env.CONFIG_FILE ?? DEFAULT_CONFIG);
   const { accent } = config.theme;
-  const agenda = buildAgenda(config, Date.now());
+  const agenda = buildAgenda(config, wallClockNow());
 
   return {
     ...config,

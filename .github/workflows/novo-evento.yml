@@ -76,12 +76,18 @@ jobs:
     permissions:
       contents: write
       issues: write
+      # Para pedir a publicação do site. Ver o comentário no passo final.
+      actions: write
 
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
+          # A main de agora, não a de quando a issue chegou. Duas issues
+          # enviadas juntas geram dois runs presos ao mesmo commit, e o segundo
+          # não enxergaria o evento que o primeiro acabou de publicar.
+          ref: main
 
       - name: Setup Node
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
@@ -162,6 +168,11 @@ jobs:
             git pull --rebase origin main
           done
           [ "$publicado" = sim ]
+
+          # O GitHub não dispara workflows a partir de commit empurrado com o
+          # GITHUB_TOKEN, para não criar laço infinito. Sem este pedido
+          # explícito, o evento entra no config.yaml e o site nunca reconstrói.
+          gh workflow run deploy.yml --ref main
 
           gh issue comment "$NUMERO" --body "Publicado. O site atualiza em cerca de um minuto: $SITE"
           gh issue close "$NUMERO" --reason completed
