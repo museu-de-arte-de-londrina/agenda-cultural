@@ -18,7 +18,6 @@ async function writeQrCodes(outputDir, config) {
   const url = config.seo.base_url;
   if (!url) return;
 
-  await mkdir(outputDir, { recursive: true });
   const options = { margin: 2, errorCorrectionLevel: 'M' };
 
   const svg = await QRCode.toString(url, { ...options, type: 'svg' });
@@ -84,7 +83,15 @@ async function writeCrawlerFiles(outputDir, config) {
 }
 
 export default function (eleventyConfig) {
-  eleventyConfig.on('eleventy.after', async ({ dir }) => {
+  eleventyConfig.on('eleventy.after', async ({ dir, outputMode }) => {
+    // Os testes renderizam com toJSON(), que devolve as páginas em memória e
+    // não cria a pasta de saída. Escrever arquivo ali dentro não faria sentido
+    // e quebrava a suíte em qualquer checkout novo, onde _site ainda não
+    // existe.
+    if (outputMode !== 'fs') return;
+
+    await mkdir(dir.output, { recursive: true });
+
     const config = await site();
     await writeQrCodes(dir.output, config);
     await writeCalendars(dir.output, config);
