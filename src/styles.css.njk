@@ -194,34 +194,6 @@ body {
   background: var(--surface-hover);
 }
 
-/* One icon per theme, both in the same grid cell so the button never resizes. */
-.theme-toggle__sun,
-.theme-toggle__moon {
-  grid-area: 1 / 1;
-}
-
-.theme-toggle__sun {
-  display: none;
-}
-
-:root[data-theme='dark'] .theme-toggle__sun {
-  display: block;
-}
-
-:root[data-theme='dark'] .theme-toggle__moon {
-  display: none;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) .theme-toggle__sun {
-    display: block;
-  }
-
-  :root:not([data-theme='light']) .theme-toggle__moon {
-    display: none;
-  }
-}
-
 /* ----------------------------------------------------------------- frame -- */
 
 /* The one surface that lifts off the dot field. Everything inside it is flat
