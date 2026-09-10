@@ -9,7 +9,7 @@ profile:
   tagline: Programação, exposições e canais oficiais do museu.
   handle: "@museudeartedelondrina"
   handle_url: https://www.instagram.com/museudeartedelondrina/
-  avatar: assets/museu-33-anos.png
+  avatar: assets/museu-33-anos.webp
   avatar_shape: square
 
 theme:
@@ -22,7 +22,7 @@ events:
     start: 2026-09-21T09:00
     end: 2026-09-21T10:00
     kind: Ação Educativa
-    image: assets/evento-museu-educativo.png
+    image: assets/evento-museu-educativo.webp
     url: https://visite.museus.gov.br/20a-primavera-dos-museus/atendimento-pelo-programa-museu-educativo/
     description: Contação de História baseada no livro "A mão livre do vovô", de Michel Goski e Silvia Zatz,
       Visita Mediada às exposições e à edificação, e Atividade Arte-Educativa para alunos da Escola…
@@ -50,7 +50,7 @@ events:
     start: 2026-09-21T20:00
     end: 2026-09-21T21:00
     kind: Abertura
-    image: assets/evento-fachada-museu.png
+    image: assets/evento-fachada-museu.webp
     url: https://visite.museus.gov.br/20a-primavera-dos-museus/abertura-oficial-da-programacao-local-da-20a-primavera-dos-museus/
     description: Abertura da programação local da 20ª Primavera dos Museus com representantes do Museu de
       Arte de Londrina/Secretaria Municipal de Cultura, Museu do Café/Sesc Cadeião, Museu Histórico de…
@@ -85,7 +85,7 @@ events:
     start: 2026-09-24T14:00
     end: 2026-09-24T15:30
     kind: Ação Educativa
-    image: assets/evento-museu-educativo.png
+    image: assets/evento-museu-educativo.webp
     url: https://visite.museus.gov.br/20a-primavera-dos-museus/atendimento-programa-museu-educativo/
     description: Contação de História baseada no livro “Perigo na Floresta”, de Cláudia Rezende Barbeiro,
       Visita Mediada às exposições e à edificação, e Atividade Arte-Educativa para alunos da Escola Ateliê…
@@ -107,7 +107,7 @@ events:
     start: 2026-09-25T10:00
     end: 2026-09-25T11:30
     kind: Ação Educativa
-    image: assets/evento-museu-educativo.png
+    image: assets/evento-museu-educativo.webp
     url: https://visite.museus.gov.br/20a-primavera-dos-museus/programa-museu-educativo/
     description: Contação de História baseada no livro “Perigo na Floresta”, de Cláudia Rezende Barbeiro,
       Visita Mediada às exposições e à edificação, e Atividade Arte-Educativa para alunos da Escola…
@@ -115,7 +115,7 @@ events:
     start: 2026-09-25T14:00
     end: 2026-09-25T15:30
     kind: Ação Educativa
-    image: assets/evento-museu-educativo.png
+    image: assets/evento-museu-educativo.webp
     url: https://visite.museus.gov.br/20a-primavera-dos-museus/programa-museu-educativo-2/
     description: Contação de História baseada no livro “Perigo na Floresta”, de Cláudia Rezende Barbeiro,
       Visita Mediada às exposições e à edificação, e Atividade Arte-Educativa para alunos da Escola…
@@ -165,7 +165,7 @@ social:
 seo:
   title: Museu de Arte de Londrina
   description: Links oficiais do Museu de Arte de Londrina — programação, exposições, redes sociais e contato.
-  og_image: assets/og-museu-33-anos.png
+  og_image: assets/og-museu-33-anos.jpg
   base_url: https://museu-de-arte-de-londrina.github.io/agenda-cultural
 
 footer:
