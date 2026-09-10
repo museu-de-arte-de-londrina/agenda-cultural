@@ -300,7 +300,12 @@ h1 {
   overflow-wrap: anywhere;
 }
 
+/* Padding grows the target without moving anything: the negative margin
+   gives back exactly what the padding takes. */
 .handle a {
+  display: inline-block;
+  padding: 0.6875rem 0.75rem;
+  margin: -0.6875rem -0.75rem;
   color: var(--muted);
   text-decoration: none;
 }
@@ -323,20 +328,28 @@ h1 {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 0.25rem;
+  gap: 0.125rem;
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
+/* 3rem clears both the 44px minimum and Android's 48dp, which matters more
+   here than anywhere else on the page: these are the smallest things on it
+   and the page is opened from a phone. */
 .social__link {
   display: grid;
   place-items: center;
-  width: 2.25rem;
-  height: 2.25rem;
+  width: 3rem;
+  height: 3rem;
   border-radius: 50%;
   color: var(--muted);
   text-decoration: none;
+}
+
+.social__link .icon {
+  width: 1.375rem;
+  height: 1.375rem;
 }
 
 .social__link:hover {

@@ -316,6 +316,10 @@ Decisões que não são óbvias lendo o CSS:
 - **O accent também é cor de texto**, e um accent escuro fica ilegível no tema
   escuro. `lib/color.js` clareia ou escurece a cor preservando o matiz até
   passar em AA, então qualquer `theme.accent` continua legível nos dois temas.
+- **Alvo de toque mínimo de 44px.** Os ícones de contato têm 48px (o mínimo do
+  Android), e a arroba ganha preenchimento com margem negativa — cresce o alvo
+  sem mexer no layout. O cartão de evento inteiro é clicável por um `::after`
+  que cobre a linha, então o alvo real é a linha, não o texto do título.
 - **O botão de tema é ancorado no cartão, não na viewport.** Fixo no canto da
   tela ele montava na borda arredondada do cartão em toda largura de celular —
   ali o cartão ocupa quase toda a tela e não sobra canto livre. Dentro do
