@@ -1,0 +1,88 @@
+name: Publicar evento na agenda
+description: Preencha os campos e o site é atualizado. Não precisa mexer em código.
+title: "[evento] "
+labels: ["evento"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Ao enviar, um robô confere os dados e abre uma proposta de alteração
+        (um "pull request") para alguém revisar e publicar.
+
+        Se algum campo estiver errado, ele comenta aqui dizendo o quê, e você
+        pode corrigir editando este formulário.
+
+  - type: input
+    id: titulo
+    attributes:
+      label: Título do evento
+      description: Como aparece na agenda. Até 140 caracteres.
+      placeholder: Apresentação de Taiko
+    validations:
+      required: true
+
+  - type: input
+    id: data-inicio
+    attributes:
+      label: Data
+      description: No formato dia/mês/ano.
+      placeholder: 21/09/2026
+    validations:
+      required: true
+
+  - type: input
+    id: hora-inicio
+    attributes:
+      label: Hora de início
+      description: No formato hora:minuto. Deixe em branco se durar o dia todo.
+      placeholder: "19:00"
+
+  - type: input
+    id: hora-fim
+    attributes:
+      label: Hora de término
+      placeholder: "20:00"
+
+  - type: input
+    id: data-fim
+    attributes:
+      label: Último dia
+      description: Só para o que dura vários dias, como exposição. Em branco se for de um dia só.
+      placeholder: 27/09/2026
+
+  - type: dropdown
+    id: tipo
+    attributes:
+      label: Tipo de atividade
+      options:
+        - Exposição
+        - Oficina
+        - Show Musical
+        - Teatro
+        - Ação Educativa
+        - Sarau
+        - Exibição de Filme
+        - Abertura
+        - Visita Mediada
+        - Outro
+
+  - type: textarea
+    id: descricao
+    attributes:
+      label: Descrição
+      description: Uma ou duas frases sobre o que acontece. Evite repetir o título. Até 300 caracteres.
+      placeholder: Tambores japoneses, pelo 22º Londrina Matsuri.
+
+  - type: input
+    id: link
+    attributes:
+      label: Link para mais informações
+      description: Endereço começando com https. Opcional.
+      placeholder: https://londrinacultura.londrina.pr.gov.br/espaco/1/
+
+  - type: markdown
+    attributes:
+      value: |
+        **Foto:** este formulário ainda não recebe imagem. Depois que a proposta
+        for aberta, arraste a foto para a pasta `src/assets/eventos/` por lá, ou
+        publique sem foto: o cartão funciona do mesmo jeito.

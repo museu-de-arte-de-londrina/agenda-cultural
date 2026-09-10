@@ -78,7 +78,8 @@ tag `<meta http-equiv>`. Duas consequências, ambas aceitas conscientemente:
 
 - as diretivas `frame-ancestors`, `report-uri` e `sandbox` **são ignoradas**
   quando entregues por `<meta>`. Contra clickjacking não há defesa possível
-  aqui sem um proxy na frente;
+  aqui sem um proxy na frente. `frame-ancestors` foi retirada da política:
+  além de não valer, ela registrava um erro no console de cada visitante;
 - a política só passa a valer quando o parser chega na tag. Como não existe
   script algum na página e a CSP é o primeiro `<meta>` depois de `charset` e
   `viewport`, a janela é irrelevante na prática.

@@ -1,0 +1,114 @@
+name: Publicar evento
+
+# Uma issue preenchida pelo formulário vira uma proposta de alteração.
+on:
+  issues:
+    types: [opened, edited]
+
+permissions:
+  contents: read
+
+jobs:
+  publicar:
+    name: Transformar a issue em proposta
+    runs-on: ubuntu-latest
+
+    # Só automatiza para quem já tem acesso de escrita. O repositório é
+    # público e qualquer pessoa pode abrir issue; de terceiros isso vira um
+    # pedido para alguém ler, nunca uma alteração no repositório.
+    if: >-
+      contains(github.event.issue.labels.*.name, 'evento') &&
+      contains(fromJSON('["OWNER", "MEMBER", "COLLABORATOR"]'), github.event.issue.author_association)
+
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Montar o evento a partir da issue
+        id: montar
+        continue-on-error: true
+        env:
+          # Por variável de ambiente, nunca interpolado no shell: o corpo da
+          # issue é texto de fora e não pode virar comando.
+          ISSUE_BODY: ${{ github.event.issue.body }}
+        run: node scripts/evento-da-issue.js 2> erro.txt
+
+      - name: Avisar na issue o que deu errado
+        if: steps.montar.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NUMERO: ${{ github.event.issue.number }}
+        run: |
+          {
+            echo "Não consegui publicar ainda:"
+            echo
+            cat erro.txt
+            echo
+            echo "Edite o formulário acima corrigindo isso e eu tento de novo."
+          } > comentario.md
+          gh issue comment "$NUMERO" --body-file comentario.md
+          exit 1
+
+      - name: Conferir que o site continua construindo
+        run: |
+          npm run validate
+          npm test
+          npm run build
+
+      - name: Abrir a proposta de alteração
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NUMERO: ${{ github.event.issue.number }}
+          TITULO: ${{ github.event.issue.title }}
+        run: |
+          set -euo pipefail
+          BRANCH="evento/issue-$NUMERO"
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$BRANCH"
+          git add config.yaml
+
+          cat > mensagem.txt <<'FIM'
+          feat(agenda): novo evento vindo do formulário
+
+          Gerado a partir de uma issue preenchida no formulário de publicação.
+          Confira data, hora e descrição antes de publicar.
+          FIM
+          git commit --file mensagem.txt
+          rm mensagem.txt
+          git push --force origin "$BRANCH"
+
+          cat > corpo.md <<FIM
+          Fecha #$NUMERO
+
+          Gerado a partir do formulário. Confira data, hora e descrição, e
+          adicione a foto em \`src/assets/eventos/\` se houver.
+
+          O site só publica depois que esta proposta for integrada.
+          FIM
+
+          if gh pr view "$BRANCH" --json number > /dev/null 2>&1; then
+            gh pr comment "$BRANCH" --body "Atualizado a partir da issue #$NUMERO."
+          else
+            gh pr create --base main --head "$BRANCH" --title "Agenda: $TITULO" --body-file corpo.md
+          fi
+
+          URL=$(gh pr view "$BRANCH" --json url --jq .url)
+          gh issue comment "$NUMERO" --body "Proposta aberta: $URL"

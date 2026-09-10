@@ -1,0 +1,182 @@
+/**
+ * Regressões de layout e acessibilidade, medidas num navegador de verdade.
+ *
+ * Deliberadamente não são comparações de pixel: a fonte renderiza diferente
+ * entre a máquina de quem desenvolve e a esteira, e a linha de base viveria
+ * quebrando por motivo nenhum. O que está aqui são as invariantes que de fato
+ * quebraram enquanto esta página foi construída: botão montado na borda do
+ * cartão, texto cortado, alvo de toque pequeno demais, contraste abaixo de AA.
+ */
+import test, { before, after } from 'node:test';
+import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
+import process from 'node:process';
+import { chromium } from 'playwright';
+
+import { servirSite } from '../../scripts/servir.js';
+
+const SITE = new URL('../../_site/', import.meta.url);
+
+let navegador;
+let site;
+
+before(async () => {
+  // Por HTTP, e não file://: a fonte é servida com CORS e por file:// o
+  // navegador a recusa, medindo uma página que ninguém recebe.
+  site = await servirSite(SITE.pathname);
+  navegador = await chromium.launch({
+    // Usa o Chrome da máquina quando existe, para a esteira não precisar
+    // baixar um navegador inteiro só para isto.
+    executablePath: process.env.CHROME_PATH || undefined,
+    channel: process.env.CHROME_PATH ? undefined : 'chrome',
+    args: ['--no-sandbox'],
+  });
+});
+
+after(async () => {
+  await navegador?.close();
+  site?.fechar();
+});
+
+/** @param {{largura?: number, altura?: number, tema?: 'light'|'dark'}} opcoes */
+async function abrir(opcoes = {}) {
+  const contexto = await navegador.newContext({
+    viewport: { width: opcoes.largura ?? 390, height: opcoes.altura ?? 844 },
+    colorScheme: opcoes.tema ?? 'light',
+  });
+  const pagina = await contexto.newPage();
+  const erros = [];
+  pagina.on('console', (m) => m.type() === 'error' && erros.push(m.text()));
+  pagina.on('pageerror', (e) => erros.push(String(e)));
+  await pagina.goto(site.url, { waitUntil: 'load' });
+  await pagina.evaluate(() =>
+    document.querySelectorAll('img[loading="lazy"]').forEach((i) => i.setAttribute('loading', 'eager')),
+  );
+  return { contexto, pagina, erros };
+}
+
+const LARGURAS = [320, 360, 390, 768, 1280];
+
+test('nenhuma largura provoca rolagem horizontal', async () => {
+  for (const largura of LARGURAS) {
+    const { contexto, pagina } = await abrir({ largura });
+    const transbordo = await pagina.evaluate(
+      () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
+    );
+    assert.equal(transbordo, 0, `${largura}px transborda ${transbordo}px na horizontal`);
+    await contexto.close();
+  }
+});
+
+test('nada escapa das bordas do cartão', async () => {
+  for (const largura of LARGURAS) {
+    const { contexto, pagina } = await abrir({ largura });
+    const fugas = await pagina.evaluate(() => {
+      const frame = document.querySelector('.frame').getBoundingClientRect();
+      return [...document.querySelectorAll('.frame *')]
+        .filter((el) => {
+          const r = el.getBoundingClientRect();
+          if (r.width === 0 || r.height === 0) return false;
+          return r.left < frame.left - 0.5 || r.right > frame.right + 0.5;
+        })
+        .map((el) => el.className || el.tagName)
+        .slice(0, 5);
+    });
+    assert.deepEqual(fugas, [], `em ${largura}px, elementos saem do cartão`);
+    await contexto.close();
+  }
+});
+
+test('todo alvo de toque cabe num polegar', async () => {
+  const { contexto, pagina } = await abrir({ largura: 390 });
+  const pequenos = await pagina.evaluate(() => {
+    const fora = [];
+    for (const el of document.querySelectorAll('a, button')) {
+      const r = el.getBoundingClientRect();
+      if (r.width === 0 || r.height === 0) continue;
+      if (el.closest('.entry') && el.classList.contains('entry__link')) continue; // alvo é a linha toda
+      if (Math.min(r.width, r.height) < 44) {
+        fora.push(`${el.className || el.tagName}: ${Math.round(r.width)}x${Math.round(r.height)}`);
+      }
+    }
+    return fora;
+  });
+  assert.deepEqual(pequenos, [], 'alvos abaixo de 44px');
+  await contexto.close();
+});
+
+test('todo texto passa em AA nos dois temas', async () => {
+  for (const tema of ['light', 'dark']) {
+    const { contexto, pagina } = await abrir({ largura: 1280, altura: 900, tema });
+    const reprovados = await pagina.evaluate(() => {
+      const canal = (c) => {
+        c /= 255;
+        return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+      };
+      const lum = ([r, g, b]) => 0.2126 * canal(r) + 0.7152 * canal(g) + 0.0722 * canal(b);
+      const nums = (s) => (s.match(/[\d.]+/g) || []).slice(0, 3).map(Number);
+      const razao = (a, b) => {
+        const [x, y] = [lum(a), lum(b)].sort((p, q) => q - p);
+        return (x + 0.05) / (y + 0.05);
+      };
+      const fundoDe = (el) => {
+        for (let n = el; n; n = n.parentElement) {
+          const c = getComputedStyle(n).backgroundColor;
+          const p = nums(c);
+          if (p.length === 3 && !/rgba\(.*,\s*0\)/.test(c)) return p;
+        }
+        return [255, 255, 255];
+      };
+
+      const fora = [];
+      for (const el of document.querySelectorAll('body *')) {
+        const texto = [...el.childNodes]
+          .filter((n) => n.nodeType === 3)
+          .map((n) => n.textContent.trim())
+          .join('');
+        if (!texto) continue;
+        const cs = getComputedStyle(el);
+        if (cs.visibility === 'hidden' || cs.display === 'none' || el.closest('[hidden]')) continue;
+        const tamanho = Number.parseFloat(cs.fontSize);
+        const grande = tamanho >= 24 || (tamanho >= 18.66 && Number(cs.fontWeight) >= 700);
+        const precisa = grande ? 3 : 4.5;
+        const obtido = razao(nums(cs.color), fundoDe(el));
+        if (obtido < precisa) fora.push(`${texto.slice(0, 24)}: ${obtido.toFixed(2)} < ${precisa}`);
+      }
+      return fora;
+    });
+    assert.deepEqual(reprovados, [], `contraste abaixo de AA no tema ${tema}`);
+    await contexto.close();
+  }
+});
+
+test('o botão de tema não monta na borda do cartão', async () => {
+  for (const largura of [320, 390, 1280]) {
+    const { contexto, pagina } = await abrir({ largura });
+    const dentro = await pagina.evaluate(() => {
+      const b = document.getElementById('theme-toggle').getBoundingClientRect();
+      const f = document.querySelector('.frame').getBoundingClientRect();
+      return b.left >= f.left && b.right <= f.right && b.top >= f.top;
+    });
+    assert.ok(dentro, `em ${largura}px o botão sai do cartão`);
+    await contexto.close();
+  }
+});
+
+test('a página não registra erro no console', async () => {
+  const { contexto, pagina, erros } = await abrir({ largura: 1280 });
+  await pagina.waitForTimeout(300);
+  assert.deepEqual(erros, []);
+  await contexto.close();
+});
+
+test('robots.txt e sitemap saem prontos para o crawler', async () => {
+  const robots = await readFile(new URL('robots.txt', SITE), 'utf8');
+  assert.match(robots, /^User-agent: \*$/m);
+  assert.match(robots, /^Allow: \/$/m);
+  assert.match(robots, /^Sitemap: https:\/\/\S+sitemap\.xml$/m);
+
+  const sitemap = await readFile(new URL('sitemap.xml', SITE), 'utf8');
+  assert.match(sitemap, /^<\?xml version="1\.0" encoding="UTF-8"\?>/);
+  assert.match(sitemap, /<loc>https:\/\/\S+<\/loc>/);
+});

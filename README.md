@@ -39,35 +39,9 @@ performance e abriria superfície de XSS à toa.
 
 ## Preview
 
-```
-                                              ┌───┐
-                                              │ ☾ │  ← tema claro/escuro
-   ┌──────────────────────────────────────────┴───┴──┐
-   │                      ◍                          │  avatar
-   │            Museu de Arte de Londrina            │  profile.name
-   │             @museudeartedelondrina              │  profile.handle
-   │          Programação, exposições e ...          │  profile.tagline
-   │                 ◯   ◯   ◯   ◯                   │  social[]  (compacto)
-   ├─────────────────────────────────────────────────┤
-   │  AGENDA                                         │
-   │  ┌──────┬────────────────────────────────────┐  │
-   │  │      │ segunda-feira, 21 de set · 19:00   │  │  event.start / .end
-   │  │ foto │ Apresentação de Taiko              │  │  event.title
-   │  │      │ (Show Musical)                     │  │  event.kind
-   │  └──────┴────────────────────────────────────┘  │
-   │  ┌──────┬────────────────────────────────────┐  │
-   │  │  21  │ ...                                │  │  sem foto → ladrilho
-   │  │ SET  │                                    │  │     com a data
-   │  └──────┴────────────────────────────────────┘  │
-   ├─────────────────────────────────────────────────┤
-   │  MAIS INFORMAÇÕES                               │
-   │  [ ◻ Programação e visitação              ]     │  links[]
-   ├─────────────────────────────────────────────────┤
-   │              [logo]  Secretaria...              │  footer
-   └─────────────────────────────────────────────────┘
-```
+No ar: <https://museu-de-arte-de-londrina.github.io/agenda-cultural/>
 
-Para ver de verdade: `npm ci && npm run dev` e abra <http://localhost:8080>.
+Rodando local: `npm ci && npm run dev`, depois abra <http://localhost:8080>.
 
 ## Começando em 3 passos
 
@@ -101,6 +75,20 @@ Pronto. A cada push na `main` o site é reconstruído e publicado em
 > Se o build falhar, a aba **Actions** mostra exatamente qual campo do
 > `config.yaml` está errado. A página no ar não é substituída por uma quebrada.
 
+## Publicando um evento sem mexer em código
+
+Abra uma issue pelo modelo **Publicar evento na agenda**, preencha os campos e
+envie. Um robô confere os dados e abre uma proposta de alteração para alguém
+revisar e publicar. Se algum campo estiver errado, ele comenta na própria issue
+dizendo o quê.
+
+A automação só roda para quem tem acesso de escrita no repositório. O
+repositório é público e qualquer pessoa pode abrir issue; vindo de fora, ela
+vira um pedido para alguém ler, nunca uma alteração automática.
+
+Editar o `config.yaml` na mão continua funcionando, e é o caminho para mexer em
+qualquer coisa que não seja evento.
+
 ## Referência do `config.yaml`
 
 Campos sem "obrigatório" podem ser omitidos: o default entra no lugar.
@@ -120,6 +108,7 @@ Campos sem "obrigatório" podem ser omitidos: o default entra no lugar.
 | `profile.handle` | texto começando com `@` | não | nenhum | Arroba mostrada abaixo do nome. Precisa de aspas no YAML. |
 | `profile.handle_url` | URL `https:`, `mailto:` ou `tel:` | não | nenhum | Destino da arroba. Sem isso, ela é só texto. |
 | `profile.avatar` | caminho ou URL `https://` | não | nenhum | Sem avatar, aparece um círculo com as iniciais do nome. |
+| `profile.location` | texto, até 160 | não | nenhum | Endereço do local. Só aparece nos arquivos de calendário, junto do evento salvo. |
 | `profile.avatar_shape` | `circle` \| `square` | não | `circle` | `square` para logotipos: o círculo corta os cantos e come o nome da marca. |
 
 Imagens locais vão em `src/assets/` e são referenciadas como
@@ -250,7 +239,9 @@ npm run dev        # servidor com hot reload em http://localhost:8080
 npm run validate   # só confere o config.yaml, sem gerar nada
 npm test           # testes do validador, do sanitizador e do escape do HTML
 npm run lint
-npm run build      # valida e gera o site em _site/
+npm run build        # valida e gera o site em _site/
+npm run test:browser # regressões de layout e acessibilidade num Chrome de verdade
+npm run lighthouse   # performance, acessibilidade, boas práticas e SEO
 ```
 
 `npm run build` roda o `validate` antes: config inválido nunca vira página.
@@ -271,11 +262,36 @@ npm run build      # valida e gera o site em _site/
 | `src/assets/fonts/` | Archivo (OFL), hospedada aqui. Nenhuma requisição sai para CDN de fonte. |
 | `src/assets/fundo-museu.webp` | Fachada do museu, desfocada, atrás da página. Foto de Emerson Dias, do portal da Prefeitura. |
 | `scripts/validate-config.js` | O `npm run validate`. |
+| `scripts/evento-da-issue.js` | Transforma a issue do formulário em evento. |
+| `scripts/lighthouse.js` | O `npm run lighthouse`, com os mínimos por categoria. |
+| `scripts/servir.js` | Servidor estático usado pelo Lighthouse e pelos testes. |
+| `lib/calendar.js` | Geração dos arquivos `.ics`. |
+| `test/browser/` | Regressões de layout e acessibilidade, num navegador. |
 | `eleventy.config.js` | Configuração do build; gera também os QR codes. |
 | `test/` | Testes com `node:test`, sem framework. |
 
 `_site/` é gerado e não vai para o repositório. O deploy publica o artefato
 direto pelo `actions/deploy-pages`, sem branch `gh-pages`.
+
+## Calendário
+
+Cada evento publica um arquivo `.ics` próprio, e a agenda inteira publica um
+feed em `agenda.ics` que pode ser assinado num aplicativo de calendário.
+
+Os horários levam o fuso do local em vez de serem convertidos para UTC: 19:00
+continua 19:00 para quem está na porta do museu, não importa o que o celular
+da pessoa ache do assunto.
+
+## Dados estruturados
+
+A página declara os eventos em `schema.org/Event`, então buscadores podem
+mostrar a agenda como eventos e não como um bloco de texto.
+
+Esse é o único valor da página marcado como `safe` no template, e precisa ser:
+um `<script>` guarda texto cru, então escapar o conteúdo corromperia o JSON em
+vez de proteger alguma coisa. Os caracteres que poderiam fechar o elemento
+antes da hora viram escapes unicode em `src/_data/site.js`, e há teste
+alimentando um título com `</script>` dentro para provar que não dá para sair.
 
 ## QR code
 
@@ -311,6 +327,12 @@ Se preferir versionar o domínio junto com o código, crie um arquivo
 - **Os textos da interface são fixos em português.** `lang` muda o atributo do
   `<html>`, mas o skip link e os rótulos de navegação continuam em pt-BR.
   Traduzi-los exige editar `src/index.njk`. i18n de verdade está fora do escopo.
+- **A auditoria de `robots.txt` do Lighthouse é pulada de propósito.** Ela busca
+  o arquivo com `fetch()` de dentro da página, e a CSP daqui usa
+  `connect-src 'none'`. Um crawler de verdade pede direto ao servidor e não é
+  afetado; afrouxar a política para satisfazer a auditoria trocaria proteção
+  real por um número. O conteúdo do arquivo é conferido em
+  `test/browser/site.test.js`.
 - **CSP por `<meta>`** não aplica `frame-ancestors`
   ([detalhes](SECURITY.md#limitação-conhecida-csp-por-meta)).
 - **A agenda é tão fresca quanto o último build.** É um site estático: sem

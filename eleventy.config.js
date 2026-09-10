@@ -54,11 +54,41 @@ async function writeCalendars(outputDir, config) {
   );
 }
 
+/**
+ * robots.txt and a sitemap, both derived from seo.base_url.
+ *
+ * Without a robots.txt, GitHub Pages answers that path with the 404 page,
+ * which crawlers read as a malformed file rather than as "no rules".
+ */
+async function writeCrawlerFiles(outputDir, config) {
+  const url = config.seo.base_url;
+  if (!url) return;
+
+  const updated = (config.updatedAt?.iso ?? new Date().toISOString()).slice(0, 10);
+  const sitemap = [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+    '  <url>',
+    `    <loc>${url}</loc>`,
+    `    <lastmod>${updated}</lastmod>`,
+    '  </url>',
+    '</urlset>',
+    '',
+  ].join('\n');
+
+  await writeFile(join(outputDir, 'sitemap.xml'), sitemap);
+  await writeFile(
+    join(outputDir, 'robots.txt'),
+    `User-agent: *\nAllow: /\n\nSitemap: ${url}sitemap.xml\n`,
+  );
+}
+
 export default function (eleventyConfig) {
   eleventyConfig.on('eleventy.after', async ({ dir }) => {
     const config = await site();
     await writeQrCodes(dir.output, config);
     await writeCalendars(dir.output, config);
+    await writeCrawlerFiles(dir.output, config);
   });
 
   eleventyConfig.addPassthroughCopy({ 'src/assets': 'assets' });

@@ -23,8 +23,10 @@ permalink: /index.html
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    {#- GitHub Pages cannot set response headers, so the policy ships as a meta tag. -#}
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https:; style-src 'self'; script-src 'self'; font-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'">
+    {#- GitHub Pages cannot set response headers, so the policy ships as a meta tag.
+        frame-ancestors is left out on purpose: a meta tag cannot deliver it, and
+        including it only logged an error in every visitor's console. See SECURITY.md. -#}
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https:; style-src 'self'; script-src 'self'; font-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
     <meta name="referrer" content="no-referrer">
     <meta name="color-scheme" content="{{ 'light dark' if site.theme.mode == 'auto' else site.theme.mode }}">
 

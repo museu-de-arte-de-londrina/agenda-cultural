@@ -57,3 +57,11 @@ jobs:
 
       - name: Build
         run: npm run build
+
+      # Os dois passos abaixo dirigem o Chrome que já vem na máquina da
+      # esteira, então não há navegador para baixar.
+      - name: Regressões de layout e acessibilidade
+        run: npm run test:browser
+
+      - name: Lighthouse
+        run: npm run lighthouse

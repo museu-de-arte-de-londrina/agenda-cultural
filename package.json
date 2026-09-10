@@ -13,12 +13,16 @@
     "test": "node --test \"test/*.test.js\"",
     "lint": "eslint .",
     "build": "npm run validate && eleventy",
-    "dev": "eleventy --serve"
+    "dev": "eleventy --serve",
+    "lighthouse": "npm run build && node scripts/lighthouse.js",
+    "test:browser": "npm run build && node --test \"test/browser/*.test.js\""
   },
   "devDependencies": {
     "@11ty/eleventy": "^3.1.6",
     "@eslint/js": "^10.0.1",
     "eslint": "^10.10.0",
+    "lighthouse": "^12.8.2",
+    "playwright": "^1.63.0",
     "qrcode": "^1.5.4",
     "simple-icons": "^16.30.0",
     "yaml": "^2.9.0",
