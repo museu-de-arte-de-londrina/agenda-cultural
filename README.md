@@ -309,9 +309,11 @@ Decisões que não são óbvias lendo o CSS:
 - **A agenda é agrupada por dia.** A data fica num trilho à esquerda e é
   impressa uma vez por dia, não uma vez por evento — seis atividades no mesmo
   dia imprimiam a mesma data seis vezes.
-- **A lista é zebrada.** O preenchimento alterna a cada linha e reinicia a cada
-  dia, então uma data nova sempre abre no tom claro. É o que dá ritmo de
-  leitura numa lista longa — nenhum item recebe tratamento visual próprio.
+- **A zebra é do dia, não do item.** A faixa de cada dia alterna de fundo, e as
+  linhas dentro dela são todas iguais. O que precisa ser distinguido aqui é um
+  dia do seguinte — um único dia chega a ter seis atividades. Nenhum evento
+  recebe tratamento visual próprio, e os links do rodapé não entram na
+  alternância.
 - **O tom da zebra mora no `src/_data/site.js`, não no CSS.** O cálculo do
   accent legível precisa do valor exato que a linha vai usar; manter uma
   segunda cópia no CSS foi como os horários escorregaram para 4,41:1 quando a

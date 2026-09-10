@@ -359,12 +359,18 @@ h1 {
   display: grid;
   grid-template-columns: 2.75rem 1fr;
   gap: 0.875rem;
+  padding: 0.625rem 0.5rem;
+  border-radius: 0.875rem;
+}
+
+/* The band alternates, not the rows inside it: what needs telling apart here
+   is one day from the next, and a day can hold six activities. */
+.day:nth-of-type(even) {
+  background: var(--zebra);
 }
 
 .day + .day {
-  margin-top: 0.75rem;
-  padding-top: 0.75rem;
-  border-top: 1px solid var(--hairline);
+  margin-top: 0.375rem;
 }
 
 .day__rail {
@@ -418,12 +424,7 @@ h1 {
   margin-top: 0.5rem;
 }
 
-/* Zebra: alternating fill gives the eye a rhythm to follow down a long day,
-   and restarts on each day so a new date always opens on the lighter tone. */
-.entry:nth-child(even),
-.links li:nth-child(even) .link {
-  background: var(--zebra);
-}
+
 
 .entry:hover {
   border-color: var(--accent-text);
