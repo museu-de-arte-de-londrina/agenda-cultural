@@ -317,7 +317,7 @@ Decisões que não são óbvias lendo o CSS:
   escuro. `lib/color.js` clareia ou escurece a cor preservando o matiz até
   passar em AA, então qualquer `theme.accent` continua legível nos dois temas.
 - **O fundo é a fachada do museu, fora de foco.** O desfoque está assado no
-  arquivo (3 KB), não em `filter: blur()` — filtrar uma camada do tamanho da
+  arquivo (19 KB), não em `filter: blur()` — filtrar uma camada do tamanho da
   viewport faria o compositor refazer o borrão a cada scroll. Sobre a foto vai
   um véu que escurece de cima para baixo, e todo o conteúdo fica em superfícies
   opacas, então o contraste do texto não depende da imagem.
