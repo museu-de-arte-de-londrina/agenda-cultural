@@ -119,6 +119,23 @@ export function jaTemEvento(eventos, evento) {
 }
 
 /**
+ * Ordem em que os campos são escritos no config.yaml. A foto só é conhecida
+ * depois do download, e sem isto ela cairia no fim do bloco, diferente dos
+ * eventos escritos à mão.
+ */
+const ORDEM = ['title', 'start', 'end', 'kind', 'image', 'url', 'description'];
+
+/**
+ * @param {object} evento
+ * @returns {object} o mesmo evento, com as chaves na ordem de ORDEM
+ */
+export function ordenarCampos(evento) {
+  return Object.fromEntries(
+    ORDEM.filter((chave) => evento[chave] !== undefined).map((chave) => [chave, evento[chave]]),
+  );
+}
+
+/**
  * @param {Map<string, string>} campos
  * @returns {{evento: object, erros: string[]}}
  */
@@ -244,7 +261,8 @@ async function principal() {
     }
   }
 
-  const eventos = [...(atual.events ?? []), evento];
+  const completo = ordenarCampos(evento);
+  const eventos = [...(atual.events ?? []), completo];
 
   // A mesma validação do build: se quebraria o site, para aqui.
   try {
@@ -261,7 +279,7 @@ async function principal() {
   // YAML reescrever todos os eventos, e o diff do PR ficaria ilegível para
   // quem só quer conferir o que foi adicionado.
   const lista = doc.get('events');
-  if (lista && typeof lista.add === 'function') lista.add(doc.createNode(evento));
+  if (lista && typeof lista.add === 'function') lista.add(doc.createNode(completo));
   else doc.set('events', eventos);
 
   await writeFile(CONFIG, doc.toString({ lineWidth: 96 }));

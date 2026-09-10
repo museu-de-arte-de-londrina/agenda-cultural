@@ -12,6 +12,7 @@ import {
   jaTemEvento,
   extrairUrlDaFoto,
   baixarFoto,
+  ordenarCampos,
 } from '../scripts/evento-da-issue.js';
 
 /** O formato que o GitHub gera a partir do formulário. */
@@ -220,4 +221,21 @@ test('explica em português por que a foto não serve', async (t) => {
   globalThis.fetch = async () =>
     new Response(new Uint8Array(6 * 1024 * 1024), { headers: { 'content-type': 'image/png' } });
   await assert.rejects(baixarFoto('https://exemplo.org/enorme.png', evento), /limite é 5 MB/);
+});
+
+test('a foto fica no meio do bloco, e não no fim', () => {
+  const evento = {
+    title: 'Oficina',
+    start: '2026-10-15T14:00',
+    description: 'Uma frase.',
+    image: 'assets/eventos/oficina.webp',
+    kind: 'Oficina',
+  };
+  assert.deepEqual(Object.keys(ordenarCampos(evento)), [
+    'title',
+    'start',
+    'kind',
+    'image',
+    'description',
+  ]);
 });
