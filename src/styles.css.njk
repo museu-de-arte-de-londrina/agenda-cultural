@@ -422,6 +422,13 @@ h1 {
   font-weight: 600;
 }
 
+/* Esta seção fecha a página e é curta: centralizada ela lê como um bloco só,
+   enquanto a agenda acima precisa do alinhamento à esquerda para a coluna de
+   horários guiar a leitura. */
+.more__title {
+  text-align: center;
+}
+
 .empty {
   margin: 0;
   color: var(--muted);
@@ -607,6 +614,7 @@ h1 {
 .link {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 0.625rem;
   min-height: 2.875rem;
   padding: 0.5rem 0.875rem;
