@@ -276,7 +276,14 @@ test('cada evento oferece o próprio arquivo de calendário', async () => {
   const html = await render(
     'profile:\n  name: Museu\nevents:\n  - title: Show de Taiko\n    start: 2099-05-04T19:00\n',
   );
-  assert.match(html, /href="eventos\/show-de-taiko-209905041900\.ics" download/);
+
+  const botao = html.match(/<a\b[^>]*class="entry__calendar"[\s\S]*?>/);
+  assert.ok(botao, 'botão de calendário ausente');
+  assert.match(botao[0], /href="eventos\/show-de-taiko-209905041900\.ics"/);
+  assert.match(botao[0], /\bdownload\b/);
+  // Só o ícone, então o rótulo precisa vir por aria-label.
+  assert.match(botao[0], /aria-label="Adicionar [^"]*Show de Taiko[^"]*"/);
+
   assert.match(html, /href="agenda\.ics" download/);
 });
 

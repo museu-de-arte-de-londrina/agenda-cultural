@@ -1,4 +1,4 @@
-# Agenda Cultural: agregador de links
+# Agenda Cultural
 
 Uma página só, estática, com a **agenda de eventos** em primeiro plano e os
 canais de contato logo abaixo do título. O conteúdo é seu: mora no seu
@@ -22,20 +22,6 @@ events:
 
 Cada evento vira um cartão com miniatura, data, hora e título. Quem já passou
 some sozinho no build seguinte.
-
-## Por que não é mais um Linktree
-
-| | Aqui | Serviços hospedados |
-| --- | --- | --- |
-| Dono do conteúdo | Você, num repositório git | A plataforma |
-| Rastreamento do visitante | Nenhum | Analytics, pixel, cookies |
-| Requisições a terceiros | Zero | CDN, fontes, scripts |
-| JavaScript na página | ~1 KB, só o botão de tema | Vários KB |
-| Custo | R$ 0 | Grátis com limite, ou assinatura |
-
-O YAML é lido **no build**, não no navegador: o Eleventy gera o HTML final já
-pronto. Nada de `fetch('config.yaml')` no cliente, porque isso custaria SEO,
-performance e abriria superfície de XSS à toa.
 
 ## Preview
 
@@ -240,7 +226,7 @@ npm run validate   # só confere o config.yaml, sem gerar nada
 npm test           # testes do validador, do sanitizador e do escape do HTML
 npm run lint
 npm run build        # valida e gera o site em _site/
-npm run test:browser # regressões de layout e acessibilidade num Chrome de verdade
+npm run test:browser # layout, alvos de toque, contraste e axe-core num Chrome
 npm run lighthouse   # performance, acessibilidade, boas práticas e SEO
 ```
 
@@ -327,6 +313,9 @@ Se preferir versionar o domínio junto com o código, crie um arquivo
 - **Os textos da interface são fixos em português.** `lang` muda o atributo do
   `<html>`, mas o skip link e os rótulos de navegação continuam em pt-BR.
   Traduzi-los exige editar `src/index.njk`. i18n de verdade está fora do escopo.
+- **A auditoria do axe roda com a CSP desligada.** É a única forma de injetar o
+  axe na página, e é a própria CSP que impede a injeção. A política em si é
+  verificada por outro teste, que confere que nada inline passa.
 - **O mínimo de Performance no CI é 80, não 95.** A nota composta depende da
   CPU disponível na hora da medição: nesta base o `benchmarkIndex` do próprio
   relatório variou de 840 a 1506 entre execuções da mesma página, sem uma linha
@@ -362,6 +351,15 @@ Decisões que não são óbvias lendo o CSS:
 - **O accent também é cor de texto**, e um accent escuro fica ilegível no tema
   escuro. `lib/color.js` clareia ou escurece a cor preservando o matiz até
   passar em AA, então qualquer `theme.accent` continua legível nos dois temas.
+- **Nenhuma área clicável fica por cima de outra.** O cartão do evento já teve
+  uma sobreposição que o tornava inteiro clicável, com o botão de calendário
+  dentro dela. Dois alvos empilhados são difíceis de acertar no toque e o
+  leitor de tela anunciava a linha inteira como um link só. Hoje o título leva
+  ao evento e o botão salva no calendário, cada um com a própria área, e há
+  teste que reprova qualquer clicável dentro de outro.
+- **O botão de calendário do evento é só o ícone.** Com rótulo em texto, cada
+  cartão ganhava uma linha inteira e a agenda voltava a caber um evento por
+  tela de celular. O rótulo vai no `aria-label`, e o alvo continua com 44px.
 - **Alvo de toque mínimo de 44px.** Os ícones de contato têm 48px (o mínimo do
   Android), e a arroba ganha preenchimento com margem negativa, que cresce o alvo
   sem mexer no layout. O cartão de evento inteiro é clicável por um `::after`

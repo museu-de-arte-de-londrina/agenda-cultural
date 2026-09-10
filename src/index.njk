@@ -167,10 +167,13 @@ permalink: /index.html
                   <p class="entry__meta">
                     {%- if event.kind %}<span class="entry__kind">{{ event.kind }}</span>{% endif %}
                     {%- if event.runsUntil %}<span class="entry__until">até {{ event.runsUntil }}</span>{% endif %}
-                    {#- Above the card-wide overlay, or the overlay would swallow the click. -#}
-                    <a class="entry__calendar" href="eventos/{{ event.slug }}.ics" download>
-                      {{- calendarIcon() }}<span>Adicionar ao calendário</span>
-                    </a>
+                    {#- Só o ícone: com rótulo, cada cartão ganhava uma linha inteira. -#}
+                    <a
+                      class="entry__calendar"
+                      href="eventos/{{ event.slug }}.ics"
+                      download
+                      aria-label="Adicionar “{{ event.title }}” ao calendário"
+                    >{{ calendarIcon() }}</a>
                   </p>
                 </div>
 
@@ -186,6 +189,7 @@ permalink: /index.html
                 {%- if event.description %}
                 <p class="entry__description">{{ event.description }}</p>
                 {%- endif %}
+
               </li>
               {%- endfor %}
             </ol>
@@ -216,17 +220,17 @@ permalink: /index.html
         {%- endif %}
       </main>
 
-      {%- if site.updatedAt %}
-      {#- The date of the content, not of the build: it is what tells a reader
-          whether the agenda is being kept up. -#}
-      <p class="updated">
-        Programação atualizada em <time datetime="{{ site.updatedAt.iso }}">{{ site.updatedAt.label }}</time>
-      </p>
-      {%- endif %}
+      <footer class="footer">
+        {%- if site.updatedAt %}
+        {#- Dentro do rodapé porque ele é landmark: solto entre main e footer,
+            este parágrafo ficava fora de qualquer região da página. -#}
+        <p class="updated">
+          Programação atualizada em <time datetime="{{ site.updatedAt.iso }}">{{ site.updatedAt.label }}</time>
+        </p>
+        {%- endif %}
 
       {%- if site.footer %}
       {%- set footerTag = 'a' if site.footer.url else 'div' %}
-      <footer class="footer">
         <{{ footerTag }} class="footer__inner"{% if site.footer.url %} href="{{ site.footer.url }}" target="_blank" rel="noopener noreferrer"{% endif %}>
           {%- if site.footer.logos.length %}
           <span class="footer__logos">
@@ -238,8 +242,8 @@ permalink: /index.html
           {%- endif %}
           {%- if site.footer.text %}<span class="footer__text">{{ site.footer.text }}</span>{% endif %}
         </{{ footerTag }}>
+        {%- endif %}
       </footer>
-      {%- endif %}
     </div>
   </body>
 </html>

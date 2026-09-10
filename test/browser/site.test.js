@@ -88,21 +88,55 @@ test('nada escapa das bordas do cartão', async () => {
 });
 
 test('todo alvo de toque cabe num polegar', async () => {
+  // Sem exceção: qualquer coisa clicável precisa dos 44px, inclusive o título
+  // do evento, que é a ação principal do cartão.
+  for (const largura of [320, 390]) {
+    const { contexto, pagina } = await abrir({ largura });
+    const pequenos = await pagina.evaluate(() =>
+      [...document.querySelectorAll('a, button')]
+        .map((el) => ({ el, r: el.getBoundingClientRect() }))
+        .filter(({ r }) => r.width > 0 && r.height > 0 && Math.min(r.width, r.height) < 44)
+        .map(({ el, r }) => `${el.className || el.tagName}: ${Math.round(r.width)}x${Math.round(r.height)}`),
+    );
+    assert.deepEqual(pequenos, [], `alvos abaixo de 44px em ${largura}px`);
+    await contexto.close();
+  }
+});
+
+test('nenhuma área clicável fica por cima de outra', async () => {
+  // Dois links empilhados são difíceis de acertar no toque e o leitor de tela
+  // anuncia a região errada.
   const { contexto, pagina } = await abrir({ largura: 390 });
-  const pequenos = await pagina.evaluate(() => {
-    const fora = [];
-    for (const el of document.querySelectorAll('a, button')) {
-      const r = el.getBoundingClientRect();
-      if (r.width === 0 || r.height === 0) continue;
-      if (el.closest('.entry') && el.classList.contains('entry__link')) continue; // alvo é a linha toda
-      if (Math.min(r.width, r.height) < 44) {
-        fora.push(`${el.className || el.tagName}: ${Math.round(r.width)}x${Math.round(r.height)}`);
-      }
-    }
-    return fora;
-  });
-  assert.deepEqual(pequenos, [], 'alvos abaixo de 44px');
+  const aninhados = await pagina.evaluate(() =>
+    [...document.querySelectorAll('a, button')]
+      .filter((el) => el.parentElement.closest('a, button'))
+      .map((el) => el.className || el.tagName),
+  );
+  assert.deepEqual(aninhados, [], 'há elemento clicável dentro de outro');
   await contexto.close();
+});
+
+test('o axe não encontra violação de acessibilidade', async () => {
+  for (const tema of ['light', 'dark']) {
+    for (const largura of [320, 390, 1280]) {
+      // bypassCSP só para conseguir injetar o axe: a política da página é
+      // verificada pelo teste de CSP, e é ela que barra a injeção aqui.
+      const contexto = await navegador.newContext({
+        viewport: { width: largura, height: 900 },
+        colorScheme: tema,
+        bypassCSP: true,
+      });
+      const pagina = await contexto.newPage();
+      await pagina.goto(site.url, { waitUntil: 'load' });
+      await pagina.addScriptTag({ path: 'node_modules/axe-core/axe.min.js' });
+      const resultado = await pagina.evaluate(() =>
+        window.axe.run(document, { resultTypes: ['violations'] }),
+      );
+      const violacoes = resultado.violations.map((v) => `[${v.impact}] ${v.id}: ${v.help}`);
+      assert.deepEqual(violacoes, [], `axe em ${largura}px, tema ${tema}`);
+      await contexto.close();
+    }
+  }
 });
 
 test('todo texto passa em AA nos dois temas', async () => {
