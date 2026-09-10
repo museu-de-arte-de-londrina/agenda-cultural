@@ -5,9 +5,16 @@
 import { loadConfigFile } from '../../schema/config.schema.js';
 import { resolveIcon } from '../../lib/icons.js';
 import { bestContrast, contrastRatio } from '../../lib/color.js';
+import {
+  parseDateTime,
+  toDate,
+  toIsoString,
+  isUpcoming,
+  formatEventWhen,
+  formatDateTile,
+} from '../../lib/datetime.js';
 
 const DEFAULT_CONFIG = new URL('../../config.yaml', import.meta.url);
-
 
 /** Two initials, used when no avatar is set. */
 function initials(name) {
@@ -30,6 +37,33 @@ function absoluteUrl(source, baseUrl) {
   return new URL(source, baseUrl).href;
 }
 
+/**
+ * The agenda: only what has not finished yet, soonest first.
+ *
+ * The cut-off is the build time, so the page is as fresh as its last deploy.
+ * The Pages workflow also rebuilds on a schedule to keep this honest between
+ * edits — see .github/workflows/deploy.yml.
+ */
+function buildAgenda(config, now) {
+  return config.events
+    .map((event) => {
+      // Already validated by the schema, so these parses cannot fail.
+      const start = parseDateTime(event.start);
+      const end = event.end ? parseDateTime(event.end) : null;
+      return {
+        ...event,
+        start,
+        end,
+        when: formatEventWhen(start, end, config.lang),
+        tile: formatDateTile(start, config.lang),
+        iso: toIsoString(start),
+        startsAt: toDate(start).getTime(),
+      };
+    })
+    .filter((event) => isUpcoming(event.start, event.end, now))
+    .sort((a, b) => a.startsAt - b.startsAt);
+}
+
 export default async function site() {
   // Read at call time, not import time, so tests can point at a fixture.
   const config = await loadConfigFile(process.env.CONFIG_FILE ?? DEFAULT_CONFIG);
@@ -38,6 +72,7 @@ export default async function site() {
   return {
     ...config,
     initials: initials(config.profile.name),
+    events: buildAgenda(config, Date.now()),
     links: config.links.map((link) => ({ ...link, iconData: link.icon ? resolveIcon(link.icon) : null })),
     social: config.social.map((entry) => ({ ...entry, iconData: resolveIcon(entry.platform) })),
     canonical: config.seo.base_url ?? null,

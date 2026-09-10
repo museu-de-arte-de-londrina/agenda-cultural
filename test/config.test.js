@@ -97,6 +97,59 @@ test('avatar_shape tem default e recusa valor fora do enum', () => {
   );
 });
 
+test('events é opcional e valida data, ordem e chaves', () => {
+  assert.deepEqual(parseConfig(minimal()).events, [], 'sem agenda, lista vazia');
+
+  const config = parseConfig({
+    ...minimal(),
+    events: [{ title: 'Abertura', start: '2026-09-21T19:00', end: '2026-09-21T20:00', kind: 'Show' }],
+  });
+  assert.equal(config.events[0].title, 'Abertura');
+  assert.equal(config.events[0].start, '2026-09-21T19:00');
+
+  rejects({ ...minimal(), events: [{ start: '2026-09-21' }] }, /events\[0\]\.title: campo obrigatório/);
+  rejects({ ...minimal(), events: [{ title: 'x' }] }, /events\[0\]\.start: campo obrigatório/);
+  rejects(
+    { ...minimal(), events: [{ title: 'x', start: '21/09/2026' }] },
+    /events\[0\]\.start: data inválida/,
+  );
+  rejects(
+    { ...minimal(), events: [{ title: 'x', start: '2026-02-31' }] },
+    /events\[0\]\.start: data inválida/,
+  );
+  rejects(
+    { ...minimal(), events: [{ title: 'x', start: '2026-09-25', end: '2026-09-21' }] },
+    /events\[0\]\.end: termina antes de começar/,
+  );
+  rejects(
+    { ...minimal(), events: [{ title: 'x', start: '2026-09-21', url: 'javascript:alert(1)' }] },
+    /events\[0\]\.url: URL inválida/,
+  );
+  rejects({ ...minimal(), events: [{ title: 'x', start: '2026-09-21', img: 'a.png' }] }, /chave desconhecida/);
+  rejects({ ...minimal(), events: 'nenhum' }, /events: deve ser uma lista de eventos/);
+});
+
+test('o mesmo dia inteiro como início e fim é aceito', () => {
+  const config = parseConfig({
+    ...minimal(),
+    events: [{ title: 'Temporada', start: '2026-09-21', end: '2026-09-27' }],
+  });
+  assert.equal(config.events[0].end, '2026-09-27');
+});
+
+test('handle precisa da arroba', () => {
+  assert.equal(
+    parseConfig({ ...minimal(), profile: { name: 'Museu', handle: '@museu.londrina' } }).profile.handle,
+    '@museu.londrina',
+  );
+  rejects({ ...minimal(), profile: { name: 'Museu', handle: 'museu' } }, /handle: deve começar com @/);
+  rejects({ ...minimal(), profile: { name: 'Museu', handle: '@com espaço' } }, /handle: deve começar com @/);
+  rejects(
+    { ...minimal(), profile: { name: 'Museu', handle_url: 'javascript:alert(1)' } },
+    /handle_url: URL inválida/,
+  );
+});
+
 test('footer é opcional e passa pela mesma allowlist de URL', () => {
   assert.equal(parseConfig(minimal()).footer, undefined);
 

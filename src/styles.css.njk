@@ -5,46 +5,52 @@ permalink: /styles.css
   Generated at build time so `theme.accent` can be baked in as a custom
   property. Shipping it as a real file (instead of an inline <style>) is what
   lets the CSP stay at `style-src 'self'` with no 'unsafe-inline'.
+
+  Theme resolution, in order of precedence:
+    1. :root[data-theme="..."]  — the toggle, and theme.mode when it is fixed
+    2. prefers-color-scheme     — the reader's system setting
+    3. :root                    — light, the base every token is defined in
 */
 
 :root {
-  color-scheme: {{ 'light dark' if site.theme.mode == 'auto' else site.theme.mode }};
+  color-scheme: light;
 
   --accent: {{ site.theme.accent }};
   --accent-fg: {{ site.accentForeground }};
 
-  --bg: #f6f7fb;
+  --bg: #f4f6fa;
   --surface: #ffffff;
-  --surface-hover: #f0f2f8;
+  --surface-2: #f7f9fc;
+  --surface-hover: #eef2f8;
   --text: #10151f;
-  --muted: #4b5666;
-  --border: #e3e7ef;
-  --shadow: rgba(16, 21, 31, 0.08);
+  --muted: #505d70;
+  --border: #dfe5ee;
+  --shadow: rgba(16, 21, 31, 0.07);
   --focus: {{ site.focusRing.light }};
 }
 
 {% set darkTokens %}
-  --bg: #070b14;
-  --surface: #101828;
-  --surface-hover: #18233a;
+  color-scheme: dark;
+  --bg: #05080f;
+  --surface: #0e1626;
+  --surface-2: #141f33;
+  --surface-hover: #1b2740;
   --text: #eaeff8;
-  --muted: #9fb0c9;
-  --border: #24304a;
-  --shadow: rgba(0, 0, 0, 0.45);
+  --muted: #a2b1c8;
+  --border: #263349;
+  --shadow: rgba(0, 0, 0, 0.5);
   --focus: {{ site.focusRing.dark }};
 {% endset %}
 
-{%- if site.theme.mode == 'auto' %}
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme='light']) {
     {{- darkTokens -}}
   }
 }
-{%- elif site.theme.mode == 'dark' %}
-:root {
+
+:root[data-theme='dark'] {
   {{- darkTokens -}}
 }
-{%- endif %}
 
 *,
 *::before,
@@ -54,15 +60,11 @@ permalink: /styles.css
 
 body {
   margin: 0;
-  padding: 2rem 1rem 3rem;
+  padding: 1.5rem 1rem 3rem;
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
   background: var(--bg);
   color: var(--text);
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   font-size: 1rem;
   line-height: 1.5;
   -webkit-text-size-adjust: 100%;
@@ -81,7 +83,7 @@ body {
 
 .skip-link:focus {
   left: 0;
-  z-index: 1;
+  z-index: 3;
 }
 
 .visually-hidden {
@@ -95,14 +97,78 @@ body {
   white-space: nowrap;
 }
 
-.card {
-  width: 100%;
-  max-width: 32rem;
+/* ---------------------------------------------------------------- toggle -- */
+
+.theme-toggle {
+  position: fixed;
+  top: 0.75rem;
+  right: 0.75rem;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--muted);
+  box-shadow: 0 1px 3px var(--shadow);
+  cursor: pointer;
 }
+
+.theme-toggle:hover {
+  color: var(--text);
+  background: var(--surface-hover);
+}
+
+/* One icon per theme, both in the same grid cell so the button never resizes. */
+.theme-toggle__sun,
+.theme-toggle__moon {
+  grid-area: 1 / 1;
+}
+
+.theme-toggle__sun {
+  display: none;
+}
+
+:root[data-theme='dark'] .theme-toggle__sun {
+  display: block;
+}
+
+:root[data-theme='dark'] .theme-toggle__moon {
+  display: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .theme-toggle__sun {
+    display: block;
+  }
+
+  :root:not([data-theme='light']) .theme-toggle__moon {
+    display: none;
+  }
+}
+
+/* ----------------------------------------------------------------- frame -- */
+
+.frame {
+  width: 100%;
+  max-width: 44rem;
+  margin: 0 auto;
+  padding: 2rem 1.25rem 1.5rem;
+  border: 1px solid var(--border);
+  border-radius: 1.25rem;
+  background: var(--surface);
+  box-shadow: 0 1px 2px var(--shadow);
+}
+
+/* --------------------------------------------------------------- profile -- */
 
 .profile {
   text-align: center;
-  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border);
 }
 
 .avatar {
@@ -141,27 +207,217 @@ body {
 h1 {
   margin: 1rem 0 0;
   font-size: 1.5rem;
-  line-height: 1.25;
+  line-height: 1.2;
   letter-spacing: -0.01em;
   overflow-wrap: anywhere;
 }
 
+.handle {
+  margin: 0.375rem 0 0;
+  font-size: 0.9375rem;
+  overflow-wrap: anywhere;
+}
+
+.handle a {
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.handle a:hover {
+  color: var(--text);
+  text-decoration: underline;
+}
+
 .tagline {
-  margin: 0.5rem 0 0;
+  margin: 0.5rem auto 0;
+  max-width: 32rem;
   color: var(--muted);
   overflow-wrap: anywhere;
 }
 
-.links,
+/* Compact contact row: the agenda below is the point of the page. */
+.social {
+  margin-top: 1rem;
+}
+
 .social ul {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.375rem;
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
-.links {
+.social__link {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.social__link:hover {
+  color: var(--text);
+  background: var(--surface-hover);
+}
+
+/* -------------------------------------------------------------- sections -- */
+
+.section + .section {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.section__title {
+  margin: 1.5rem 0 1rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.section + .section .section__title {
+  margin-top: 0;
+}
+
+.empty {
+  margin: 0;
+  color: var(--muted);
+}
+
+/* ---------------------------------------------------------------- agenda -- */
+
+.events {
+  list-style: none;
+  margin: 0;
+  padding: 0;
   display: grid;
   gap: 0.75rem;
+}
+
+.event {
+  position: relative;
+  display: grid;
+  grid-template-columns: 5.5rem 1fr;
+  gap: 0.875rem;
+  align-items: start;
+  padding: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 0.875rem;
+  background: var(--surface-2);
+}
+
+.event__media {
+  position: relative;
+}
+
+.event__image,
+.event__tile {
+  display: block;
+  width: 5.5rem;
+  height: 5.5rem;
+  margin: 0;
+  border-radius: 0.625rem;
+}
+
+.event__image {
+  object-fit: cover;
+  background: var(--surface-hover);
+}
+
+/* No photo yet: a date tile beats a stock image, and it is real information. */
+.event__tile {
+  display: grid;
+  place-content: center;
+  text-align: center;
+  color: var(--accent-fg);
+  background: var(--accent);
+  line-height: 1.1;
+}
+
+.event__tile-day {
+  display: block;
+  font-size: 1.75rem;
+  font-weight: 700;
+}
+
+.event__tile-month {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+
+.event__body {
+  min-width: 0;
+}
+
+.event__when {
+  margin: 0;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.event__time::before {
+  content: ' · ';
+}
+
+.event__title {
+  margin: 0.25rem 0 0;
+  font-size: 1.0625rem;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+
+.event__link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.event__link:hover {
+  text-decoration: underline;
+}
+
+/* The whole card is the target, so a pointer anywhere on it opens the link. */
+.event__link::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+
+.event__kind {
+  display: inline-block;
+  margin: 0.5rem 0 0;
+  padding: 0.125rem 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.event__description {
+  margin: 0.5rem 0 0;
+  font-size: 0.875rem;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+
+/* ----------------------------------------------------------------- links -- */
+
+.links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.625rem;
 }
 
 .link {
@@ -169,15 +425,14 @@ h1 {
   align-items: center;
   justify-content: center;
   gap: 0.625rem;
-  min-height: 3.25rem;
-  padding: 0.75rem 1.25rem;
+  min-height: 3rem;
+  padding: 0.625rem 1rem;
   border: 1px solid var(--border);
   border-radius: 0.75rem;
-  background: var(--surface);
+  background: var(--surface-2);
   color: inherit;
   font-weight: 500;
   text-decoration: none;
-  box-shadow: 0 1px 2px var(--shadow);
 }
 
 .link:hover {
@@ -199,50 +454,11 @@ h1 {
   overflow-wrap: anywhere;
 }
 
-.social {
-  margin-top: 2rem;
-}
-
-.social ul {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.5rem;
-}
-
-.social__link {
-  display: grid;
-  place-items: center;
-  width: 2.75rem;
-  height: 2.75rem;
-  border-radius: 50%;
-  color: var(--muted);
-  text-decoration: none;
-}
-
-.social__link:hover {
-  color: var(--text);
-  background: var(--surface-hover);
-}
-
-.icon {
-  flex: none;
-  fill: currentColor;
-}
-
-.icon--stroke {
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
+/* ---------------------------------------------------------------- footer -- */
 
 .footer {
-  width: 100%;
-  max-width: 32rem;
-  margin-top: 2.5rem;
-  padding-top: 1.5rem;
+  margin-top: 2rem;
+  padding-top: 1.25rem;
   border-top: 1px solid var(--border);
   text-align: center;
 }
@@ -278,25 +494,75 @@ a.footer__inner:hover {
   box-sizing: content-box;
 }
 
+/* ----------------------------------------------------------------- icons -- */
+
+.icon {
+  flex: none;
+  fill: currentColor;
+}
+
+.icon--stroke {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
 :focus-visible {
   outline: 3px solid var(--focus);
   outline-offset: 2px;
   border-radius: 0.25rem;
 }
 
+/* ------------------------------------------------------------ responsive -- */
+
+@media (max-width: 26rem) {
+  .event {
+    grid-template-columns: 4rem 1fr;
+    gap: 0.75rem;
+  }
+
+  .event__image,
+  .event__tile {
+    width: 4rem;
+    height: 4rem;
+  }
+
+  .event__tile-day {
+    font-size: 1.375rem;
+  }
+
+  .avatar {
+    width: 5.5rem;
+    height: 5.5rem;
+  }
+}
+
 @media (min-width: 40rem) {
   body {
-    padding-top: 4rem;
+    padding: 3rem 1.5rem 4rem;
+  }
+
+  .frame {
+    padding: 2.5rem 2rem 2rem;
   }
 
   h1 {
-    font-size: 1.75rem;
+    font-size: 1.875rem;
+  }
+
+  .theme-toggle {
+    top: 1.25rem;
+    right: 1.25rem;
   }
 }
 
 @media (prefers-reduced-motion: no-preference) {
   .link,
-  .social__link {
-    transition: background-color 150ms ease, filter 150ms ease, color 150ms ease;
+  .social__link,
+  .theme-toggle,
+  .event {
+    transition: background-color 150ms ease, color 150ms ease, filter 150ms ease;
   }
 }

@@ -1,22 +1,27 @@
 # Agenda Cultural — agregador de links
 
-Uma página só, estática, com todos os seus links. Estilo Linktree, mas o
-conteúdo é seu: mora no seu repositório, publica no GitHub Pages e **tudo que
-aparece na tela vem de um único arquivo, o `config.yaml`**.
+Uma página só, estática, com a **agenda de eventos** em primeiro plano e os
+canais de contato logo abaixo do título. O conteúdo é seu: mora no seu
+repositório, publica no GitHub Pages e **tudo que aparece na tela vem de um
+único arquivo, o `config.yaml`**.
 
 Você nunca precisa abrir HTML, CSS ou JavaScript para usar.
 
 ```yaml
 profile:
   name: Museu de Arte de Londrina
-  tagline: Agenda, exposições e canais oficiais do museu em um só lugar.
+  handle: "@museudeartedelondrina"
 
-links:
-  - label: Programação e visitação
-    url: https://londrinacultura.londrina.pr.gov.br/espaco/1/
-    icon: website
-    highlight: true
+events:
+  - title: Apresentação de Taiko
+    start: 2026-09-21T19:00
+    end: 2026-09-21T20:00
+    kind: Show Musical
+    image: assets/taiko.png
 ```
+
+Cada evento vira um cartão com miniatura, data, hora e título. Quem já passou
+some sozinho no build seguinte.
 
 ## Por que não é mais um Linktree
 
@@ -25,7 +30,7 @@ links:
 | Dono do conteúdo | Você, num repositório git | A plataforma |
 | Rastreamento do visitante | Nenhum | Analytics, pixel, cookies |
 | Requisições a terceiros | Zero | CDN, fontes, scripts |
-| JavaScript na página | Zero | Vários KB |
+| JavaScript na página | ~1 KB, só o botão de tema | Vários KB |
 | Custo | R$ 0 | Grátis com limite, ou assinatura |
 
 O YAML é lido **no build**, não no navegador: o Eleventy gera o HTML final já
@@ -35,23 +40,31 @@ performance e abriria superfície de XSS à toa.
 ## Preview
 
 ```
-        ┌─────────────────────────────┐
-        │            ◍                │   avatar (ou iniciais)
-        │  Museu de Arte de Londrina  │   profile.name
-        │  Agenda, exposições e ...   │   profile.tagline
-        │                             │
-        │ ┌─────────────────────────┐ │
-        │ │ ◻ Programação e visita  │ │   highlight: true  → cor de destaque
-        │ └─────────────────────────┘ │
-        │ ┌─────────────────────────┐ │
-        │ │ ◻ O museu no portal ... │ │   links[]
-        │ └─────────────────────────┘ │
-        │ ┌─────────────────────────┐ │
-        │ │ ◻ Instagram do museu    │ │
-        │ └─────────────────────────┘ │
-        │                             │
-        │      ◯   ◯   ◯              │   social[]
-        └─────────────────────────────┘
+                                              ┌───┐
+                                              │ ☾ │  ← tema claro/escuro
+   ┌──────────────────────────────────────────┴───┴──┐
+   │                      ◍                          │  avatar
+   │            Museu de Arte de Londrina            │  profile.name
+   │             @museudeartedelondrina              │  profile.handle
+   │          Programação, exposições e ...          │  profile.tagline
+   │                 ◯   ◯   ◯   ◯                   │  social[]  (compacto)
+   ├─────────────────────────────────────────────────┤
+   │  AGENDA                                         │
+   │  ┌──────┬────────────────────────────────────┐  │
+   │  │      │ segunda-feira, 21 de set · 19:00   │  │  event.start / .end
+   │  │ foto │ Apresentação de Taiko              │  │  event.title
+   │  │      │ (Show Musical)                     │  │  event.kind
+   │  └──────┴────────────────────────────────────┘  │
+   │  ┌──────┬────────────────────────────────────┐  │
+   │  │  21  │ ...                                │  │  sem foto → ladrilho
+   │  │ SET  │                                    │  │     com a data
+   │  └──────┴────────────────────────────────────┘  │
+   ├─────────────────────────────────────────────────┤
+   │  MAIS INFORMAÇÕES                               │
+   │  [ ◻ Programação e visitação              ]     │  links[]
+   ├─────────────────────────────────────────────────┤
+   │              [logo]  Secretaria...              │  footer
+   └─────────────────────────────────────────────────┘
 ```
 
 Para ver de verdade: `npm ci && npm run dev` e abra <http://localhost:8080>.
@@ -104,6 +117,8 @@ Campos sem "obrigatório" podem ser omitidos — o default entra no lugar.
 | --- | --- | --- | --- | --- |
 | `profile.name` | texto, até 80 | **sim** | — | Título da página e `<h1>`. |
 | `profile.tagline` | texto, até 160 | não | vazio | Linha sob o nome. Omitida, o parágrafo some. |
+| `profile.handle` | texto começando com `@` | não | nenhum | Arroba mostrada abaixo do nome. Precisa de aspas no YAML. |
+| `profile.handle_url` | URL `https:`, `mailto:` ou `tel:` | não | nenhum | Destino da arroba. Sem isso, ela é só texto. |
 | `profile.avatar` | caminho ou URL `https://` | não | nenhum | Sem avatar, aparece um círculo com as iniciais do nome. |
 | `profile.avatar_shape` | `circle` \| `square` | não | `circle` | `square` para logotipos: o círculo corta os cantos e come o nome da marca. |
 
@@ -121,9 +136,33 @@ A cor do texto sobre o `accent` é calculada no build (preto ou branco, o que
 tiver mais contraste), então o contraste AA vale para qualquer accent
 escolhido. Aspas no YAML são necessárias: `accent: "#a4343a"`.
 
+### `events[]`
+
+A agenda — o miolo da página. Cada evento vira um cartão com miniatura, data,
+hora e título.
+
+| Campo | Tipo | Obrigatório | Default | Descrição |
+| --- | --- | --- | --- | --- |
+| `title` | texto, até 140 | **sim** | — | Título do evento. |
+| `start` | `AAAA-MM-DD` ou `AAAA-MM-DDTHH:MM` | **sim** | — | Início. Data impossível (`2026-02-31`) quebra o build. |
+| `end` | mesmo formato | não | nenhum | Fim. Precisa ser depois do `start`. |
+| `kind` | texto, até 40 | não | nenhum | Etiqueta do tipo (Oficina, Exposição...). |
+| `image` | caminho ou URL `https://` | não | ladrilho com a data | Miniatura quadrada; 320×320 basta. |
+| `url` | URL `https:`, `mailto:` ou `tel:` | não | nenhum | Página do evento. Com ela, o cartão inteiro vira clicável. |
+| `description` | texto, até 400 | não | nenhum | Uma linha de contexto. |
+
+Três comportamentos que valem saber:
+
+- **A ordem no arquivo não importa.** A lista é ordenada por data.
+- **Eventos que já terminaram não aparecem.** O corte usa o horário do build,
+  e o workflow de deploy roda diariamente para isso não envelhecer. O GitHub
+  desativa workflows agendados após 60 dias sem atividade no repositório.
+- **Horário é horário de parede do local.** `19:00` é 19:00 no museu; nada é
+  convertido de fuso, então a máquina que builda não muda o que está escrito.
+
 ### `links[]`
 
-Os botões principais, na ordem em que aparecem.
+Links secundários, abaixo da agenda, na ordem em que aparecem.
 
 | Campo | Tipo | Obrigatório | Default | Descrição |
 | --- | --- | --- | --- | --- |
@@ -216,12 +255,14 @@ npm run build      # valida e gera o site em _site/
 | `config.yaml` | O único arquivo que você edita no uso normal. |
 | `config.example.yaml` | Modelo comentado campo a campo. |
 | `src/index.njk` | Template da página. |
+| `src/theme.js` | Único JS do site: o botão de tema claro/escuro. |
 | `src/styles.css.njk` | CSS, gerado no build para embutir o `accent`. |
 | `src/_data/site.js` | Carrega o YAML, valida e monta os dados do template. |
 | `src/assets/` | Imagens suas. Copiadas para `/assets/` no site. |
 | `schema/config.schema.js` | O schema (Zod) e a allowlist de esquemas de URL. |
 | `lib/icons.js` | Resolução de ícones para dados de path SVG. |
 | `lib/color.js` | Contraste WCAG, para garantir AA sobre qualquer accent. |
+| `lib/datetime.js` | Datas dos eventos: parse, ordenação e formatação. |
 | `scripts/validate-config.js` | O `npm run validate`. |
 | `test/` | Testes com `node:test`, sem framework. |
 
@@ -250,6 +291,8 @@ Se preferir versionar o domínio junto com o código, crie um arquivo
   Traduzi-los exige editar `src/index.njk`. i18n de verdade está fora do escopo.
 - **CSP por `<meta>`** não aplica `frame-ancestors`
   ([detalhes](SECURITY.md#limitação-conhecida-csp-por-meta)).
+- **A agenda é tão fresca quanto o último build.** É um site estático: sem
+  rebuild, um evento encerrado continua na página. Daí o agendamento diário.
 
 ## Segurança e acessibilidade
 
@@ -259,7 +302,8 @@ Detalhe completo em [SECURITY.md](SECURITY.md). Em resumo:
   markup, nada usa `| safe`;
 - URLs passam por allowlist de esquema (`https:`, `mailto:`, `tel:`);
   `javascript:`, `data:` e `vbscript:` **quebram o build**;
-- CSP restritiva com `script-src 'none'` e sem `unsafe-inline`
+- o único JavaScript é o botão de tema (~1 KB, arquivo próprio); a CSP fica em
+  `script-src 'self'`, sem `unsafe-inline` e sem `unsafe-eval`
   ([limitações do `<meta>`](SECURITY.md#limitação-conhecida-csp-por-meta));
 - links externos sempre com `rel="noopener noreferrer"`;
 - zero recursos externos: sem CDN, sem Google Fonts, sem analytics;

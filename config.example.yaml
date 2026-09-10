@@ -18,6 +18,14 @@ profile:
   # (opcional, default: vazio — o parágrafo some) Até 160 caracteres.
   tagline: Matemática. Primeira programadora do mundo.
 
+  # (opcional, default: nenhum) Arroba mostrada logo abaixo do nome.
+  # Precisa das aspas: no YAML, @ no início de um valor é reservado.
+  handle: "@umperfilqualquer"
+
+  # (opcional, default: nenhum) Para onde a arroba aponta. Sem isso ela vira
+  # texto simples. Mesma allowlist de esquemas dos demais links.
+  handle_url: https://www.instagram.com/umperfilqualquer/
+
   # (opcional, default: nenhum — vira um círculo com as iniciais)
   # Caminho relativo dentro de src/assets/, ou uma URL https://
   avatar: assets/avatar.svg
@@ -36,7 +44,42 @@ theme:
   # A cor do texto sobre o accent é calculada no build para garantir AA.
   accent: "#2563eb"
 
-# (opcional, default: lista vazia) Os botões principais, na ordem em que aparecem.
+# (opcional, default: lista vazia) A agenda. É o miolo da página.
+#
+# Eventos que já terminaram não são renderizados: o corte acontece no build,
+# e o workflow de deploy roda uma vez por dia para o corte não envelhecer.
+# A ordem no arquivo não importa — a lista é ordenada por data.
+events:
+  - # (obrigatório) Até 140 caracteres.
+    title: Abertura da exposição
+
+    # (obrigatório) AAAA-MM-DD ou AAAA-MM-DDTHH:MM.
+    # É horário de parede do local: nada é convertido de fuso.
+    start: 2026-09-21T19:00
+
+    # (opcional) Mesmo formato. Precisa ser depois do start.
+    # Para uma temporada, use o último dia; o horário vira o horário diário.
+    end: 2026-09-21T22:00
+
+    # (opcional) Etiqueta do tipo de atividade. Até 40 caracteres.
+    kind: Exposição
+
+    # (opcional, default: um ladrilho com a data) Miniatura quadrada.
+    # 320x320 já basta. Caminho em src/assets/ ou URL https://
+    image: assets/avatar.svg
+
+    # (opcional) Página do evento. Mesma allowlist de esquemas.
+    url: https://example.org/evento
+
+    # (opcional) Uma linha de contexto. Até 400 caracteres.
+    description: Uma frase curta sobre o que é o evento.
+
+  - title: Oficina de gravura
+    start: 2026-09-22T14:00
+    end: 2026-09-22T17:00
+    kind: Oficina
+
+# (opcional, default: lista vazia) Links secundários, abaixo da agenda.
 links:
   - # (obrigatório) Até 80 caracteres.
     label: Meu site

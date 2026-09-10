@@ -2,6 +2,7 @@ export default function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy({ 'src/assets': 'assets' });
   // Only used for a custom domain; harmless when the file is absent.
   eleventyConfig.addPassthroughCopy('src/CNAME');
+  eleventyConfig.addPassthroughCopy('src/theme.js');
 
   return {
     dir: {

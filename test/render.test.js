@@ -53,7 +53,7 @@ seo:
   assert.ok(!html.includes('<img src=x'), 'a tag img apareceu crua');
   // `onerror=` still appears as text inside the escaped label; what matters
   // is that it is not inside a tag, which the escaped-form match below proves.
-  assert.ok(!html.includes('<script'), 'nenhuma tag script deve existir na página');
+  assert.ok(!/<script(?![^>]*src=)/.test(html), 'nenhum script inline deve existir na página');
   assert.ok(!html.includes('</head><script>'), 'a meta description escapou do atributo');
 
   assert.match(html, /&lt;script&gt;alert\((?:&quot;|&#34;)xss(?:&quot;|&#34;)\)&lt;\/script&gt; &amp; Cia/);
@@ -88,9 +88,15 @@ test('a CSP não abre exceção para inline', async () => {
   assert.ok(csp, 'meta CSP ausente');
   assert.ok(!csp[1].includes('unsafe-inline'), 'CSP com unsafe-inline');
   assert.ok(!csp[1].includes('unsafe-eval'), 'CSP com unsafe-eval');
-  assert.match(csp[1], /script-src 'none'/);
+  assert.match(csp[1], /script-src 'self'/);
   assert.ok(!html.includes('<style'), 'CSS inline quebraria a CSP');
   assert.ok(!/<[a-z]+[^>]*\sstyle="/.test(html), 'atributo style quebraria a CSP');
+
+  // O único script é o próprio, servido como arquivo: nada inline, nada de fora.
+  const scripts = html.match(/<script[^>]*>/g) ?? [];
+  assert.equal(scripts.length, 1, 'só o toggle de tema deveria carregar script');
+  assert.match(scripts[0], /src="theme\.js"/);
+  assert.ok(!scripts[0].includes('defer'), 'defer faria o tema piscar antes de aplicar');
 });
 
 test('sem avatar, cai para as iniciais e não gera img quebrada', async () => {
@@ -116,6 +122,79 @@ footer:
 
   const semTexto = await render('profile:\n  name: Ada\nfooter:\n  logo: assets/avatar.svg\n');
   assert.match(semTexto, /<img class="footer__logo"[^>]*alt="Logotipo institucional"/, 'sem texto, precisa de alt');
+});
+
+test('a agenda mostra só o que ainda não terminou, do mais próximo ao mais distante', async () => {
+  const html = await render(`
+profile:
+  name: Museu
+events:
+  - title: Evento de 2099
+    start: 2099-12-01T19:00
+  - title: Evento que já passou
+    start: 2000-01-01T19:00
+    end: 2000-01-01T20:00
+  - title: Evento de 2098
+    start: 2098-03-05T10:00
+    end: 2098-03-05T12:00
+    kind: Oficina
+`);
+
+  assert.ok(!html.includes('Evento que já passou'), 'evento encerrado não deveria aparecer');
+
+  const ordem = [...html.matchAll(/class="event__title">\s*([^<\n]+)/g)].map((m) => m[1].trim());
+  assert.deepEqual(ordem, ['Evento de 2098', 'Evento de 2099'], 'ordenado por data, não pela ordem do arquivo');
+
+  assert.match(html, /<time datetime="2098-03-05T10:00">/);
+  assert.match(html, /class="event__kind">Oficina</);
+});
+
+test('evento sem imagem ganha o ladrilho de data', async () => {
+  const html = await render('profile:\n  name: Museu\nevents:\n  - title: Sem foto\n    start: 2099-07-04\n');
+
+  assert.ok(!html.includes('event__image'), 'não deveria inventar imagem');
+  assert.match(html, /event__tile-day">04</);
+  assert.match(html, /event__tile-month">JUL</);
+});
+
+test('agenda vazia mostra um aviso em vez de sumir', async () => {
+  const html = await render('profile:\n  name: Museu\n');
+  assert.match(html, /class="empty"/);
+  assert.ok(!html.includes('<ol class="events">'));
+});
+
+test('o título do evento é escapado como todo o resto', async () => {
+  const html = await render(`
+profile:
+  name: Museu
+events:
+  - title: '<script>alert(1)</script> & cia'
+    start: 2099-01-01T10:00
+    kind: '<b>tipo</b>'
+`);
+
+  assert.ok(!html.includes('<script>alert(1)'), 'payload cru no HTML');
+  assert.ok(!html.includes('<b>tipo</b>'), 'markup cru na etiqueta');
+  assert.match(html, /&lt;script&gt;alert\(1\)&lt;\/script&gt; &amp; cia/);
+});
+
+test('o botão de tema começa escondido e traz os dois rótulos', async () => {
+  const html = await render('profile:\n  name: Museu\n');
+
+  const button = html.match(/<button[^>]*id="theme-toggle"[\s\S]*?>/);
+  assert.ok(button, 'botão de tema ausente');
+  assert.match(button[0], /\shidden/, 'sem JS o botão não faz nada, então nasce escondido');
+  assert.match(button[0], /data-label-dark="[^"]+"/);
+  assert.match(button[0], /data-label-light="[^"]+"/);
+  assert.match(button[0], /aria-pressed="false"/);
+});
+
+test('theme.mode fixo vira data-theme no html, e auto não', async () => {
+  const escuro = await render('profile:\n  name: Museu\ntheme:\n  mode: dark\n');
+  assert.match(escuro, /<html lang="pt-BR" data-theme="dark">/);
+
+  const automatico = await render('profile:\n  name: Museu\ntheme:\n  mode: auto\n');
+  assert.ok(!automatico.includes('data-theme='), 'em auto quem manda é o prefers-color-scheme');
 });
 
 test('config inválido derruba o build em vez de renderizar', async () => {

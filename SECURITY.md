@@ -47,6 +47,10 @@ O site é estático, sem backend, sem banco e sem sessão de usuário. Não há 
 de visitante para vazar: nenhuma requisição sai para terceiros, nenhum cookie é
 gravado, nenhum script roda.
 
+O site roda um único script próprio, `src/theme.js`, que só lê e grava a
+preferência de tema em `localStorage`. Ele não faz requisição nenhuma, não lê
+conteúdo da página e não recebe entrada de fora.
+
 A superfície real é o `config.yaml` virando HTML. As defesas são:
 
 | Risco | Defesa | Onde |
@@ -57,7 +61,9 @@ A superfície real é o `config.yaml` virando HTML. As defesas são:
 | URL protocol-relative (`//host`) em imagem | rejeitada; imagem remota só via `https://` | `schema/config.schema.js` |
 | Ícone como vetor de markup | ícones são dados de path validados, nunca HTML vindo do config | `lib/icons.js` |
 | `window.opener` em link externo | `rel="noopener noreferrer"` em todos os links | `src/index.njk` |
-| Script injetado na página | CSP com `script-src 'none'`, sem `unsafe-inline` | `<meta>` em `src/index.njk` |
+| Script injetado na página | CSP com `script-src 'self'`, sem `unsafe-inline` nem `unsafe-eval` | `<meta>` em `src/index.njk` |
+| Script de terceiro | Só existe um arquivo JS, próprio e versionado (`src/theme.js`) | `src/theme.js` |
+| Data forjada no YAML | Parse estrito de `AAAA-MM-DD[THH:MM]`, com rejeição de data de calendário impossível | `lib/datetime.js` |
 | Vazamento de IP do visitante para CDN | zero recursos externos; fontes do sistema, ícones embutidos | `src/styles.css.njk` |
 | Referrer vazando para o destino | `<meta name="referrer" content="no-referrer">` | `src/index.njk` |
 | Action comprometida por tag movida | actions pinadas por SHA completo | `.github/workflows/` |

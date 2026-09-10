@@ -6,7 +6,9 @@ lang: pt-BR
 
 profile:
   name: Museu de Arte de Londrina
-  tagline: Agenda, exposições e canais oficiais do museu em um só lugar.
+  tagline: Programação, exposições e canais oficiais do museu.
+  handle: "@museudeartedelondrina"
+  handle_url: https://www.instagram.com/museudeartedelondrina/
   avatar: assets/museu-33-anos.png
   avatar_shape: square
 
@@ -14,6 +16,109 @@ theme:
   mode: auto
   accent: "#004080"
 
+# Agenda. Eventos que já terminaram somem sozinhos no próximo build.
+events:
+  - title: Programa Museu Educativo
+    start: 2026-09-21T09:00
+    end: 2026-09-21T10:00
+    kind: Ação Educativa
+    image: assets/evento-museu-educativo.png
+    url: https://visite.museus.gov.br/20a-primavera-dos-museus/atendimento-pelo-programa-museu-educativo/
+    description: Contação de História baseada no livro "A mão livre do vovô", de Michel Goski e Silvia Zatz,
+      Visita Mediada às exposições e à edificação, e Atividade Arte-Educativa para alunos da Escola…
+  - title: '“A Riqueza de um patrimônio em movimento: por dentro da vida e da coleção Vladimir Kozák"'
+    start: 2026-09-21T11:00
+    end: 2026-09-25T17:00
+    kind: Exposição
+    url: https://visite.museus.gov.br/20a-primavera-dos-museus/a-riqueza-de-um-patrimonio-em-movimento-por-dentro-da-vida-e-da-colecao-vladimir-kozak/
+    description: A exposição de acervo do Museu Paranaense (MUPA) apresenta ao público a trajetória de Vladimir
+      Kozák, nascido em 1897, na antiga Tchecoslováquia, e falecido em Curitiba-PR, em 1979, cuja…
+  - title: Exposição Gira Mundo
+    start: 2026-09-21T11:00
+    end: 2026-09-27T17:00
+    kind: Exposição
+    url: https://visite.museus.gov.br/20a-primavera-dos-museus/exposicao-gira-mundo/
+    description: “Gira Mundo” traz 22 obras, entre telas, gravuras e esculturas do acervo do Museu de Arte
+      de Londrina
+  - title: Apresentação de Taiko
+    start: 2026-09-21T19:00
+    end: 2026-09-21T20:00
+    kind: Show Musical
+    url: https://visite.museus.gov.br/20a-primavera-dos-museus/apresentacao-de-taiko/
+    description: Apresentação de Taiko, pelo projeto “22º Londrina Matsuri - Festival da Primavera”
+  - title: Abertura da programação local da 20ª Primavera dos Museus
+    start: 2026-09-21T20:00
+    end: 2026-09-21T21:00
+    kind: Abertura
+    image: assets/evento-fachada-museu.png
+    url: https://visite.museus.gov.br/20a-primavera-dos-museus/abertura-oficial-da-programacao-local-da-20a-primavera-dos-museus/
+    description: Abertura da programação local da 20ª Primavera dos Museus com representantes do Museu de
+      Arte de Londrina/Secretaria Municipal de Cultura, Museu do Café/Sesc Cadeião, Museu Histórico de…
+  - title: Mostra de curta-metragens
+    start: 2026-09-21T21:00
+    end: 2026-09-21T22:00
+    kind: Exibição de Filme
+    url: https://visite.museus.gov.br/20a-primavera-dos-museus/mostra-de-curta-metragens/
+    description: Sessão de cinema com mostra de curta-metragens, pelo projeto "28º Festival Kinoarte de
+      Cinema"
+  - title: Estúdio de Rádio Móvel
+    start: 2026-09-22T14:00
+    end: 2026-09-22T17:00
+    kind: Oficina
+    url: https://visite.museus.gov.br/20a-primavera-dos-museus/estudio-de-radio-movel/
+    description: Oficina de criação e desenvolvimento de podcast pelo projeto AlmA Londrina Rádio Web
+  - title: Roda de conversa “Os desafios dos museus na contemporaneidade”
+    start: 2026-09-23T09:00
+    end: 2026-09-23T11:00
+    kind: Ação Educativa
+    url: https://visite.museus.gov.br/20a-primavera-dos-museus/museu-em-audio-um-guia-inclusivo-sobre-a-historia-de-londrina/
+    description: A atividade propõe uma reflexão coletiva sobre os caminhos que os museus podem construir
+      para responder às demandas do presente, abordando temas como inclusão, acessibilidade, diversidade,…
+  - title: Espetáculo teatral “Mundus Eurídice”
+    start: 2026-09-23T19:30
+    end: 2026-09-23T21:00
+    kind: Teatro
+    url: https://visite.museus.gov.br/20a-primavera-dos-museus/espetaculo-teatral-mundus-euridice/
+    description: O espetáculo "Mundus Eurídice", da companhia londrinense “As Caetanas”, conta a história
+      de duas cientistas que mergulham em um nado pelo cosmos
+  - title: Programa Museu Educativo
+    start: 2026-09-24T14:00
+    end: 2026-09-24T15:30
+    kind: Ação Educativa
+    image: assets/evento-museu-educativo.png
+    url: https://visite.museus.gov.br/20a-primavera-dos-museus/atendimento-programa-museu-educativo/
+    description: Contação de História baseada no livro “Perigo na Floresta”, de Cláudia Rezende Barbeiro,
+      Visita Mediada às exposições e à edificação, e Atividade Arte-Educativa para alunos da Escola Ateliê…
+  - title: Show musical "Novo Caminho"
+    start: 2026-09-24T16:00
+    end: 2026-09-24T17:30
+    kind: Show Musical
+    url: https://visite.museus.gov.br/20a-primavera-dos-museus/show-musical-novo-caminho/
+    description: Show musical "Novo Caminho" apresentado pelo projeto “Novo Caminho de Regional Simplicidade”,
+      com composições de artistas locais do Choro
+  - title: '“BRISA: Saraus Artísticos 6ª Temporada”'
+    start: 2026-09-24T18:00
+    end: 2026-09-24T20:00
+    kind: Sarau
+    url: https://visite.museus.gov.br/20a-primavera-dos-museus/brisa-saraus-artisticos-6a-temporada/
+    description: 'Sarau Brisa, pelo projeto “BRISA: Saraus Artísticos 6ª Temporada”, apresentações e atividades
+      culturais junto às pessoas em situação de rua ou acolhimento institucional e à comunidade em…'
+  - title: Programa Museu Educativo
+    start: 2026-09-25T10:00
+    end: 2026-09-25T11:30
+    kind: Ação Educativa
+    image: assets/evento-museu-educativo.png
+    url: https://visite.museus.gov.br/20a-primavera-dos-museus/programa-museu-educativo/
+    description: Contação de História baseada no livro “Perigo na Floresta”, de Cláudia Rezende Barbeiro,
+      Visita Mediada às exposições e à edificação, e Atividade Arte-Educativa para alunos da Escola…
+  - title: Programa Museu Educativo
+    start: 2026-09-25T14:00
+    end: 2026-09-25T15:30
+    kind: Ação Educativa
+    image: assets/evento-museu-educativo.png
+    url: https://visite.museus.gov.br/20a-primavera-dos-museus/programa-museu-educativo-2/
+    description: Contação de História baseada no livro “Perigo na Floresta”, de Cláudia Rezende Barbeiro,
+      Visita Mediada às exposições e à edificação, e Atividade Arte-Educativa para alunos da Escola…
 links:
   - label: Programação e visitação
     url: https://londrinacultura.londrina.pr.gov.br/espaco/1/
@@ -35,9 +140,6 @@ links:
     url: https://www.youtube.com/@LondrinaCultura
     icon: youtube
 
-  - label: Coleção Vladimir Kozák — Semana Nacional de Museus
-    url: https://visite.museus.gov.br/24a-semana-nacional-de-museus/a-riqueza-de-um-patrimonio-em-movimento-por-dentro-da-vida-e-da-colecao-vladimir-kozaz/
-    icon: link
 
   - label: Notícias do museu no blog da Prefeitura
     url: https://blog.londrina.pr.gov.br/?s=museu+de+arte

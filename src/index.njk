@@ -10,12 +10,12 @@ permalink: /index.html
 <svg class="icon{% if not data.fill %} icon--stroke{% endif %}" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">{% for d in data.paths %}<path d="{{ d }}"/>{% endfor %}</svg>
 {%- endmacro -%}
 <!doctype html>
-<html lang="{{ site.lang }}">
+<html lang="{{ site.lang }}"{% if site.theme.mode != 'auto' %} data-theme="{{ site.theme.mode }}"{% endif %}>
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     {#- GitHub Pages cannot set response headers, so the policy ships as a meta tag. -#}
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https:; style-src 'self'; script-src 'none'; font-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https:; style-src 'self'; script-src 'self'; font-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'">
     <meta name="referrer" content="no-referrer">
     <meta name="color-scheme" content="{{ 'light dark' if site.theme.mode == 'auto' else site.theme.mode }}">
 
@@ -39,14 +39,39 @@ permalink: /index.html
     <link rel="icon" href="{{ site.profile.avatar }}">
     {%- endif %}
     <link rel="stylesheet" href="styles.css">
+    {#- Not deferred: it applies the saved theme before the first paint. -#}
+    <script src="theme.js"></script>
   </head>
 
   <body>
-    {%- if site.links.length %}
+    {%- if site.events.length %}
+    <a class="skip-link" href="#agenda">Pular para a agenda</a>
+    {%- elif site.links.length %}
     <a class="skip-link" href="#links">Pular para os links</a>
     {%- endif %}
 
-    <main class="card">
+    {#- Revealed by theme.js; without JavaScript it would be a dead control. -#}
+    <button
+      id="theme-toggle"
+      class="theme-toggle"
+      type="button"
+      hidden
+      aria-pressed="false"
+      aria-label="Mudar para o tema escuro"
+      data-label-dark="Mudar para o tema escuro"
+      data-label-light="Mudar para o tema claro"
+    >
+      <svg class="icon icon--stroke theme-toggle__sun" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
+        <path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10Z"/>
+        <path d="M12 2v2"/><path d="M12 20v2"/><path d="M4 12H2"/><path d="M22 12h-2"/>
+        <path d="m5.6 5.6 1.4 1.4"/><path d="m17 17 1.4 1.4"/><path d="m18.4 5.6-1.4 1.4"/><path d="m7 17-1.4 1.4"/>
+      </svg>
+      <svg class="icon icon--stroke theme-toggle__moon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
+        <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+      </svg>
+    </button>
+
+    <div class="frame">
       <header class="profile">
         {%- if site.profile.avatar %}
         <img class="avatar avatar--{{ site.profile.avatar_shape }}" src="{{ site.profile.avatar }}" width="112" height="112" alt="{{ site.profile.name }}">
@@ -54,62 +79,118 @@ permalink: /index.html
         <p class="avatar avatar--{{ site.profile.avatar_shape }} avatar--initials" aria-hidden="true">{{ site.initials }}</p>
         {%- endif %}
         <h1>{{ site.profile.name }}</h1>
+
+        {%- if site.profile.handle %}
+        <p class="handle">
+          {%- if site.profile.handle_url -%}
+          <a href="{{ site.profile.handle_url }}" target="_blank" rel="noopener noreferrer">{{ site.profile.handle }}</a>
+          {%- else -%}
+          {{ site.profile.handle }}
+          {%- endif -%}
+        </p>
+        {%- endif %}
+
         {%- if site.profile.tagline %}
         <p class="tagline">{{ site.profile.tagline }}</p>
         {%- endif %}
+
+        {%- if site.social.length %}
+        <nav class="social" aria-label="Contato e redes sociais">
+          <ul>
+            {%- for entry in site.social %}
+            <li>
+              <a class="social__link" href="{{ entry.url }}" target="_blank" rel="noopener noreferrer">
+                {{ icon(entry.iconData) }}
+                <span class="visually-hidden">{{ entry.iconData.title }}</span>
+              </a>
+            </li>
+            {%- endfor %}
+          </ul>
+        </nav>
+        {%- endif %}
       </header>
 
-      {%- if site.links.length %}
-      <nav id="links" aria-label="Links">
-        <ul class="links">
-          {%- for link in site.links %}
-          <li>
-            <a class="link{% if link.highlight %} link--highlight{% endif %}" href="{{ link.url }}" target="_blank" rel="noopener noreferrer">
-              {%- if link.iconData %}{{ icon(link.iconData) }}{% endif %}
-              <span class="link__label">{{ link.label }}</span>
-            </a>
-          </li>
-          {%- endfor %}
-        </ul>
-      </nav>
-      {%- endif %}
+      <main>
+        <section class="section" id="agenda" aria-labelledby="agenda-title">
+          <h2 class="section__title" id="agenda-title">Agenda</h2>
 
-      {%- if site.social.length %}
-      <nav class="social" aria-label="Redes sociais">
-        <ul>
-          {%- for entry in site.social %}
-          <li>
-            <a class="social__link" href="{{ entry.url }}" target="_blank" rel="noopener noreferrer">
-              {{ icon(entry.iconData) }}
-              <span class="visually-hidden">{{ entry.iconData.title }}</span>
-            </a>
-          </li>
-          {%- endfor %}
-        </ul>
-      </nav>
-      {%- endif %}
-    </main>
+          {%- if site.events.length %}
+          <ol class="events">
+            {%- for event in site.events %}
+            <li>
+              <article class="event">
+                <div class="event__media">
+                  {%- if event.image %}
+                  <img class="event__image" src="{{ event.image }}" width="96" height="96" alt="" loading="lazy" decoding="async">
+                  {%- else %}
+                  <p class="event__tile" aria-hidden="true">
+                    <span class="event__tile-day">{{ event.tile.day }}</span>
+                    <span class="event__tile-month">{{ event.tile.month }}</span>
+                  </p>
+                  {%- endif %}
+                </div>
 
-    {%- if site.footer %}
-    <footer class="footer">
-      {%- if site.footer.url %}
-      <a class="footer__inner" href="{{ site.footer.url }}" target="_blank" rel="noopener noreferrer">
-        {%- if site.footer.logo %}
-        {#- Decorative when the text below already names it, so it is not read twice. -#}
-        <img class="footer__logo" src="{{ site.footer.logo }}" width="128" height="32" alt="{{ '' if site.footer.text else 'Logotipo institucional' }}">
+                <div class="event__body">
+                  <p class="event__when">
+                    <time datetime="{{ event.iso }}">{{ event.when.date }}</time>
+                    {%- if event.when.time %}<span class="event__time">{{ event.when.time }}</span>{% endif %}
+                  </p>
+                  <h3 class="event__title">
+                    {%- if event.url -%}
+                    <a class="event__link" href="{{ event.url }}" target="_blank" rel="noopener noreferrer">{{ event.title }}</a>
+                    {%- else -%}
+                    {{ event.title }}
+                    {%- endif -%}
+                  </h3>
+                  {%- if event.kind %}<p class="event__kind">{{ event.kind }}</p>{% endif %}
+                  {%- if event.description %}<p class="event__description">{{ event.description }}</p>{% endif %}
+                </div>
+              </article>
+            </li>
+            {%- endfor %}
+          </ol>
+          {%- else %}
+          <p class="empty">Nenhum evento publicado no momento. Confira os canais oficiais abaixo para a programação atual.</p>
+          {%- endif %}
+        </section>
+
+        {%- if site.links.length %}
+        <section class="section" id="links" aria-labelledby="links-title">
+          <h2 class="section__title" id="links-title">Mais informações</h2>
+          <ul class="links">
+            {%- for link in site.links %}
+            <li>
+              <a class="link{% if link.highlight %} link--highlight{% endif %}" href="{{ link.url }}" target="_blank" rel="noopener noreferrer">
+                {%- if link.iconData %}{{ icon(link.iconData) }}{% endif %}
+                <span class="link__label">{{ link.label }}</span>
+              </a>
+            </li>
+            {%- endfor %}
+          </ul>
+        </section>
         {%- endif %}
-        {%- if site.footer.text %}<span class="footer__text">{{ site.footer.text }}</span>{% endif %}
-      </a>
-      {%- else %}
-      <div class="footer__inner">
-        {%- if site.footer.logo %}
-        {#- Decorative when the text below already names it, so it is not read twice. -#}
-        <img class="footer__logo" src="{{ site.footer.logo }}" width="128" height="32" alt="{{ '' if site.footer.text else 'Logotipo institucional' }}">
+      </main>
+
+      {%- if site.footer %}
+      <footer class="footer">
+        {%- if site.footer.url %}
+        <a class="footer__inner" href="{{ site.footer.url }}" target="_blank" rel="noopener noreferrer">
+          {%- if site.footer.logo %}
+          {#- Decorative when the text below already names it, so it is not read twice. -#}
+          <img class="footer__logo" src="{{ site.footer.logo }}" width="128" height="32" alt="{{ '' if site.footer.text else 'Logotipo institucional' }}">
+          {%- endif %}
+          {%- if site.footer.text %}<span class="footer__text">{{ site.footer.text }}</span>{% endif %}
+        </a>
+        {%- else %}
+        <div class="footer__inner">
+          {%- if site.footer.logo %}
+          <img class="footer__logo" src="{{ site.footer.logo }}" width="128" height="32" alt="{{ '' if site.footer.text else 'Logotipo institucional' }}">
+          {%- endif %}
+          {%- if site.footer.text %}<span class="footer__text">{{ site.footer.text }}</span>{% endif %}
+        </div>
         {%- endif %}
-        {%- if site.footer.text %}<span class="footer__text">{{ site.footer.text }}</span>{% endif %}
-      </div>
+      </footer>
       {%- endif %}
-    </footer>
-    {%- endif %}
+    </div>
   </body>
 </html>

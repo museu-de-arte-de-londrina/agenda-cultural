@@ -8,6 +8,7 @@ import { readFile } from 'node:fs/promises';
 import { z } from 'zod';
 import { parse as parseYaml } from 'yaml';
 import { resolveIcon, GENERIC_ICON_NAMES } from '../lib/icons.js';
+import { parseDateTime, toDate } from '../lib/datetime.js';
 
 /** URL schemes allowed anywhere in config.yaml. */
 export const ALLOWED_URL_PROTOCOLS = Object.freeze(['https:', 'mailto:', 'tel:']);
@@ -136,6 +137,19 @@ const iconField = z
     return slug;
   });
 
+const dateTimeField = z
+  .string({ error: message('deve ser um texto com a data') })
+  .transform((value, ctx) => {
+    if (parseDateTime(value) === null) {
+      ctx.addIssue({
+        code: 'custom',
+        message: `data inválida: ${JSON.stringify(value)}. Use AAAA-MM-DD ou AAAA-MM-DDTHH:MM (ex: 2026-09-21T19:00)`,
+      });
+      return z.NEVER;
+    }
+    return value.trim();
+  });
+
 const text = (max) =>
   z
     .string({ error: message('deve ser um texto') })
@@ -149,6 +163,12 @@ const profileSchema = z
     name: text(80),
     tagline: text(160).optional(),
     avatar: imageField.optional(),
+    handle: z
+      .string({ error: message('deve ser um texto') })
+      .trim()
+      .regex(/^@[A-Za-z0-9._]{1,40}$/, 'deve começar com @, ex: @museudeartedelondrina')
+      .optional(),
+    handle_url: urlField.optional(),
     // A circle crops the corners, which eats the wordmark on most logos.
     avatar_shape: z
       .enum(['circle', 'square'], { error: "deve ser 'circle' ou 'square'" })
@@ -188,6 +208,30 @@ const linkSchema = z
     objectError,
   )
   .strict();
+
+/** One item of the agenda: what it is, when it happens, and where to read more. */
+const eventSchema = z
+  .object(
+    {
+      title: text(140),
+      start: dateTimeField,
+      end: dateTimeField.optional(),
+      kind: text(40).optional(),
+      image: imageField.optional(),
+      url: urlField.optional(),
+      description: text(400).optional(),
+    },
+    objectError,
+  )
+  .strict()
+  .superRefine((event, ctx) => {
+    if (!event.end) return;
+    const start = parseDateTime(event.start);
+    const end = parseDateTime(event.end);
+    if (toDate(end, { endOfDay: !end.hasTime }) < toDate(start)) {
+      ctx.addIssue({ code: 'custom', path: ['end'], message: 'termina antes de começar' });
+    }
+  });
 
 /** Institutional mark shown under the card. */
 const footerSchema = z
@@ -255,6 +299,7 @@ export const configSchema = z
       .regex(/^[a-z]{2,3}(-[A-Za-z0-9]{2,8})*$/, 'deve ser uma tag BCP 47, ex: pt-BR')
       .default('pt-BR'),
     profile: profileSchema,
+    events: z.array(eventSchema, { error: message('deve ser uma lista de eventos') }).default([]),
     links: z.array(linkSchema, { error: message('deve ser uma lista de links') }).default([]),
     social: z.array(socialSchema, { error: message('deve ser uma lista') }).default([]),
     theme: themeSchema,

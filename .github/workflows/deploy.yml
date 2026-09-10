@@ -3,6 +3,11 @@ name: Deploy
 on:
   push:
     branches: [main]
+  # The agenda drops events once they are over, and that filter runs at build
+  # time. A daily rebuild keeps the published page honest between edits.
+  # GitHub disables scheduled workflows after 60 days without repo activity.
+  schedule:
+    - cron: '17 6 * * *'
   workflow_dispatch:
 
 # Read-only by default; the deploy job widens this for itself only.
