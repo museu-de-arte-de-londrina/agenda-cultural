@@ -127,10 +127,6 @@ events:
     url: https://visite.museus.gov.br/20a-primavera-dos-museus/programa-museu-educativo-2/
     description: Contação de histórias do livro “Perigo na Floresta”, visita mediada e atividade
       arte-educativa. Para alunos da Escola Municipal Profª Tereza Canhadas Bertan.
-  - title: Conferencia do gatilho de fechamento
-    start: 2020-01-02T10:00
-    end: 2020-01-02T11:00
-    description: Data no passado de proposito, para o evento nunca aparecer na pagina publica.
 links:
   - label: Programação oficial no Londrina Cultura
     url: https://londrinacultura.londrina.pr.gov.br/espaco/1/
