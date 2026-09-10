@@ -134,6 +134,10 @@ events:
     image: assets/eventos/evento-de-teste-202609101200.png
     url: https://google.com
     description: descrição sobre o evento blablablabla
+  - title: Verificacao do fluxo de publicacao
+    start: 2026-01-05T10:00
+    end: 2026-01-05T11:00
+    description: Evento datado no passado, so para conferir que o deploy dispara. Sai da agenda sozinho.
 links:
   - label: Programação oficial no Londrina Cultura
     url: https://londrinacultura.londrina.pr.gov.br/espaco/1/
