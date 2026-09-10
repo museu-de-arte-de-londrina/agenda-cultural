@@ -155,13 +155,27 @@ test('footer é opcional e passa pela mesma allowlist de URL', () => {
 
   const config = parseConfig({
     ...minimal(),
-    footer: { logo: 'assets/orgao.png', text: 'Secretaria', url: 'https://example.org' },
+    footer: {
+      logos: [{ image: 'assets/orgao.png', alt: 'Órgão' }, { image: 'assets/museu.webp' }],
+      text: 'Secretaria',
+      url: 'https://example.org',
+    },
   });
   assert.equal(config.footer.text, 'Secretaria');
   assert.equal(config.footer.url, 'https://example.org/');
+  assert.equal(config.footer.logos.length, 2);
+  assert.equal(config.footer.logos[0].alt, 'Órgão');
+  assert.equal(config.footer.logos[1].alt, undefined, 'alt é opcional');
+
+  assert.deepEqual(parseConfig({ ...minimal(), footer: { text: 'Só texto' } }).footer.logos, []);
 
   rejects({ ...minimal(), footer: { url: 'javascript:alert(1)' } }, /footer\.url: URL inválida/);
-  rejects({ ...minimal(), footer: { logo: '//evil.example.com/a.png' } }, /footer\.logo: imagem inválida/);
+  rejects(
+    { ...minimal(), footer: { logos: [{ image: '//evil.example.com/a.png' }] } },
+    /footer\.logos\[0\]\.image: imagem inválida/,
+  );
+  rejects({ ...minimal(), footer: { logos: [{}] } }, /footer\.logos\[0\]\.image: campo obrigatório/);
+  rejects({ ...minimal(), footer: { logos: [{ image: 'a.png', src: 'b' }] } }, /chave desconhecida: "src"/);
   rejects({ ...minimal(), footer: { txt: 'x' } }, /footer: chave desconhecida: "txt"/);
 });
 

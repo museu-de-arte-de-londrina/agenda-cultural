@@ -135,10 +135,17 @@ seo:
 
 # (opcional, o bloco inteiro pode sumir) Selo institucional abaixo do cartão.
 footer:
-  # (opcional) Caminho ou URL https:// do logotipo.
-  logo: assets/avatar.svg
-  # (opcional) Texto ao lado do logotipo. Existindo, o logotipo vira
-  # decorativo e não é lido duas vezes pelo leitor de tela.
+  # (opcional, default: lista vazia) Até 4 logotipos, lado a lado.
+  logos:
+    - # (obrigatório) Caminho ou URL https://
+      image: assets/avatar.svg
+      # (opcional) Texto alternativo. Sem ele o logotipo vira decorativo, o
+      # que é o certo quando o texto abaixo já nomeia o dono. Com mais de um
+      # logotipo, dê um alt para cada: a legenda não nomeia todos.
+      alt: Uma organização qualquer
+    - image: assets/avatar.svg
+      alt: Outra organização
+  # (opcional) Legenda abaixo dos logotipos.
   text: Uma organização qualquer
   # (opcional) Mesma allowlist de esquemas dos demais links.
   url: https://example.org

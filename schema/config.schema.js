@@ -233,13 +233,29 @@ const eventSchema = z
     }
   });
 
-/** Institutional mark shown under the card. */
+/** One institutional mark in the footer strip. */
+const footerLogoSchema = z
+  .object(
+    {
+      image: imageField,
+      // With more than one mark, the caption cannot name them all, so each
+      // logo carries its own alternative text.
+      alt: text(80).optional(),
+    },
+    objectError,
+  )
+  .strict();
+
+/** Institutional marks shown under the card. */
 const footerSchema = z
   .object(
     {
-    logo: imageField.optional(),
-    text: text(120).optional(),
-    url: urlField.optional(),
+      logos: z
+        .array(footerLogoSchema, { error: message('deve ser uma lista de logotipos') })
+        .max(4, 'no máximo 4 logotipos')
+        .default([]),
+      text: text(120).optional(),
+      url: urlField.optional(),
     },
     objectError,
   )

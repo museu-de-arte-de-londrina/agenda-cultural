@@ -106,22 +106,32 @@ test('sem avatar, cai para as iniciais e não gera img quebrada', async () => {
   assert.match(html, /avatar--initials[^>]*>AL</);
 });
 
-test('o selo do rodapé não faz o leitor de tela repetir o texto', async () => {
+test('cada logotipo do rodapé carrega seu próprio texto alternativo', async () => {
   const html = await render(`
 profile:
-  name: Ada
+  name: Museu
 footer:
-  logo: assets/avatar.svg
+  logos:
+    - image: assets/avatar.svg
+      alt: Prefeitura
+    - image: assets/avatar.svg
   text: Secretaria Municipal de Cultura
   url: https://example.org
 `);
 
-  assert.match(html, /<img class="footer__logo"[^>]*alt=""/, 'logo com texto ao lado deve ser decorativa');
-  assert.match(html, /<img class="footer__logo"[^>]*width="128"[^>]*height="32"/, 'espaço reservado');
-  assert.match(html, /class="footer__inner" href="https:\/\/example\.org\/"[^>]*rel="noopener noreferrer"/);
+  const logos = html.match(/<img class="footer__logo"[^>]*>/g) ?? [];
+  assert.equal(logos.length, 2, 'os dois logotipos devem ser renderizados');
+  assert.match(logos[0], /alt="Prefeitura"/, 'com alt declarado, ele é usado');
+  assert.match(logos[1], /alt=""/, 'sem alt declarado, o logotipo é decorativo');
+  for (const logo of logos) assert.match(logo, /width="88"[^>]*height="32"/, 'espaço reservado');
 
-  const semTexto = await render('profile:\n  name: Ada\nfooter:\n  logo: assets/avatar.svg\n');
-  assert.match(semTexto, /<img class="footer__logo"[^>]*alt="Logotipo institucional"/, 'sem texto, precisa de alt');
+  assert.match(html, /class="footer__inner" href="https:\/\/example\.org\/"[^>]*rel="noopener noreferrer"/);
+});
+
+test('rodapé sem link não vira âncora vazia', async () => {
+  const html = await render('profile:\n  name: Museu\nfooter:\n  text: Secretaria\n');
+  assert.match(html, /<div class="footer__inner">/);
+  assert.ok(!/<a class="footer__inner"/.test(html));
 });
 
 test('a agenda mostra só o que ainda não terminou, do mais próximo ao mais distante', async () => {

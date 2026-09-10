@@ -209,8 +209,8 @@ ou a uma organização maior. O bloco inteiro é opcional.
 
 | Campo | Tipo | Obrigatório | Default | Descrição |
 | --- | --- | --- | --- | --- |
-| `footer.logo` | caminho ou URL `https://` | não | nenhum | Logotipo. Fica num box de tamanho fixo, então não causa layout shift. |
-| `footer.text` | texto, até 120 | não | nenhum | Texto ao lado do logotipo. Havendo texto, o logotipo vira decorativo (`alt=""`) e não é lido duas vezes. |
+| `footer.logos` | lista, até 4 | não | vazio | Logotipos lado a lado. Cada item tem `image` (obrigatório) e `alt` (opcional). Box de tamanho fixo, então não causa layout shift. |
+| `footer.text` | texto, até 120 | não | nenhum | Legenda abaixo dos logotipos. Um logotipo sem `alt` é tratado como decorativo, então a legenda não é lida duas vezes. |
 | `footer.url` | URL `https:`, `mailto:` ou `tel:` | não | nenhum | Havendo URL, o selo inteiro vira link. Mesma allowlist dos demais campos. |
 
 ### Ícones

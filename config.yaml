@@ -22,7 +22,7 @@ events:
     start: 2026-09-21T09:00
     end: 2026-09-21T10:00
     kind: Ação Educativa
-    image: assets/evento-museu-educativo.webp
+    image: assets/eventos/programa-museu-educativo-4.webp
     url: https://visite.museus.gov.br/20a-primavera-dos-museus/atendimento-pelo-programa-museu-educativo/
     description: Contação de História baseada no livro "A mão livre do vovô", de Michel Goski e Silvia Zatz,
       Visita Mediada às exposições e à edificação, e Atividade Arte-Educativa para alunos da Escola…
@@ -30,6 +30,7 @@ events:
     start: 2026-09-21T11:00
     end: 2026-09-25T17:00
     kind: Exposição
+    image: assets/eventos/a-riqueza-de-um-patrimonio-em-movimento-por-.webp
     url: https://visite.museus.gov.br/20a-primavera-dos-museus/a-riqueza-de-um-patrimonio-em-movimento-por-dentro-da-vida-e-da-colecao-vladimir-kozak/
     description: A exposição de acervo do Museu Paranaense (MUPA) apresenta ao público a trajetória de Vladimir
       Kozák, nascido em 1897, na antiga Tchecoslováquia, e falecido em Curitiba-PR, em 1979, cuja…
@@ -37,6 +38,7 @@ events:
     start: 2026-09-21T11:00
     end: 2026-09-27T17:00
     kind: Exposição
+    image: assets/eventos/exposicao-gira-mundo.webp
     url: https://visite.museus.gov.br/20a-primavera-dos-museus/exposicao-gira-mundo/
     description: “Gira Mundo” traz 22 obras, entre telas, gravuras e esculturas do acervo do Museu de Arte
       de Londrina
@@ -44,13 +46,14 @@ events:
     start: 2026-09-21T19:00
     end: 2026-09-21T20:00
     kind: Show Musical
+    image: assets/eventos/apresentacao-de-taiko.webp
     url: https://visite.museus.gov.br/20a-primavera-dos-museus/apresentacao-de-taiko/
     description: Apresentação de Taiko, pelo projeto “22º Londrina Matsuri - Festival da Primavera”
   - title: Abertura da programação local da 20ª Primavera dos Museus
     start: 2026-09-21T20:00
     end: 2026-09-21T21:00
     kind: Abertura
-    image: assets/evento-fachada-museu.webp
+    image: assets/eventos/abertura-da-programacao-local-da-20a-primave.webp
     url: https://visite.museus.gov.br/20a-primavera-dos-museus/abertura-oficial-da-programacao-local-da-20a-primavera-dos-museus/
     description: Abertura da programação local da 20ª Primavera dos Museus com representantes do Museu de
       Arte de Londrina/Secretaria Municipal de Cultura, Museu do Café/Sesc Cadeião, Museu Histórico de…
@@ -58,6 +61,7 @@ events:
     start: 2026-09-21T21:00
     end: 2026-09-21T22:00
     kind: Exibição de Filme
+    image: assets/eventos/mostra-de-curta-metragens.webp
     url: https://visite.museus.gov.br/20a-primavera-dos-museus/mostra-de-curta-metragens/
     description: Sessão de cinema com mostra de curta-metragens, pelo projeto "28º Festival Kinoarte de
       Cinema"
@@ -65,12 +69,14 @@ events:
     start: 2026-09-22T14:00
     end: 2026-09-22T17:00
     kind: Oficina
+    image: assets/eventos/estudio-de-radio-movel.webp
     url: https://visite.museus.gov.br/20a-primavera-dos-museus/estudio-de-radio-movel/
     description: Oficina de criação e desenvolvimento de podcast pelo projeto AlmA Londrina Rádio Web
   - title: Roda de conversa “Os desafios dos museus na contemporaneidade”
     start: 2026-09-23T09:00
     end: 2026-09-23T11:00
     kind: Ação Educativa
+    image: assets/eventos/roda-de-conversa-os-desafios-dos-museus-na-c.webp
     url: https://visite.museus.gov.br/20a-primavera-dos-museus/museu-em-audio-um-guia-inclusivo-sobre-a-historia-de-londrina/
     description: A atividade propõe uma reflexão coletiva sobre os caminhos que os museus podem construir
       para responder às demandas do presente, abordando temas como inclusão, acessibilidade, diversidade,…
@@ -78,6 +84,7 @@ events:
     start: 2026-09-23T19:30
     end: 2026-09-23T21:00
     kind: Teatro
+    image: assets/eventos/espetaculo-teatral-mundus-euridice.webp
     url: https://visite.museus.gov.br/20a-primavera-dos-museus/espetaculo-teatral-mundus-euridice/
     description: O espetáculo "Mundus Eurídice", da companhia londrinense “As Caetanas”, conta a história
       de duas cientistas que mergulham em um nado pelo cosmos
@@ -85,7 +92,7 @@ events:
     start: 2026-09-24T14:00
     end: 2026-09-24T15:30
     kind: Ação Educativa
-    image: assets/evento-museu-educativo.webp
+    image: assets/eventos/programa-museu-educativo-3.webp
     url: https://visite.museus.gov.br/20a-primavera-dos-museus/atendimento-programa-museu-educativo/
     description: Contação de História baseada no livro “Perigo na Floresta”, de Cláudia Rezende Barbeiro,
       Visita Mediada às exposições e à edificação, e Atividade Arte-Educativa para alunos da Escola Ateliê…
@@ -93,6 +100,7 @@ events:
     start: 2026-09-24T16:00
     end: 2026-09-24T17:30
     kind: Show Musical
+    image: assets/eventos/show-musical-novo-caminho.webp
     url: https://visite.museus.gov.br/20a-primavera-dos-museus/show-musical-novo-caminho/
     description: Show musical "Novo Caminho" apresentado pelo projeto “Novo Caminho de Regional Simplicidade”,
       com composições de artistas locais do Choro
@@ -100,6 +108,7 @@ events:
     start: 2026-09-24T18:00
     end: 2026-09-24T20:00
     kind: Sarau
+    image: assets/eventos/brisa-saraus-artisticos-6a-temporada.webp
     url: https://visite.museus.gov.br/20a-primavera-dos-museus/brisa-saraus-artisticos-6a-temporada/
     description: 'Sarau Brisa, pelo projeto “BRISA: Saraus Artísticos 6ª Temporada”, apresentações e atividades
       culturais junto às pessoas em situação de rua ou acolhimento institucional e à comunidade em…'
@@ -107,7 +116,7 @@ events:
     start: 2026-09-25T10:00
     end: 2026-09-25T11:30
     kind: Ação Educativa
-    image: assets/evento-museu-educativo.webp
+    image: assets/eventos/programa-museu-educativo-2.webp
     url: https://visite.museus.gov.br/20a-primavera-dos-museus/programa-museu-educativo/
     description: Contação de História baseada no livro “Perigo na Floresta”, de Cláudia Rezende Barbeiro,
       Visita Mediada às exposições e à edificação, e Atividade Arte-Educativa para alunos da Escola…
@@ -115,7 +124,7 @@ events:
     start: 2026-09-25T14:00
     end: 2026-09-25T15:30
     kind: Ação Educativa
-    image: assets/evento-museu-educativo.webp
+    image: assets/eventos/programa-museu-educativo.webp
     url: https://visite.museus.gov.br/20a-primavera-dos-museus/programa-museu-educativo-2/
     description: Contação de História baseada no livro “Perigo na Floresta”, de Cláudia Rezende Barbeiro,
       Visita Mediada às exposições e à edificação, e Atividade Arte-Educativa para alunos da Escola…
@@ -169,6 +178,10 @@ seo:
   base_url: https://museu-de-arte-de-londrina.github.io/agenda-cultural
 
 footer:
-  logo: assets/prefeitura-londrina.png
+  logos:
+    - image: assets/prefeitura-londrina.png
+      alt: Prefeitura de Londrina
+    - image: assets/museu-de-arte-de-londrina.webp
+      alt: Museu de Arte de Londrina
   text: Secretaria Municipal de Cultura
   url: https://portal.londrina.pr.gov.br

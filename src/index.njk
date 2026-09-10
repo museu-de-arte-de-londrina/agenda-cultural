@@ -151,7 +151,10 @@ permalink: /index.html
                 </div>
 
                 {%- if event.image %}
-                <img class="entry__image" src="{{ event.image }}" width="96" height="96" alt="" loading="lazy" decoding="async">
+                {#- The frame clips; the image drifts inside it as the page scrolls. -#}
+                <div class="entry__media">
+                  <img class="entry__image" src="{{ event.image }}" width="256" height="256" alt="" loading="lazy" decoding="async">
+                </div>
                 {%- endif %}
               </li>
               {%- endfor %}
@@ -181,23 +184,19 @@ permalink: /index.html
       </main>
 
       {%- if site.footer %}
+      {%- set footerTag = 'a' if site.footer.url else 'div' %}
       <footer class="footer">
-        {%- if site.footer.url %}
-        <a class="footer__inner" href="{{ site.footer.url }}" target="_blank" rel="noopener noreferrer">
-          {%- if site.footer.logo %}
-          {#- Decorative when the text below already names it, so it is not read twice. -#}
-          <img class="footer__logo" src="{{ site.footer.logo }}" width="128" height="32" alt="{{ '' if site.footer.text else 'Logotipo institucional' }}">
+        <{{ footerTag }} class="footer__inner"{% if site.footer.url %} href="{{ site.footer.url }}" target="_blank" rel="noopener noreferrer"{% endif %}>
+          {%- if site.footer.logos.length %}
+          <span class="footer__logos">
+            {%- for mark in site.footer.logos %}
+            {#- Without its own alt a mark is decorative: the caption below names the owner. -#}
+            <img class="footer__logo" src="{{ mark.image }}" width="88" height="32" alt="{{ mark.alt if mark.alt else '' }}">
+            {%- endfor %}
+          </span>
           {%- endif %}
           {%- if site.footer.text %}<span class="footer__text">{{ site.footer.text }}</span>{% endif %}
-        </a>
-        {%- else %}
-        <div class="footer__inner">
-          {%- if site.footer.logo %}
-          <img class="footer__logo" src="{{ site.footer.logo }}" width="128" height="32" alt="{{ '' if site.footer.text else 'Logotipo institucional' }}">
-          {%- endif %}
-          {%- if site.footer.text %}<span class="footer__text">{{ site.footer.text }}</span>{% endif %}
-        </div>
-        {%- endif %}
+        </{{ footerTag }}>
       </footer>
       {%- endif %}
     </div>
