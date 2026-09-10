@@ -1,16 +1,17 @@
 name: Publicar evento na agenda
-description: Preencha os campos e o site é atualizado. Não precisa mexer em código.
+description: Preencha os campos, confira e feche a issue. Não precisa mexer em código.
 title: "[evento] "
 labels: ["evento"]
 body:
   - type: markdown
     attributes:
       value: |
-        Ao enviar, um robô confere os dados e abre uma proposta de alteração
-        (um "pull request") para alguém revisar e publicar.
+        Enviar ainda não publica. Depois de enviar, releia o que ficou
+        registrado e, quando estiver certo, clique em **Close issue**. É o
+        fechamento que manda o robô publicar.
 
-        Se algum campo estiver errado, ele comenta aqui dizendo o quê, e você
-        pode corrigir editando este formulário.
+        Se algum campo estiver errado, ele comenta aqui dizendo o quê. Aí é
+        reabrir a issue, corrigir este formulário e fechar de novo.
 
   - type: input
     id: titulo

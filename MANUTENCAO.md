@@ -33,28 +33,42 @@ Preencha o que souber. Só o título e a data são obrigatórios:
 | Foto do evento | não | arraste a imagem para a caixa, ou cole o endereço |
 | Link para mais informações | não | endereço começando com `https://` |
 
-Clique em **Submit new issue**.
+Clique em **Submit new issue**. Nada é publicado ainda: o formulário enviado é
+um rascunho.
 
-### 2. O resto acontece sozinho
+### 2. Confira e feche a issue
 
-Assim que você envia, a automação:
+Releia o que ficou registrado. Achou erro, clique nos três pontinhos, escolha
+**Edit** e corrija quantas vezes precisar.
+
+Quando estiver do jeito certo, clique em **Close issue**, ao pé da página.
+Fechar a issue é o gesto que manda publicar: quer dizer "conferi os dados,
+pode ir para o ar".
+
+### 3. O resto acontece sozinho
+
+Assim que você fecha, a automação:
 
 1. Lê os campos e confere se as datas fazem sentido.
 2. Reconstrói o site inteiro com o evento novo, para garantir que ele não quebra
    a página.
 3. Escreve o evento no `config.yaml` e publica.
 
-O site fica no ar cerca de um minuto depois do envio. A automação comenta na
-issue com o endereço da página e fecha a issue. Você não precisa clicar em mais
-nada.
+O site fica no ar cerca de um minuto depois de você fechar a issue. A automação
+comenta ali com o endereço da página.
 
 **Se algo estiver errado**, nada é publicado. Em vez disso, ela escreve um
-comentário na sua própria issue dizendo o que não entendeu, em português. Aí é
-só clicar nos três pontinhos do formulário, escolher **Edit**, corrigir e
-salvar. A conferência roda de novo sozinha.
+comentário na sua própria issue dizendo o que não entendeu, em português. Para
+tentar de novo: clique em **Reopen issue**, corrija o formulário pelo **Edit** e
+feche outra vez.
 
-Como a issue fecha ao publicar, editar o formulário depois disso não publica de
-novo. Para mexer em um evento que já está no ar, veja
+Para **recusar** um pedido sem publicar nada, feche pela setinha ao lado do
+botão, escolhendo **Close as not planned**. A automação entende isso como
+recusa e não mexe no site.
+
+Reabrir e fechar de novo uma issue já publicada não duplica o evento: a
+automação compara com o que já está na agenda e avisa que não há o que fazer.
+Para mexer em um evento que já está no ar, veja
 [Tirar ou corrigir um evento](#tirar-ou-corrigir-um-evento-antes-da-data).
 
 ## A foto do evento
@@ -159,8 +173,9 @@ proposital: serve para o público avisar de um erro ou sugerir algo.
 
 A publicação automática, porém, só roda para quem tem acesso de escrita no
 repositório. Vindo de fora, o formulário vira um pedido para alguém da equipe
-ler, e a pessoa recebe um comentário explicando que a revisão é humana. Nunca
-vira uma alteração automática no site.
+ler, e nunca uma alteração automática no site. A issue fica aberta esperando
+alguém do museu; se a própria pessoa fechar, recebe um comentário explicando
+que a revisão é humana.
 
 Para dar acesso a alguém da equipe: **Settings → Collaborators and teams → Add
 people**, com a permissão **Write**.
@@ -170,9 +185,10 @@ people**, com a permissão **Write**.
 Quase tudo aparece na aba **Actions**, que é o histórico de tudo o que rodou.
 Verde é sucesso, vermelho é falha, e clicar na linha mostra o motivo.
 
-**Enviei o formulário e nada aconteceu.** Veja se a issue está com a etiqueta
-`evento`. Se o formulário foi usado, ela entra sozinha. Se a issue foi escrita à
-mão, sem o formulário, a automação não reconhece os campos e não faz nada.
+**Enviei o formulário e nada aconteceu.** Enviar não publica. Falta fechar a
+issue, no **Close issue**. Se você já fechou e mesmo assim nada rodou, veja se a
+issue está com a etiqueta `evento`: usando o formulário ela entra sozinha, mas
+numa issue escrita à mão a automação não reconhece os campos e não faz nada.
 
 **A automação comentou que não entendeu a data.** O formato é dia/mês/ano com
 quatro dígitos no ano, como `03/10/2026`. Hora é `19:00`, com dois pontos.
@@ -207,10 +223,10 @@ automática estiver verde, podem ser integradas sem medo.
 ## Resumo do ciclo
 
 ```
-formulário  ->  confere e constrói  ->  escreve no config.yaml  ->  site no ar
-                      ~30s                                             ~40s
+formulário  ->  você confere  ->  fecha a issue  ->  robô publica  ->  site no ar
+                                                        ~30s             ~40s
 
-                        um envio seu, nenhum clique depois
-                                        |
-                   evento some sozinho depois que a data passa
+                    o robô só entra depois que você fecha
+                                    |
+               evento some sozinho depois que a data passa
 ```

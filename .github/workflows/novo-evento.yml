@@ -1,13 +1,16 @@
 name: Publicar evento
 
-# Uma issue preenchida pelo formulário vira uma proposta de alteração.
+# Uma issue preenchida pelo formulário vira uma proposta de alteração, e
+# fechar a issue é o gesto que manda publicar.
+#
+# Só closed. Na criação o GitHub dispara opened e labeled com segundos de
+# diferença, porque o formulário aplica a etiqueta na mesma chamada que cria a
+# issue, e o trabalho rodava duas vezes para o mesmo evento. Com o fechamento
+# como gatilho, cada envio roda uma vez e quem preenche revisa antes de ir
+# para o ar.
 on:
   issues:
-    # Sem opened de propósito. O formulário aplica a etiqueta na própria
-    # criação, então opened e labeled chegam com dois segundos de diferença e o
-    # trabalho rodava duas vezes para a mesma issue. labeled sozinho cobre tanto
-    # o envio pelo formulário quanto a etiqueta posta à mão depois.
-    types: [edited, labeled]
+    types: [closed]
 
 permissions:
   contents: read
@@ -29,11 +32,13 @@ jobs:
   conferir:
     name: Conferir quem pediu
     runs-on: ubuntu-latest
-    # Fechada quer dizer publicada. Sem isso, editar a issue depois publicaria
-    # o evento de novo.
+    # Fechar como "not planned" é o jeito de recusar um pedido, e fechar como
+    # duplicada não deve publicar duas vezes o mesmo evento. Só o fechamento
+    # normal, o "completed", vale como ordem de publicar.
     if: >-
-      github.event.issue.state == 'open' &&
-      contains(github.event.issue.labels.*.name, 'evento')
+      contains(github.event.issue.labels.*.name, 'evento') &&
+      github.event.issue.state_reason != 'not_planned' &&
+      github.event.issue.state_reason != 'duplicate'
 
     permissions:
       contents: read
@@ -60,7 +65,7 @@ jobs:
       # Sem isso, quem preenche o formulário de fora fica esperando uma
       # resposta que nunca chega.
       - name: Avisar que o pedido vai para revisão
-        if: steps.acesso.outputs.pode != 'true' && github.event.action != 'edited'
+        if: steps.acesso.outputs.pode != 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ISSUE: ${{ github.event.issue.number }}
@@ -120,7 +125,7 @@ jobs:
             echo
             cat erro.txt
             echo
-            echo "Edite o formulário acima corrigindo isso e eu tento de novo."
+            echo "Reabra a issue, corrija o formulário e feche de novo. Eu tento outra vez."
           } > comentario.md
           gh issue comment "$NUMERO" --body-file comentario.md
           exit 1
@@ -142,7 +147,6 @@ jobs:
           # O script sai sem escrever quando o evento já está na agenda.
           if git diff --quiet -- config.yaml && [ -z "$(git status --porcelain src/assets/eventos)" ]; then
             gh issue comment "$NUMERO" --body 'Esse evento já está na agenda. Nada a fazer.'
-            gh issue close "$NUMERO" --reason completed
             exit 0
           fi
 
@@ -176,5 +180,5 @@ jobs:
           # explícito, o evento entra no config.yaml e o site nunca reconstrói.
           gh workflow run deploy.yml --ref main
 
+          # A issue já veio fechada: foi o fechamento que disparou este trabalho.
           gh issue comment "$NUMERO" --body "Publicado. O site atualiza em cerca de um minuto: $SITE"
-          gh issue close "$NUMERO" --reason completed

@@ -64,13 +64,16 @@ Pronto. A cada push na `main` o site é reconstruído e publicado em
 ## Publicando um evento sem mexer em código
 
 Abra uma issue pelo modelo **Publicar evento na agenda**, preencha os campos e
-envie. Uma automação confere os dados, reconstrói o site para garantir que o
-evento não quebra a página, escreve no `config.yaml` e publica. Leva cerca de um
-minuto do envio até o ar, e a issue fecha sozinha. A foto do evento pode ser
-arrastada para dentro do formulário: a automação baixa a imagem e guarda no
-repositório, em vez de deixar a página do museu dependendo de um servidor de
-terceiro. Se algum campo estiver errado, nada é publicado e ela comenta na
-própria issue dizendo o quê.
+envie. Enviar deixa o evento em rascunho; quem preencheu revisa e, quando está
+certo, fecha a issue. O fechamento é o gesto que manda publicar. Aí uma
+automação confere os dados, reconstrói o site para garantir que o evento não
+quebra a página, escreve no `config.yaml` e publica, cerca de um minuto do
+fechamento até o ar. A foto do evento pode ser arrastada para dentro do
+formulário: a automação baixa a imagem e guarda no repositório, em vez de deixar
+a página do museu dependendo de um servidor de terceiro. Se algum campo estiver
+errado, nada é publicado e ela comenta na própria issue dizendo o quê.
+
+Fechar por **Close as not planned** recusa o pedido sem publicar nada.
 
 A automação só roda para quem tem acesso de escrita no repositório. O
 repositório é público e qualquer pessoa pode abrir issue; vindo de fora, ela
@@ -81,7 +84,7 @@ qualquer coisa que não seja evento.
 
 O [`MANUTENCAO.md`](MANUTENCAO.md) descreve esse ciclo inteiro passo a passo,
 para quem cuida da programação e não mexe em código: o que acontece depois que a
-issue é enviada, como acrescentar a foto, como cancelar um evento e por que os
+issue é fechada, como acrescentar a foto, como cancelar um evento e por que os
 que já passaram somem sozinhos.
 
 ## Referência do `config.yaml`
