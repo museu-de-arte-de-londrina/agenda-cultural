@@ -18,6 +18,7 @@ import {
   formatShortDate,
   isSameDay,
 } from '../../lib/datetime.js';
+import { slugify } from '../../lib/slug.js';
 
 const DEFAULT_CONFIG = new URL('../../config.yaml', import.meta.url);
 
@@ -33,23 +34,6 @@ const SURFACE_HOVER = { light: '#e8eef7', dark: '#1a2540' };
 /** A cor do próprio cartão, entregue ao CSS e ao <meta name="theme-color">. */
 const SURFACE = { light: '#ffffff', dark: '#0d1524' };
 
-/**
- * A stable identifier for an event, used to name its calendar file and as the
- * UID a calendar app matches on. The start time is part of it because the same
- * activity repeats on different days.
- */
-function slugify(title, start) {
-  const base = title
-    .normalize('NFKD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-|-$/g, '')
-    .slice(0, 48)
-    .replace(/-$/, '');
-  // Date and time both: the same activity runs twice on the same day.
-  return `${base}-${start.replace(/[-:T ]/g, '')}`;
-}
 
 /** Two initials, used when no avatar is set. */
 function initials(name) {

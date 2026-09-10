@@ -66,8 +66,11 @@ Pronto. A cada push na `main` o site é reconstruído e publicado em
 Abra uma issue pelo modelo **Publicar evento na agenda**, preencha os campos e
 envie. Uma automação confere os dados, reconstrói o site para garantir que o
 evento não quebra a página, escreve no `config.yaml` e publica. Leva cerca de um
-minuto do envio até o ar, e a issue fecha sozinha. Se algum campo estiver errado,
-nada é publicado e ela comenta na própria issue dizendo o quê.
+minuto do envio até o ar, e a issue fecha sozinha. A foto do evento pode ser
+arrastada para dentro do formulário: a automação baixa a imagem e guarda no
+repositório, em vez de deixar a página do museu dependendo de um servidor de
+terceiro. Se algum campo estiver errado, nada é publicado e ela comenta na
+própria issue dizendo o quê.
 
 A automação só roda para quem tem acesso de escrita no repositório. O
 repositório é público e qualquer pessoa pode abrir issue; vindo de fora, ela

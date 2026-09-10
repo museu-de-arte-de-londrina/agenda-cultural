@@ -132,7 +132,7 @@ jobs:
           set -euo pipefail
 
           # O script sai sem escrever quando o evento já está na agenda.
-          if git diff --quiet -- config.yaml; then
+          if git diff --quiet -- config.yaml && [ -z "$(git status --porcelain src/assets/eventos)" ]; then
             gh issue comment "$NUMERO" --body 'Esse evento já está na agenda. Nada a fazer.'
             gh issue close "$NUMERO" --reason completed
             exit 0
@@ -140,7 +140,7 @@ jobs:
 
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add config.yaml
+          git add config.yaml src/assets/eventos
 
           cat > mensagem.txt <<FIM
           feat(agenda): novo evento vindo do formulário

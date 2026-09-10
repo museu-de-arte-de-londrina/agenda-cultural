@@ -11,13 +11,30 @@
  * The result is validated against the same schema the site build uses, so an
  * event that would break the page is rejected here instead of on main.
  */
-import { readFile, writeFile } from 'node:fs/promises';
+import { readFile, writeFile, mkdir } from 'node:fs/promises';
+import { fileURLToPath } from 'node:url';
+import path from 'node:path';
 import process from 'node:process';
 import YAML from 'yaml';
 
 import { parseConfig, ConfigError } from '../schema/config.schema.js';
+import { slugify } from '../lib/slug.js';
 
 const CONFIG = new URL('../config.yaml', import.meta.url);
+const PASTA_FOTOS = fileURLToPath(new URL('../src/assets/eventos/', import.meta.url));
+
+/**
+ * Formatos que o site sabe servir. A chave é o content-type que o servidor
+ * declara, e o valor vira a extensão do arquivo guardado.
+ */
+const TIPOS_DE_IMAGEM = {
+  'image/webp': 'webp',
+  'image/jpeg': 'jpg',
+  'image/png': 'png',
+};
+
+/** Acima disso a miniatura não vale o que custa no celular de quem visita. */
+const PESO_MAXIMO = 5 * 1024 * 1024;
 
 /** GitHub writes this into every field the person left empty. */
 const VAZIO = '_No response_';
@@ -60,6 +77,34 @@ export function paraIso(data, hora) {
   const h = /^(\d{1,2}):(\d{2})$/.exec(hora.trim());
   if (!h) return null;
   return `${ano}-${mes}-${dia}T${String(h[1]).padStart(2, '0')}:${h[2]}`;
+}
+
+/**
+ * O campo da foto aceita três coisas, porque as três acontecem: a pessoa cola
+ * a imagem e o GitHub a transforma em markdown, cola o HTML de uma imagem, ou
+ * cola o endereço cru.
+ * @param {string} campo
+ * @returns {string | null}
+ */
+export function extrairUrlDaFoto(campo) {
+  const texto = String(campo ?? '').trim();
+  if (!texto) return null;
+
+  const markdown = /!\[[^\]]*\]\(\s*(\S+?)\s*\)/.exec(texto);
+  const html = /<img[^>]+src\s*=\s*["']([^"']+)["']/i.exec(texto);
+  const bruto = /https:\/\/\S+/.exec(texto);
+
+  const achado = markdown?.[1] ?? html?.[1] ?? bruto?.[0] ?? null;
+  if (achado === null) return null;
+
+  let url;
+  try {
+    url = new URL(achado);
+  } catch {
+    return null;
+  }
+  // Só https: o build baixa esse endereço, e http seria interceptável.
+  return url.protocol === 'https:' ? url.href : null;
 }
 
 /**
@@ -117,6 +162,52 @@ export function montarEvento(campos) {
   return { evento, erros };
 }
 
+/**
+ * Baixa a foto para dentro do repositório. Guardar a imagem aqui, em vez de
+ * apontar para o endereço de origem, evita que o navegador de quem visita a
+ * agenda entregue o IP a um servidor de terceiro, e evita que o cartão quebre
+ * no dia em que a imagem sair do ar lá.
+ *
+ * @param {string} url
+ * @param {object} evento
+ * @returns {Promise<string>} caminho relativo para gravar no config.yaml
+ */
+export async function baixarFoto(url, evento) {
+  let resposta;
+  try {
+    resposta = await fetch(url, { redirect: 'follow' });
+  } catch (causa) {
+    throw new Error(`Não consegui acessar a foto em ${url}. ${causa.message}`, { cause: causa });
+  }
+
+  if (!resposta.ok) {
+    throw new Error(`A foto em ${url} respondeu ${resposta.status}. Confira se o endereço é público.`);
+  }
+
+  const tipo = (resposta.headers.get('content-type') ?? '').split(';')[0].trim().toLowerCase();
+  const extensao = TIPOS_DE_IMAGEM[tipo];
+  if (!extensao) {
+    throw new Error(
+      `Esse endereço não devolveu uma imagem, e sim "${tipo || 'nada'}". ` +
+        'Aceito JPG, PNG e WebP. Se você colou o link de uma página, abra a foto e copie o endereço dela.',
+    );
+  }
+
+  const bytes = new Uint8Array(await resposta.arrayBuffer());
+  if (bytes.byteLength > PESO_MAXIMO) {
+    const mb = (bytes.byteLength / 1024 / 1024).toFixed(1);
+    throw new Error(`A foto tem ${mb} MB, e o limite é 5 MB. Reduza a imagem e envie de novo.`);
+  }
+
+  const nome = `${slugify(evento.title, evento.start)}.${extensao}`;
+  const pasta = process.env.PASTA_FOTOS ?? PASTA_FOTOS;
+  await mkdir(pasta, { recursive: true });
+  await writeFile(path.join(pasta, nome), bytes);
+
+  console.log(`Foto guardada: src/assets/eventos/${nome} (${Math.round(bytes.byteLength / 1024)} kB)`);
+  return `assets/eventos/${nome}`;
+}
+
 async function principal() {
   const body = process.env.ISSUE_BODY;
   if (!body) {
@@ -124,7 +215,8 @@ async function principal() {
     process.exit(1);
   }
 
-  const { evento, erros } = montarEvento(parseIssueForm(body));
+  const campos = parseIssueForm(body);
+  const { evento, erros } = montarEvento(campos);
   if (erros.length > 0) {
     console.error(erros.map((e) => `- ${e}`).join('\n'));
     process.exit(1);
@@ -140,6 +232,16 @@ async function principal() {
   if (jaTemEvento(atual.events ?? [], evento)) {
     console.log(`Esse evento já está na agenda: ${evento.title} (${evento.start})`);
     return;
+  }
+
+  const foto = extrairUrlDaFoto(campos.get('Foto do evento'));
+  if (foto) {
+    try {
+      evento.image = await baixarFoto(foto, evento);
+    } catch (error) {
+      console.error(`${error.message}\n\nPara publicar sem foto, apague o conteúdo do campo Foto do evento.`);
+      process.exit(1);
+    }
   }
 
   const eventos = [...(atual.events ?? []), evento];

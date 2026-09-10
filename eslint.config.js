@@ -13,6 +13,7 @@ export default [
         URL: 'readonly',
         TextEncoder: 'readonly',
         fetch: 'readonly',
+        Response: 'readonly',
       },
     },
     rules: {

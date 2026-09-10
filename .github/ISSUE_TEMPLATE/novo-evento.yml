@@ -73,16 +73,18 @@ body:
       description: Uma ou duas frases sobre o que acontece. Evite repetir o título. Até 300 caracteres.
       placeholder: Tambores japoneses, pelo 22º Londrina Matsuri.
 
+  - type: textarea
+    id: foto
+    attributes:
+      label: Foto do evento
+      description: >-
+        Arraste a imagem para dentro desta caixa, ou cole o endereço dela.
+        Aceito JPG, PNG e WebP, até 5 MB. A foto é guardada junto com o site.
+      placeholder: Arraste a foto aqui
+
   - type: input
     id: link
     attributes:
       label: Link para mais informações
       description: Endereço começando com https. Opcional.
       placeholder: https://londrinacultura.londrina.pr.gov.br/espaco/1/
-
-  - type: markdown
-    attributes:
-      value: |
-        **Foto:** este formulário ainda não recebe imagem. Depois que a proposta
-        for aberta, arraste a foto para a pasta `src/assets/eventos/` por lá, ou
-        publique sem foto: o cartão funciona do mesmo jeito.

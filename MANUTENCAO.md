@@ -30,6 +30,7 @@ Preencha o que souber. Só o título e a data são obrigatórios:
 | Último dia | não | só para o que dura vários dias, como exposição |
 | Tipo de atividade | não | escolha da lista |
 | Descrição | não | uma ou duas frases, até 300 caracteres |
+| Foto do evento | não | arraste a imagem para a caixa, ou cole o endereço |
 | Link para mais informações | não | endereço começando com `https://` |
 
 Clique em **Submit new issue**.
@@ -58,17 +59,28 @@ novo. Para mexer em um evento que já está no ar, veja
 
 ## A foto do evento
 
-O formulário ainda não recebe imagem, então o evento entra sem foto. O cartão
-funciona do mesmo jeito, só fica sem miniatura.
+Arraste o arquivo para dentro da caixa **Foto do evento**, no formulário. O
+GitHub envia a imagem e deixa um endereço no lugar; pode parecer estranho, mas é
+só isso mesmo. Se a foto já estiver publicada em algum lugar, colar o endereço
+dela funciona igual.
 
-Para colocar a foto, são duas edições pela interface do GitHub, feitas depois de
-publicar:
+A automação baixa essa imagem e guarda junto com o site, então a miniatura
+continua funcionando mesmo que a foto saia do ar na origem, e o navegador de
+quem visita a agenda não precisa buscar nada em servidor de terceiro.
 
-1. Abra a pasta `src/assets/eventos/` no repositório e use **Add file → Upload
-   files**. Dê à imagem um nome curto, sem acento e sem espaço, por exemplo
-   `oficina-de-gravura.webp`.
-2. Abra o `config.yaml`, clique no lápis e acrescente uma linha `image:` no
-   bloco do evento, logo abaixo de `kind:`:
+Aceita JPG, PNG e WebP, até 5 MB. Uma imagem de 800 pixels de largura já é mais
+que suficiente para a miniatura.
+
+Se o endereço não devolver uma imagem, se a foto passar do limite de peso ou se
+o link for privado, nada é publicado e a automação comenta na issue explicando o
+caso. Para publicar sem foto, apague o conteúdo do campo e envie de novo: o
+cartão funciona do mesmo jeito, só fica sem miniatura.
+
+### Acrescentar a foto depois
+
+Se o evento já foi publicado sem foto, o caminho é editar o `config.yaml` na
+mão. Suba a imagem para a pasta `src/assets/eventos/` com **Add file → Upload
+files**, depois acrescente uma linha `image:` no bloco do evento:
 
 ```yaml
   - title: Oficina de gravura
@@ -82,9 +94,6 @@ publicar:
 
 Repare que o caminho escrito no `config.yaml` começa em `assets/`, e não em
 `src/assets/`. O `src` fica de fora.
-
-Formatos aceitos: `.webp`, `.jpg` e `.png`. Prefira `.webp`, que pesa bem menos.
-Uma imagem de 800 pixels de largura já é mais que suficiente para a miniatura.
 
 ## Os eventos somem sozinhos
 

@@ -1,7 +1,18 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { mkdtemp, readFile, rm } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import path from 'node:path';
+import process from 'node:process';
 
-import { parseIssueForm, paraIso, montarEvento, jaTemEvento } from '../scripts/evento-da-issue.js';
+import {
+  parseIssueForm,
+  paraIso,
+  montarEvento,
+  jaTemEvento,
+  extrairUrlDaFoto,
+  baixarFoto,
+} from '../scripts/evento-da-issue.js';
 
 /** O formato que o GitHub gera a partir do formulário. */
 function corpo(campos) {
@@ -145,4 +156,68 @@ test('o mesmo evento não entra duas vezes', () => {
     false,
     'a mesma atividade em outro horário é outro evento',
   );
+});
+
+test('acha o endereço da foto no que a pessoa colar', () => {
+  const casos = [
+    ['![cartaz](https://github.com/user-attachments/assets/abc-123)', 'https://github.com/user-attachments/assets/abc-123'],
+    ['<img src="https://exemplo.org/foto.jpg" width="400">', 'https://exemplo.org/foto.jpg'],
+    ['https://exemplo.org/foto.png', 'https://exemplo.org/foto.png'],
+    ['  a foto é essa: https://exemplo.org/foto.webp  ', 'https://exemplo.org/foto.webp'],
+  ];
+  for (const [entrada, esperado] of casos) {
+    assert.equal(extrairUrlDaFoto(entrada), esperado, entrada);
+  }
+});
+
+test('recusa foto que não seja https', () => {
+  assert.equal(extrairUrlDaFoto(''), null, 'campo vazio');
+  assert.equal(extrairUrlDaFoto('_No response_'.replace('_No response_', '')), null);
+  assert.equal(extrairUrlDaFoto('http://exemplo.org/foto.jpg'), null, 'http é interceptável');
+  assert.equal(extrairUrlDaFoto('javascript:alert(1)'), null);
+  assert.equal(extrairUrlDaFoto('tenho uma foto mas não sei o link'), null);
+});
+
+test('baixa a foto e devolve o caminho relativo', async (t) => {
+  const pasta = await mkdtemp(path.join(tmpdir(), 'fotos-'));
+  process.env.PASTA_FOTOS = pasta;
+  t.after(async () => {
+    delete process.env.PASTA_FOTOS;
+    await rm(pasta, { recursive: true, force: true });
+  });
+
+  const original = globalThis.fetch;
+  globalThis.fetch = async () =>
+    new Response(new Uint8Array([1, 2, 3]), { headers: { 'content-type': 'image/webp' } });
+  t.after(() => {
+    globalThis.fetch = original;
+  });
+
+  const caminho = await baixarFoto('https://exemplo.org/f.webp', {
+    title: 'Oficina de Gravura',
+    start: '2026-10-03T14:00',
+  });
+
+  assert.equal(caminho, 'assets/eventos/oficina-de-gravura-202610031400.webp');
+  const gravado = await readFile(path.join(pasta, 'oficina-de-gravura-202610031400.webp'));
+  assert.deepEqual([...gravado], [1, 2, 3], 'o arquivo chegou inteiro');
+});
+
+test('explica em português por que a foto não serve', async (t) => {
+  const original = globalThis.fetch;
+  t.after(() => {
+    globalThis.fetch = original;
+  });
+  const evento = { title: 'X', start: '2026-10-03T14:00' };
+
+  globalThis.fetch = async () => new Response('', { status: 404 });
+  await assert.rejects(baixarFoto('https://exemplo.org/f.jpg', evento), /404/);
+
+  globalThis.fetch = async () =>
+    new Response('<html>', { headers: { 'content-type': 'text/html; charset=utf-8' } });
+  await assert.rejects(baixarFoto('https://exemplo.org/pagina', evento), /não devolveu uma imagem/);
+
+  globalThis.fetch = async () =>
+    new Response(new Uint8Array(6 * 1024 * 1024), { headers: { 'content-type': 'image/png' } });
+  await assert.rejects(baixarFoto('https://exemplo.org/enorme.png', evento), /limite é 5 MB/);
 });
