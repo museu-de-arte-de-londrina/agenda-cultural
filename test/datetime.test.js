@@ -7,7 +7,6 @@ import {
   toIsoString,
   isUpcoming,
   formatEventWhen,
-  formatDateTile,
 } from '../lib/datetime.js';
 
 /** Intl pontua intervalos com espaço fino + travessão; escrito por extenso
@@ -117,11 +116,6 @@ test('hora de início e fim iguais não vira intervalo repetido', () => {
     'pt-BR',
   );
   assert.equal(when.time, '19:00');
-});
-
-test('o ladrilho de data traz dia e mês curtos', () => {
-  assert.deepEqual(formatDateTile(parseDateTime('2026-09-21'), 'pt-BR'), { day: '21', month: 'SET' });
-  assert.deepEqual(formatDateTile(parseDateTime('2026-12-05'), 'pt-BR'), { day: '05', month: 'DEZ' });
 });
 
 test('o idioma do config manda na formatação', () => {

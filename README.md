@@ -271,10 +271,25 @@ npm run build      # valida e gera o site em _site/
 | `src/assets/fonts/` | Archivo (OFL), hospedada aqui. Nenhuma requisição sai para CDN de fonte. |
 | `src/assets/fundo-museu.webp` | Fachada do museu, desfocada, atrás da página. Foto de Emerson Dias, do portal da Prefeitura. |
 | `scripts/validate-config.js` | O `npm run validate`. |
+| `eleventy.config.js` | Configuração do build; gera também os QR codes. |
 | `test/` | Testes com `node:test`, sem framework. |
 
 `_site/` é gerado e não vai para o repositório. O deploy publica o artefato
 direto pelo `actions/deploy-pages`, sem branch `gh-pages`.
+
+## QR code
+
+O build gera um QR code apontando para o endereço em `seo.base_url`, publicado
+em dois formatos:
+
+- `qrcode.svg` — vetorial, para impressão em qualquer tamanho (cartaz, etiqueta
+  de parede, folder);
+- `qrcode.png` — 1024×1024, para slide, story ou apresentação.
+
+No site publicado eles ficam em `SEU-ENDERECO/qrcode.svg` e `.../qrcode.png`.
+São regerados a cada build, então mudar `seo.base_url` já corrige o código —
+não existe cópia antiga para esquecer de atualizar. Sem `seo.base_url`, nada é
+gerado: um QR para um endereço desconhecido é pior que nenhum.
 
 ## Domínio próprio
 
