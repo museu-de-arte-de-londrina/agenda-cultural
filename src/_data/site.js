@@ -30,6 +30,9 @@ const DEFAULT_CONFIG = new URL('../../config.yaml', import.meta.url);
  */
 const SURFACE_HOVER = { light: '#e8eef7', dark: '#1a2540' };
 
+/** A cor do próprio cartão, entregue ao CSS e ao <meta name="theme-color">. */
+const SURFACE = { light: '#ffffff', dark: '#0d1524' };
+
 /**
  * A stable identifier for an event, used to name its calendar file and as the
  * UID a calendar app matches on. The start time is part of it because the same
@@ -135,6 +138,26 @@ function structuredData(config, agenda) {
     ? { '@type': 'Place', name: config.profile.name, address: config.profile.location }
     : undefined;
 
+  // A instituição, além dos eventos: é a entidade que um buscador usa para
+  // montar o painel do museu, com endereço, logotipo e perfis oficiais.
+  const perfis = config.social.map((s) => s.url).filter((u) => u.startsWith('https://'));
+  const telefone = config.social.find((s) => s.url.startsWith('tel:'))?.url.slice(4);
+  const email = config.social.find((s) => s.url.startsWith('mailto:'))?.url.slice(7);
+
+  const museu = {
+    '@context': 'https://schema.org',
+    '@type': 'Museum',
+    name: config.profile.name,
+    ...(config.seo.base_url ? { url: config.seo.base_url } : {}),
+    ...(config.seo.description ? { description: config.seo.description } : {}),
+    ...(absolute(config.profile.avatar) ? { logo: absolute(config.profile.avatar) } : {}),
+    ...(absolute(config.seo.og_image) ? { image: absolute(config.seo.og_image) } : {}),
+    ...(config.profile.location ? { address: config.profile.location } : {}),
+    ...(telefone ? { telephone: telefone } : {}),
+    ...(email ? { email } : {}),
+    ...(perfis.length > 0 ? { sameAs: perfis } : {}),
+  };
+
   const events = agenda
     .flatMap((day) => day.events)
     .map((event) => ({
@@ -150,8 +173,8 @@ function structuredData(config, agenda) {
       organizer: { '@type': 'Organization', name: config.profile.name },
     }));
 
-  if (events.length === 0) return null;
-  return JSON.stringify(events).replace(/</g, '\\u003c').replace(/>/g, '\\u003e').replace(/&/g, '\\u0026');
+  const entidades = [museu, ...events];
+  return JSON.stringify(entidades).replace(/</g, '\\u003c').replace(/>/g, '\\u003e').replace(/&/g, '\\u0026');
 }
 
 /**
@@ -223,6 +246,7 @@ export default async function site() {
       dark: readableOn(SURFACE_HOVER.dark, accent, '#e9eff8'),
     },
     surfaceHover: SURFACE_HOVER,
+    surface: SURFACE,
     focusRing: {
       light: contrastRatio(accent, '#ffffff') >= 3 ? accent : '#0f172a',
       dark: contrastRatio(accent, '#0b1120') >= 3 ? accent : '#e8edf7',

@@ -29,6 +29,9 @@ permalink: /index.html
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https:; style-src 'self'; script-src 'self'; font-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
     <meta name="referrer" content="no-referrer">
     <meta name="color-scheme" content="{{ 'light dark' if site.theme.mode == 'auto' else site.theme.mode }}">
+    {#- Pinta a barra do navegador no celular com a cor do cartão. -#}
+    <meta name="theme-color" content="{{ site.surface.light }}" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="{{ site.surface.dark }}" media="(prefers-color-scheme: dark)">
 
     <title>{{ site.seo.title }}</title>
     <meta name="description" content="{{ site.seo.description }}">
@@ -39,9 +42,16 @@ permalink: /index.html
     <meta property="og:type" content="website">
     <meta property="og:title" content="{{ site.seo.title }}">
     <meta property="og:description" content="{{ site.seo.description }}">
+    <meta property="og:site_name" content="{{ site.profile.name }}">
+    <meta property="og:locale" content="{{ site.lang | replace('-', '_') }}">
+    {%- if site.canonical %}
+    <meta property="og:url" content="{{ site.canonical }}">
+    {%- endif %}
     {%- if site.ogImage %}
     <meta property="og:image" content="{{ site.ogImage }}">
+    <meta property="og:image:alt" content="{{ site.profile.name }}">
     <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image:alt" content="{{ site.profile.name }}">
     {%- else %}
     <meta name="twitter:card" content="summary">
     {%- endif %}
@@ -51,6 +61,10 @@ permalink: /index.html
     {%- endif %}
     <link rel="preload" href="assets/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="styles.css">
+    {%- if site.agenda.length %}
+    {#- Deixa a agenda descobrível sem precisar caçar o link na página. -#}
+    <link rel="alternate" type="text/calendar" href="agenda.ics" title="Agenda do {{ site.profile.name }}">
+    {%- endif %}
     {#- Not deferred: it applies the saved theme before the first paint. -#}
     <script src="theme.js"></script>
     {%- if site.structuredData %}
@@ -144,7 +158,9 @@ permalink: /index.html
           {%- if site.agenda.length %}
           {%- for day in site.agenda %}
           <section class="day" aria-label="{{ day.heading.full }}">
-            <p class="day__rail">
+            {#- A data completa já está no aria-label da seção; sem isto o
+                leitor de tela anunciava "seg. 21 set." logo depois dela. -#}
+            <p class="day__rail" aria-hidden="true">
               <span class="day__weekday">{{ day.heading.weekday }}</span>
               <span class="day__number">{{ day.heading.day }}</span>
               <span class="day__month">{{ day.heading.month }}</span>
@@ -152,8 +168,11 @@ permalink: /index.html
 
             <ol class="day__entries">
               {%- for event in day.events %}
-              <li class="entry">
-                <div class="entry__text">
+              <li>
+                {#- Um evento é conteúdo autocontido: sai da agenda e continua
+                    fazendo sentido sozinho, que é o que <article> significa. -#}
+                <article class="entry">
+                  <div class="entry__text">
                   <p class="entry__time">
                     <time datetime="{{ event.iso }}">{{ event.time if event.time else 'Dia todo' }}</time>
                   </p>
@@ -167,29 +186,31 @@ permalink: /index.html
                   <p class="entry__meta">
                     {%- if event.kind %}<span class="entry__kind">{{ event.kind }}</span>{% endif %}
                     {%- if event.runsUntil %}<span class="entry__until">até {{ event.runsUntil }}</span>{% endif %}
-                    {#- Só o ícone: com rótulo, cada cartão ganhava uma linha inteira. -#}
+                  </p>
+                  {%- if event.description %}
+                  <p class="entry__description">{{ event.description }}</p>
+                  {%- endif %}
+                </div>
+
+                  <div class="entry__lado">
+                    {%- if event.image %}
+                    {#- A moldura recorta; a foto desliza dentro dela ao rolar. -#}
+                    <div class="entry__media">
+                      <img class="entry__image" src="{{ event.image }}" width="256" height="256" alt="" loading="lazy" decoding="async">
+                    </div>
+                    {%- endif %}
+                    {#- Só o ícone, com rótulo no aria-label: com texto, cada cartão
+                        ganhava uma linha inteira e a agenda voltava a caber um
+                        evento por tela de celular. -#}
                     <a
                       class="entry__calendar"
                       href="eventos/{{ event.slug }}.ics"
                       download
                       aria-label="Adicionar “{{ event.title }}” ao calendário"
                     >{{ calendarIcon() }}</a>
-                  </p>
-                </div>
+                  </div>
 
-                {%- if event.image %}
-                {#- The frame clips; the image drifts inside it as the page scrolls. -#}
-                <div class="entry__media">
-                  <img class="entry__image" src="{{ event.image }}" width="256" height="256" alt="" loading="lazy" decoding="async">
-                </div>
-                {%- endif %}
-
-                {#- Full width, under the row: beside the thumbnail the column is
-                    too narrow on a phone and every description clipped. -#}
-                {%- if event.description %}
-                <p class="entry__description">{{ event.description }}</p>
-                {%- endif %}
-
+                </article>
               </li>
               {%- endfor %}
             </ol>

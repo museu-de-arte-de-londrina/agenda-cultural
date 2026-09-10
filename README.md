@@ -270,8 +270,11 @@ da pessoa ache do assunto.
 
 ## Dados estruturados
 
-A página declara os eventos em `schema.org/Event`, então buscadores podem
-mostrar a agenda como eventos e não como um bloco de texto.
+A página declara duas coisas em schema.org: cada atividade como `Event`, para
+o buscador mostrar a agenda como eventos e não como um bloco de texto, e o
+museu como `Museum`, com endereço, logotipo, contato e os perfis oficiais em
+`sameAs`. É essa segunda entidade que alimenta o painel do lugar na busca e no
+mapa.
 
 Esse é o único valor da página marcado como `safe` no template, e precisa ser:
 um `<script>` guarda texto cru, então escapar o conteúdo corromperia o JSON em
@@ -377,6 +380,22 @@ Decisões que não são óbvias lendo o CSS:
 - **A tipografia usa uma família só** (Archivo, variável) para títulos,
   horários e o trilho de data; o texto corrido fica na pilha do sistema, que
   não custa download.
+
+## Semântica da página
+
+O que o HTML carrega além do texto, e por quê:
+
+| Recurso | Onde | Para quê |
+| --- | --- | --- |
+| `<article>` por evento | cada item da agenda | Conteúdo autocontido: sai da lista e continua fazendo sentido |
+| `<time datetime>` | horário e data de atualização | Data legível por máquina, não só por gente |
+| `<header>`, `<main>`, `<nav>`, `<footer>` | estrutura | Landmarks de navegação para leitor de tela |
+| `aria-label` na seção do dia | cada grupo | Anuncia "segunda-feira, 21 de setembro" em vez de "seg. 21 set." |
+| `aria-hidden` no trilho da data | coluna da data | Evita o leitor repetir a data que o rótulo da seção já deu |
+| `og:*` e `twitter:*` completos | `<head>` | Cartão de compartilhamento com título, imagem, texto alternativo e URL |
+| `theme-color` por tema | `<head>` | A barra do navegador no celular acompanha o tema da página |
+| `rel="alternate" type="text/calendar"` | `<head>` | Deixa a agenda descobrível sem caçar o link |
+| `robots.txt` e `sitemap.xml` | gerados no build | Rastreamento previsível, com a data da última alteração |
 
 ## Segurança e acessibilidade
 

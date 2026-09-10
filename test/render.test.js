@@ -53,7 +53,9 @@ seo:
   assert.ok(!html.includes('<img src=x'), 'a tag img apareceu crua');
   // `onerror=` still appears as text inside the escaped label; what matters
   // is that it is not inside a tag, which the escaped-form match below proves.
-  assert.ok(!/<script(?![^>]*src=)/.test(html), 'nenhum script inline deve existir na página');
+  // JSON-LD é bloco de dados, não script executável, e por isso não conta aqui.
+  const inline = /<script(?![^>]*(?:src=|type="application\/ld\+json"))/;
+  assert.ok(!inline.test(html), 'nenhum script inline executável deve existir na página');
   assert.ok(!html.includes('</head><script>'), 'a meta description escapou do atributo');
 
   assert.match(html, /&lt;script&gt;alert\((?:&quot;|&#34;)xss(?:&quot;|&#34;)\)&lt;\/script&gt; &amp; Cia/);
@@ -257,19 +259,31 @@ events:
 
   // Se o payload tivesse fechado o elemento, este parse falharia.
   const dados = JSON.parse(bloco[1]);
-  assert.equal(dados.length, 1);
-  assert.equal(dados[0]['@type'], 'Event');
-  assert.equal(dados[0].name, 'Fuga </script><script>alert(1)</script> & cia', 'o título sobrevive intacto no JSON');
-  assert.equal(dados[0].startDate, '2099-05-04T19:00:00-03:00', 'horário de parede, com o deslocamento do local');
-  assert.equal(dados[0].location.address, 'Rua Sergipe, 640');
+  const eventos = dados.filter((d) => d['@type'] === 'Event');
+  assert.equal(eventos.length, 1);
+  assert.equal(eventos[0].name, 'Fuga </script><script>alert(1)</script> & cia', 'o título sobrevive intacto no JSON');
+  assert.equal(eventos[0].startDate, '2099-05-04T19:00:00-03:00', 'horário de parede, com o deslocamento do local');
+  assert.equal(eventos[0].location.address, 'Rua Sergipe, 640');
+
+  const museu = dados.find((d) => d['@type'] === 'Museum');
+  assert.ok(museu, 'a instituição também é declarada, para o painel do buscador');
+  assert.equal(museu.name, 'Museu');
 
   assert.ok(!bloco[1].includes('</script'), 'nenhum fechamento de elemento pode sobreviver cru');
   assert.equal((html.match(/<script/g) ?? []).length, 2, 'theme.js e o bloco de dados, nada mais');
 });
 
-test('sem eventos não há bloco de dados vazio', async () => {
+test('sem eventos, a instituição continua declarada', async () => {
+  // O museu existe mesmo com a agenda vazia, e é a entidade que o buscador usa
+  // para montar o painel do lugar.
   const html = await render('profile:\n  name: Museu\n');
-  assert.ok(!html.includes('application/ld+json'));
+  const bloco = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/);
+  assert.ok(bloco);
+  const dados = JSON.parse(bloco[1]);
+  assert.deepEqual(
+    dados.map((d) => d['@type']),
+    ['Museum'],
+  );
 });
 
 test('cada evento oferece o próprio arquivo de calendário', async () => {

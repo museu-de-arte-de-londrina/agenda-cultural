@@ -44,7 +44,7 @@ permalink: /styles.css
 
   /* Cool paper and blue-cast greys: the museum is Artigas concrete, not linen. */
   --bg: #eef2f7;
-  --surface: #ffffff;
+  --surface: {{ site.surface.light }};
   --surface-2: #f5f8fc;
   /* Comes from site.js: the readable-accent calculation needs this exact
      value, so it is defined once there instead of twice. */
@@ -78,7 +78,7 @@ permalink: /styles.css
 {% set darkTokens %}
   color-scheme: dark;
   --bg: #060a13;
-  --surface: #0d1524;
+  --surface: {{ site.surface.dark }};
   --surface-2: #121c2f;
   --surface-hover: {{ site.surfaceHover.dark }};
   --text: #e9eff8;
@@ -366,14 +366,21 @@ h1 {
 /* Por evento é só o ícone, com rótulo acessível: com texto, cada cartão ganhava
    uma linha inteira e a agenda voltava a caber um evento por tela. O alvo
    continua com 44px. */
+/* Coluna da direita: miniatura em cima, botão embaixo. Posição fixa em todo
+   cartão, em vez de flutuar no meio da linha de metadados conforme o texto
+   quebrava. */
+.entry__lado {
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: 0.5rem;
+}
+
 .entry__calendar {
-  display: inline-grid;
+  display: grid;
   place-items: center;
   width: 2.75rem;
   height: 2.75rem;
-  /* Negativa em cima e embaixo para o botão não engordar a linha: o alvo tem
-     44px, o espaço ocupado continua o da linha de texto. */
-  margin: -0.625rem 0;
   border: 1px solid var(--border);
   border-radius: 0.5rem;
   background: var(--surface);
@@ -552,8 +559,7 @@ h1 {
 }
 
 .entry__description {
-  grid-column: 1 / -1;
-  margin: 0.125rem 0 0;
+  margin: 0.5rem 0 0;
   font-size: 0.875rem;
   color: var(--muted);
   /* No line clamp: an explanation cut off mid-word explains nothing, and the
