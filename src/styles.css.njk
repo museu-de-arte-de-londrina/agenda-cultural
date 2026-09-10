@@ -337,6 +337,42 @@ h1 {
   padding-top: 1rem;
 }
 
+.agenda__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.agenda__subscribe,
+.entry__calendar {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3125rem;
+  color: var(--muted);
+  font-size: 0.8125rem;
+  text-decoration: none;
+}
+
+.agenda__subscribe {
+  margin-bottom: 1rem;
+}
+
+/* The whole card is a link, and its ::after overlay covers this one. Lifting
+   it above the overlay is what keeps the calendar link clickable. */
+.entry__calendar {
+  position: relative;
+  z-index: 1;
+}
+
+.agenda__subscribe:hover,
+.entry__calendar:hover {
+  color: var(--accent-text);
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
 .agenda__title,
 .more__title {
   margin: 0 0 1rem;
@@ -559,8 +595,15 @@ h1 {
 
 /* ---------------------------------------------------------------- footer -- */
 
+.updated {
+  margin: 1.5rem 0 0;
+  font-size: 0.75rem;
+  color: var(--muted);
+  text-align: center;
+}
+
 .footer {
-  margin-top: 1.75rem;
+  margin-top: 1rem;
   padding-top: 1.125rem;
   border-top: 1px solid var(--hairline);
   text-align: center;

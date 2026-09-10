@@ -163,6 +163,9 @@ const profileSchema = z
     name: text(80),
     tagline: text(160).optional(),
     avatar: imageField.optional(),
+    // Only surfaces in the calendar files, so a visitor who saves an event
+    // gets the address with it.
+    location: text(160).optional(),
     handle: z
       .string({ error: message('deve ser um texto') })
       .trim()

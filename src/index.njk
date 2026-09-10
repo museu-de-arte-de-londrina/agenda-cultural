@@ -3,11 +3,20 @@ permalink: /index.html
 ---
 {#-
   Every value below comes from config.yaml and is rendered through Nunjucks
-  autoescaping. Nothing is marked `| safe`: icons are drawn from validated
-  path data, never from raw markup. See SECURITY.md.
+  autoescaping. Icons are drawn from validated path data, never from raw
+  markup. See SECURITY.md.
+
+  One value is marked `| safe`, and only one: the JSON-LD block. A <script>
+  element holds raw text, so escaping it would corrupt the JSON instead of
+  protecting anything. It is serialised in src/_data/site.js with <, > and &
+  written as unicode escapes, which JSON reads as the same characters and the
+  HTML parser cannot read as markup at all.
 -#}
 {%- macro icon(data) -%}
 <svg class="icon{% if not data.fill %} icon--stroke{% endif %}" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">{% for d in data.paths %}<path d="{{ d }}"/>{% endfor %}</svg>
+{%- endmacro -%}
+{%- macro calendarIcon() -%}
+<svg class="icon icon--stroke" viewBox="0 0 24 24" width="15" height="15" aria-hidden="true" focusable="false"><path d="M8 2v4"/><path d="M16 2v4"/><path d="M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z"/><path d="M3 10h18"/><path d="M12 14v4"/><path d="M10 16h4"/></svg>
 {%- endmacro -%}
 <!doctype html>
 <html lang="{{ site.lang }}"{% if site.theme.mode != 'auto' %} data-theme="{{ site.theme.mode }}"{% endif %}>
@@ -42,6 +51,10 @@ permalink: /index.html
     <link rel="stylesheet" href="styles.css">
     {#- Not deferred: it applies the saved theme before the first paint. -#}
     <script src="theme.js"></script>
+    {%- if site.structuredData %}
+    {#- A data block, not executable script: CSP script-src does not apply. -#}
+    <script type="application/ld+json">{{ site.structuredData | safe }}</script>
+    {%- endif %}
   </head>
 
   <body>
@@ -117,7 +130,14 @@ permalink: /index.html
 
       <main>
         <section class="agenda" id="agenda" aria-labelledby="agenda-title">
-          <h2 class="agenda__title" id="agenda-title">Programação</h2>
+          <div class="agenda__head">
+            <h2 class="agenda__title" id="agenda-title">Programação</h2>
+            {%- if site.agenda.length %}
+            <a class="agenda__subscribe" href="agenda.ics" download>
+              {{- calendarIcon() }}<span>Assinar a agenda</span>
+            </a>
+            {%- endif %}
+          </div>
 
           {%- if site.agenda.length %}
           {%- for day in site.agenda %}
@@ -145,6 +165,10 @@ permalink: /index.html
                   <p class="entry__meta">
                     {%- if event.kind %}<span class="entry__kind">{{ event.kind }}</span>{% endif %}
                     {%- if event.runsUntil %}<span class="entry__until">até {{ event.runsUntil }}</span>{% endif %}
+                    {#- Above the card-wide overlay, or the overlay would swallow the click. -#}
+                    <a class="entry__calendar" href="eventos/{{ event.slug }}.ics" download>
+                      {{- calendarIcon() }}<span>Adicionar ao calendário</span>
+                    </a>
                   </p>
                 </div>
 
@@ -166,7 +190,10 @@ permalink: /index.html
           </section>
           {%- endfor %}
           {%- else %}
-          <p class="empty">Nenhum evento publicado no momento. Os canais oficiais abaixo têm a programação atual.</p>
+          <p class="empty">
+            Nenhuma atividade marcada por enquanto. As páginas oficiais logo abaixo
+            trazem a programação em cartaz.
+          </p>
           {%- endif %}
         </section>
 
@@ -186,6 +213,14 @@ permalink: /index.html
         </section>
         {%- endif %}
       </main>
+
+      {%- if site.updatedAt %}
+      {#- The date of the content, not of the build: it is what tells a reader
+          whether the agenda is being kept up. -#}
+      <p class="updated">
+        Programação atualizada em <time datetime="{{ site.updatedAt.iso }}">{{ site.updatedAt.label }}</time>
+      </p>
+      {%- endif %}
 
       {%- if site.footer %}
       {%- set footerTag = 'a' if site.footer.url else 'div' %}

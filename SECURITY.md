@@ -55,7 +55,8 @@ A superfície real é o `config.yaml` virando HTML. As defesas são:
 
 | Risco | Defesa | Onde |
 | --- | --- | --- |
-| XSS via campo do YAML | autoescape do Nunjucks em todo valor; nada usa `\| safe` | `src/index.njk` |
+| XSS via campo do YAML | autoescape do Nunjucks em todo valor | `src/index.njk` |
+| Fuga do bloco JSON-LD | `<`, `>` e `&` viram escapes unicode antes de entrar no `<script>`, então nenhum título consegue fechar o elemento | `src/_data/site.js` |
 | XSS via `javascript:` / `data:` | allowlist de esquemas (`https:`, `mailto:`, `tel:`); build falha | `schema/config.schema.js` |
 | Esquema disfarçado (`java\nscript:`) | rejeição de caracteres de controle antes do parse | `schema/config.schema.js` |
 | URL protocol-relative (`//host`) em imagem | rejeitada; imagem remota só via `https://` | `schema/config.schema.js` |

@@ -92,11 +92,12 @@ test('a CSP não abre exceção para inline', async () => {
   assert.ok(!html.includes('<style'), 'CSS inline quebraria a CSP');
   assert.ok(!/<[a-z]+[^>]*\sstyle="/.test(html), 'atributo style quebraria a CSP');
 
-  // O único script é o próprio, servido como arquivo: nada inline, nada de fora.
-  const scripts = html.match(/<script[^>]*>/g) ?? [];
-  assert.equal(scripts.length, 1, 'só o toggle de tema deveria carregar script');
-  assert.match(scripts[0], /src="theme\.js"/);
-  assert.ok(!scripts[0].includes('defer'), 'defer faria o tema piscar antes de aplicar');
+  // Um script executável só, o próprio, servido como arquivo. O outro elemento
+  // <script> é bloco de dados JSON-LD, que a CSP não trata como script.
+  const executaveis = (html.match(/<script(?![^>]*type="application\/ld\+json")[^>]*>/g) ?? []);
+  assert.equal(executaveis.length, 1, 'só o toggle de tema deveria carregar script');
+  assert.match(executaveis[0], /src="theme\.js"/);
+  assert.ok(!executaveis[0].includes('defer'), 'defer faria o tema piscar antes de aplicar');
 });
 
 test('sem avatar, cai para as iniciais e não gera img quebrada', async () => {
@@ -237,6 +238,46 @@ events:
   assert.ok(!html.includes('<script>alert(1)'), 'payload cru no HTML');
   assert.ok(!html.includes('<b>tipo</b>'), 'markup cru na etiqueta');
   assert.match(html, /&lt;script&gt;alert\(1\)&lt;\/script&gt; &amp; cia/);
+});
+
+test('o JSON-LD descreve os eventos e não dá para escapar dele', async () => {
+  const html = await render(`
+profile:
+  name: Museu
+  location: Rua Sergipe, 640
+events:
+  - title: 'Fuga </script><script>alert(1)</script> & cia'
+    start: 2099-05-04T19:00
+    end: 2099-05-04T21:00
+    kind: Teatro
+`);
+
+  const bloco = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/);
+  assert.ok(bloco, 'bloco de dados ausente');
+
+  // Se o payload tivesse fechado o elemento, este parse falharia.
+  const dados = JSON.parse(bloco[1]);
+  assert.equal(dados.length, 1);
+  assert.equal(dados[0]['@type'], 'Event');
+  assert.equal(dados[0].name, 'Fuga </script><script>alert(1)</script> & cia', 'o título sobrevive intacto no JSON');
+  assert.equal(dados[0].startDate, '2099-05-04T19:00:00-03:00', 'horário de parede, com o deslocamento do local');
+  assert.equal(dados[0].location.address, 'Rua Sergipe, 640');
+
+  assert.ok(!bloco[1].includes('</script'), 'nenhum fechamento de elemento pode sobreviver cru');
+  assert.equal((html.match(/<script/g) ?? []).length, 2, 'theme.js e o bloco de dados, nada mais');
+});
+
+test('sem eventos não há bloco de dados vazio', async () => {
+  const html = await render('profile:\n  name: Museu\n');
+  assert.ok(!html.includes('application/ld+json'));
+});
+
+test('cada evento oferece o próprio arquivo de calendário', async () => {
+  const html = await render(
+    'profile:\n  name: Museu\nevents:\n  - title: Show de Taiko\n    start: 2099-05-04T19:00\n',
+  );
+  assert.match(html, /href="eventos\/show-de-taiko-209905041900\.ics" download/);
+  assert.match(html, /href="agenda\.ics" download/);
 });
 
 test('o botão de tema começa escondido e traz os dois rótulos', async () => {

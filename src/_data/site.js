@@ -2,6 +2,9 @@
  * Eleventy global data: reads config.yaml at build time, validates it, and
  * derives everything the template needs. A throw here fails the build.
  */
+import { execFile } from 'node:child_process';
+import { promisify } from 'node:util';
+
 import { loadConfigFile } from '../../schema/config.schema.js';
 import { resolveIcon } from '../../lib/icons.js';
 import { bestContrast, contrastRatio, readableOn } from '../../lib/color.js';
@@ -26,6 +29,24 @@ const DEFAULT_CONFIG = new URL('../../config.yaml', import.meta.url);
  * lightest tint is.
  */
 const SURFACE_HOVER = { light: '#e8eef7', dark: '#1a2540' };
+
+/**
+ * A stable identifier for an event, used to name its calendar file and as the
+ * UID a calendar app matches on. The start time is part of it because the same
+ * activity repeats on different days.
+ */
+function slugify(title, start) {
+  const base = title
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '')
+    .slice(0, 48)
+    .replace(/-$/, '');
+  // Date and time both: the same activity runs twice on the same day.
+  return `${base}-${start.replace(/[-:T ]/g, '')}`;
+}
 
 /** Two initials, used when no avatar is set. */
 function initials(name) {
@@ -70,6 +91,7 @@ function buildAgenda(config, now) {
         ...event,
         start,
         end,
+        slug: slugify(event.title, event.start),
         iso: toIsoString(start),
         time: when.time,
         // A season spanning several days says so; a one-off does not repeat itself.
@@ -90,15 +112,103 @@ function buildAgenda(config, now) {
   return days;
 }
 
+/**
+ * schema.org/Event, so search engines can show the agenda as events rather
+ * than as a wall of text.
+ *
+ * Serialised here instead of in the template because it has to go into the
+ * page unescaped: a <script> element holds raw text, so HTML-escaping it would
+ * corrupt the JSON rather than protect anything. The three characters that
+ * could close the element early are written as unicode escapes, which JSON
+ * treats as identical and the HTML parser cannot read as markup.
+ */
+function structuredData(config, agenda) {
+  const absolute = (path) => absoluteUrl(path, config.seo.base_url);
+  const offset = '-03:00';
+  const at = (parts) => {
+    const pad = (n) => String(n).padStart(2, '0');
+    const date = `${parts.year}-${pad(parts.month)}-${pad(parts.day)}`;
+    return parts.hasTime ? `${date}T${pad(parts.hour)}:${pad(parts.minute)}:00${offset}` : date;
+  };
+
+  const place = config.profile.location
+    ? { '@type': 'Place', name: config.profile.name, address: config.profile.location }
+    : undefined;
+
+  const events = agenda
+    .flatMap((day) => day.events)
+    .map((event) => ({
+      '@context': 'https://schema.org',
+      '@type': 'Event',
+      name: event.title,
+      startDate: at(event.start),
+      ...(event.end ? { endDate: at(event.end) } : {}),
+      ...(event.description ? { description: event.description } : {}),
+      ...(event.url ? { url: event.url } : {}),
+      ...(absolute(event.image) ? { image: absolute(event.image) } : {}),
+      ...(place ? { location: place } : {}),
+      organizer: { '@type': 'Organization', name: config.profile.name },
+    }));
+
+  if (events.length === 0) return null;
+  return JSON.stringify(events).replace(/</g, '\\u003c').replace(/>/g, '\\u003e').replace(/&/g, '\\u0026');
+}
+
+/**
+ * When the programming itself was last edited, taken from the last commit that
+ * touched config.yaml.
+ *
+ * Not the build date: the site rebuilds on a daily schedule, so a build stamp
+ * would claim the agenda was updated today no matter how old it is. A visitor
+ * deciding whether to trust the page needs the date of the content, not of
+ * the deploy. Returns null outside a git checkout, and the line is dropped.
+ */
+async function programmingUpdatedAt() {
+  try {
+    const { stdout } = await promisify(execFile)(
+      'git',
+      ['log', '-1', '--format=%cI', '--', 'config.yaml'],
+      { cwd: new URL('../../', import.meta.url) },
+    );
+    return stdout.trim() || null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * @param {string|null} iso
+ * @param {string} locale
+ * @returns {{iso: string, label: string} | null}
+ */
+function formatUpdatedAt(iso, locale) {
+  if (!iso) return null;
+  const date = new Date(iso);
+  if (Number.isNaN(date.getTime())) return null;
+  return {
+    iso,
+    // The venue's clock, so a late-evening edit does not show tomorrow's date.
+    label: new Intl.DateTimeFormat(locale, {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+      timeZone: 'America/Sao_Paulo',
+    }).format(date),
+  };
+}
+
 export default async function site() {
   // Read at call time, not import time, so tests can point at a fixture.
   const config = await loadConfigFile(process.env.CONFIG_FILE ?? DEFAULT_CONFIG);
   const { accent } = config.theme;
+  const agenda = buildAgenda(config, Date.now());
 
   return {
     ...config,
     initials: initials(config.profile.name),
-    agenda: buildAgenda(config, Date.now()),
+    agenda,
+    structuredData: structuredData(config, agenda),
+    updatedAt: formatUpdatedAt(await programmingUpdatedAt(), config.lang),
     links: config.links.map((link) => ({ ...link, iconData: link.icon ? resolveIcon(link.icon) : null })),
     social: config.social.map((entry) => ({ ...entry, iconData: resolveIcon(entry.platform) })),
     canonical: config.seo.base_url ?? null,

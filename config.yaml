@@ -6,6 +6,7 @@ lang: pt-BR
 
 profile:
   name: Museu de Arte de Londrina
+  location: Rua Sergipe, 640, Centro, Londrina, PR, 86010-380
   handle: "@museudeartedelondrina"
   handle_url: https://www.instagram.com/museudeartedelondrina/
   avatar: assets/museu-33-anos.webp

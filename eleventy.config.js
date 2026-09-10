@@ -2,9 +2,8 @@ import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import QRCode from 'qrcode';
 
-import { loadConfigFile } from './schema/config.schema.js';
-
-const CONFIG = new URL('config.yaml', import.meta.url);
+import { buildCalendar } from './lib/calendar.js';
+import site from './src/_data/site.js';
 
 /**
  * A printable QR code for the page itself, generated from seo.base_url so it
@@ -15,8 +14,7 @@ const CONFIG = new URL('config.yaml', import.meta.url);
  * Skipped when base_url is unset, because a QR code for an address we do not
  * know would be worse than none.
  */
-async function writeQrCodes(outputDir) {
-  const config = await loadConfigFile(process.env.CONFIG_FILE ?? CONFIG);
+async function writeQrCodes(outputDir, config) {
   const url = config.seo.base_url;
   if (!url) return;
 
@@ -30,9 +28,37 @@ async function writeQrCodes(outputDir) {
   await writeFile(join(outputDir, 'qrcode.png'), png);
 }
 
+/**
+ * Calendar files: one per event, so a visitor can save the thing they are
+ * looking at, plus a whole-agenda feed that can be subscribed to.
+ *
+ * Written here rather than as templates because they share the agenda the
+ * page already built, and because the per-event files are one output per
+ * item rather than one per page.
+ */
+async function writeCalendars(outputDir, config) {
+  const events = config.agenda.flatMap((day) => day.events);
+  if (events.length === 0) return;
+
+  const host = config.seo.base_url ? new URL(config.seo.base_url).host : 'agenda-cultural';
+  const options = { name: config.profile.name, host, location: config.profile.location };
+
+  await writeFile(join(outputDir, 'agenda.ics'), buildCalendar(events, options));
+
+  const eventDir = join(outputDir, 'eventos');
+  await mkdir(eventDir, { recursive: true });
+  await Promise.all(
+    events.map((event) =>
+      writeFile(join(eventDir, `${event.slug}.ics`), buildCalendar([event], options)),
+    ),
+  );
+}
+
 export default function (eleventyConfig) {
   eleventyConfig.on('eleventy.after', async ({ dir }) => {
-    await writeQrCodes(dir.output);
+    const config = await site();
+    await writeQrCodes(dir.output, config);
+    await writeCalendars(dir.output, config);
   });
 
   eleventyConfig.addPassthroughCopy({ 'src/assets': 'assets' });
