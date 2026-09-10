@@ -20,7 +20,7 @@
     // Throws outright in some privacy modes, so never let it break the page.
     try {
       return localStorage.getItem(STORAGE_KEY);
-    } catch (error) {
+    } catch {
       return null;
     }
   }
@@ -28,7 +28,7 @@
   function store(value) {
     try {
       localStorage.setItem(STORAGE_KEY, value);
-    } catch (error) {
+    } catch {
       /* The toggle still works for this page view. */
     }
   }
