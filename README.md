@@ -269,6 +269,7 @@ npm run build      # valida e gera o site em _site/
 | `lib/color.js` | Contraste WCAG, para garantir AA sobre qualquer accent. |
 | `lib/datetime.js` | Datas dos eventos: parse, ordenação e formatação. |
 | `src/assets/fonts/` | Archivo (OFL), hospedada aqui. Nenhuma requisição sai para CDN de fonte. |
+| `src/assets/fundo-museu.webp` | Fachada do museu, desfocada, atrás da página. Foto de Emerson Dias, do portal da Prefeitura. |
 | `scripts/validate-config.js` | O `npm run validate`. |
 | `test/` | Testes com `node:test`, sem framework. |
 
@@ -315,6 +316,11 @@ Decisões que não são óbvias lendo o CSS:
 - **O accent também é cor de texto**, e um accent escuro fica ilegível no tema
   escuro. `lib/color.js` clareia ou escurece a cor preservando o matiz até
   passar em AA, então qualquer `theme.accent` continua legível nos dois temas.
+- **O fundo é a fachada do museu, fora de foco.** O desfoque está assado no
+  arquivo (3 KB), não em `filter: blur()` — filtrar uma camada do tamanho da
+  viewport faria o compositor refazer o borrão a cada scroll. Sobre a foto vai
+  um véu que escurece de cima para baixo, e todo o conteúdo fica em superfícies
+  opacas, então o contraste do texto não depende da imagem.
 - **A tipografia usa uma família só** (Archivo, variável) para títulos,
   horários e o trilho de data; o texto corrido fica na pilha do sistema, que
   não custa download.

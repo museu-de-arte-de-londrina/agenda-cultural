@@ -51,7 +51,10 @@ permalink: /styles.css
   --muted: #4d5c73;
   --border: #d8e0ec;
   --hairline: #e7ecf4;
-  --dot: rgba(0, 64, 128, 0.16);
+  /* Scrim over the backdrop photo. Opaque enough that the picture reads as
+     atmosphere and never competes with the page above it. */
+  --scrim-top: rgba(238, 242, 247, 0.5);
+  --scrim-bottom: rgba(238, 242, 247, 0.9);
   --accent-text: {{ site.accentText.light }};
   --focus: {{ site.focusRing.light }};
 
@@ -80,7 +83,8 @@ permalink: /styles.css
   --muted: #9db0cb;
   --border: #22304a;
   --hairline: #1a2438;
-  --dot: rgba(112, 176, 224, 0.16);
+  --scrim-top: rgba(6, 10, 19, 0.58);
+  --scrim-bottom: rgba(6, 10, 19, 0.93);
   --accent-text: {{ site.accentText.dark }};
   --focus: {{ site.focusRing.dark }};
   --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.5);
@@ -117,17 +121,22 @@ body {
   -webkit-text-size-adjust: 100%;
 }
 
-/* The dot field the page floats above. Fixed so it does not slide with the
-   content, masked so it fades out instead of tiling to the edges. */
+/* The museum itself, out of focus, behind everything.
+   The blur is baked into the file rather than applied with filter: blur(),
+   which would make the compositor re-blur a full-viewport layer on every
+   scroll. Fixed, so it stays put while the page moves over it.
+   The scrim is painted in the same declaration, above the photo. */
 .backdrop {
   position: fixed;
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  background-image: radial-gradient(circle at center, var(--dot) 1.4px, transparent 1.5px);
-  background-size: 22px 22px;
-  -webkit-mask-image: radial-gradient(ellipse 75% 55% at 50% 0%, #000 35%, transparent 100%);
-  mask-image: radial-gradient(ellipse 75% 55% at 50% 0%, #000 35%, transparent 100%);
+  background-image: linear-gradient(var(--scrim-top), var(--scrim-bottom)),
+    url('assets/fundo-museu.webp');
+  background-size: cover, cover;
+  background-position: center, center;
+  /* If the photo never arrives, the scrim alone still matches --bg. */
+  background-color: var(--bg);
 }
 
 /* Keyboard users get here first; it stays off-screen until focused. */
