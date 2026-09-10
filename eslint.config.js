@@ -11,12 +11,26 @@ export default [
         console: 'readonly',
         process: 'readonly',
         URL: 'readonly',
+        TextEncoder: 'readonly',
+        fetch: 'readonly',
       },
     },
     rules: {
       'no-console': 'off',
       eqeqeq: ['error', 'smart'],
       'prefer-const': 'error',
+    },
+  },
+  {
+    // Os callbacks de page.evaluate rodam dentro do navegador, não no Node,
+    // mesmo morando num arquivo de teste.
+    files: ['test/browser/**/*.js'],
+    languageOptions: {
+      globals: {
+        document: 'readonly',
+        window: 'readonly',
+        getComputedStyle: 'readonly',
+      },
     },
   },
   {

@@ -93,9 +93,9 @@ links:
     # (opcional, default: false) Pinta o botão com a cor de destaque.
     highlight: true
 
-  - label: Código no GitHub
-    url: https://github.com/octocat
-    icon: github
+  - label: Catálogo do acervo
+    url: https://example.org/acervo
+    icon: link
 
   - label: Me manda um e-mail
     url: mailto:ada@example.com
