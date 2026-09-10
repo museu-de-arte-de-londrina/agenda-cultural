@@ -30,12 +30,14 @@ export default [
         document: 'readonly',
         window: 'readonly',
         getComputedStyle: 'readonly',
+        navigator: 'readonly',
+        Navigator: 'readonly',
       },
     },
   },
   {
     // The only file that runs in a browser instead of in Node.
-    files: ['src/theme.js'],
+    files: ['src/theme.js', 'src/compartilhar.js'],
     languageOptions: {
       ecmaVersion: 2019,
       sourceType: 'script',
@@ -43,6 +45,10 @@ export default [
         document: 'readonly',
         window: 'readonly',
         localStorage: 'readonly',
+        navigator: 'readonly',
+        location: 'readonly',
+        setTimeout: 'readonly',
+        clearTimeout: 'readonly',
       },
     },
     rules: {

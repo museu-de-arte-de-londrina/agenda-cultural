@@ -237,7 +237,8 @@ npm run lighthouse   # performance, acessibilidade, boas práticas e SEO
 | `config.yaml` | O único arquivo que você edita no uso normal. |
 | `config.example.yaml` | Modelo comentado campo a campo. |
 | `src/index.njk` | Template da página. |
-| `src/theme.js` | Único JS do site: o botão de tema claro/escuro. |
+| `src/theme.js` | Botão de tema claro/escuro. Carrega sem defer, para o tema não piscar. |
+| `src/compartilhar.js` | Botão de compartilhar. Com defer, porque nada aqui precede a pintura. |
 | `src/styles.css.njk` | CSS, gerado no build para embutir o `accent`. |
 | `src/_data/site.js` | Carrega o YAML, valida e monta os dados do template. |
 | `src/assets/` | Imagens suas. Copiadas para `/assets/` no site. |
@@ -354,6 +355,14 @@ Decisões que não são óbvias lendo o CSS:
 - **O accent também é cor de texto**, e um accent escuro fica ilegível no tema
   escuro. `lib/color.js` clareia ou escurece a cor preservando o matiz até
   passar em AA, então qualquer `theme.accent` continua legível nos dois temas.
+- **Botão que depende de JavaScript nasce escondido de verdade.** O atributo
+  `hidden` esconde pelo `display: none` da folha do navegador, e qualquer
+  `display` numa classe sobrepõe isso: os botões de tema e de compartilhar
+  apareciam para quem está sem JavaScript, ocupando espaço e sem fazer nada.
+  Uma regra `[hidden] { display: none !important }` resolve, e um teste carrega
+  a página com JavaScript desligado para conferir.
+- **Compartilhar usa a folha do sistema quando ela existe** e copia o endereço
+  quando não existe. Faltando os dois, o botão nem aparece.
 - **Nenhuma área clicável fica por cima de outra.** O cartão do evento já teve
   uma sobreposição que o tornava inteiro clicável, com o botão de calendário
   dentro dela. Dois alvos empilhados são difíceis de acertar no toque e o
@@ -405,8 +414,9 @@ Detalhe completo em [SECURITY.md](SECURITY.md). Em resumo:
   markup, nada usa `| safe`;
 - URLs passam por allowlist de esquema (`https:`, `mailto:`, `tel:`);
   `javascript:`, `data:` e `vbscript:` **quebram o build**;
-- o único JavaScript é o botão de tema (~1 KB, arquivo próprio); a CSP fica em
-  `script-src 'self'`, sem `unsafe-inline` e sem `unsafe-eval`
+- o JavaScript da página são dois arquivos próprios e pequenos, o botão de tema
+  e o de compartilhar; a CSP fica em `script-src 'self'`, sem `unsafe-inline` e
+  sem `unsafe-eval`
   ([limitações do `<meta>`](SECURITY.md#limitação-conhecida-csp-por-meta));
 - links externos sempre com `rel="noopener noreferrer"`;
 - zero recursos externos: sem CDN, sem analytics, e a fonte é servida do próprio repositório;

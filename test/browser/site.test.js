@@ -204,6 +204,85 @@ test('a página não registra erro no console', async () => {
   await contexto.close();
 });
 
+test('compartilhar usa a folha do sistema quando ela existe', async () => {
+  const contexto = await navegador.newContext({ viewport: { width: 390, height: 844 } });
+  const pagina = await contexto.newPage();
+  await pagina.addInitScript(() => {
+    window.__compartilhado = null;
+    navigator.share = (dados) => {
+      window.__compartilhado = dados;
+      return Promise.resolve();
+    };
+  });
+  await pagina.goto(site.url, { waitUntil: 'load' });
+
+  const botao = pagina.locator('#compartilhar');
+  assert.equal(await botao.isVisible(), true, 'o botão precisa aparecer quando dá para compartilhar');
+  await botao.click();
+
+  const recebido = await pagina.evaluate(() => window.__compartilhado);
+  assert.ok(recebido, 'nada chegou em navigator.share');
+  assert.ok(recebido.title.length > 0);
+  assert.match(recebido.url, /^https:\/\//, 'compartilha o endereço público, não o do servidor de teste');
+  await contexto.close();
+});
+
+test('sem a folha do sistema, copia o endereço e avisa', async () => {
+  const contexto = await navegador.newContext({
+    viewport: { width: 1280, height: 800 },
+    permissions: ['clipboard-read', 'clipboard-write'],
+  });
+  const pagina = await contexto.newPage();
+  await pagina.goto(site.url, { waitUntil: 'load' });
+  await pagina.locator('#compartilhar').click();
+  await pagina.waitForTimeout(200);
+
+  assert.match(await pagina.evaluate(() => navigator.clipboard.readText()), /^https:\/\//);
+  // role=status com aria-live: quem usa leitor de tela precisa saber que copiou.
+  assert.match(await pagina.locator('#compartilhar-aviso').textContent(), /copiado/i);
+  await contexto.close();
+});
+
+test('sem suporte nenhum, o botão de compartilhar nem aparece', async () => {
+  // Controle que não faz nada é pior que controle nenhum.
+  const contexto = await navegador.newContext({ viewport: { width: 1280, height: 800 } });
+  const pagina = await contexto.newPage();
+  await pagina.addInitScript(() => {
+    // Os dois, explicitamente: o Chrome expõe um ou outro conforme a versão e
+    // o contexto, e o teste precisa valer para o caso em que falta tudo.
+    Object.defineProperty(Navigator.prototype, 'clipboard', { get: () => undefined, configurable: true });
+    Object.defineProperty(Navigator.prototype, 'share', { get: () => undefined, configurable: true });
+  });
+  await pagina.goto(site.url, { waitUntil: 'load' });
+  await pagina.waitForTimeout(200);
+
+  // isHidden, e não a propriedade hidden: o atributo só esconde de verdade se
+  // nenhuma classe sobrepuser o display, que foi exatamente o que aconteceu.
+  assert.equal(await pagina.locator('#compartilhar').isHidden(), true);
+  await contexto.close();
+});
+
+test('sem JavaScript, nenhum botão morto aparece na tela', async () => {
+  const contexto = await navegador.newContext({
+    viewport: { width: 1280, height: 800 },
+    javaScriptEnabled: false,
+  });
+  const pagina = await contexto.newPage();
+  await pagina.goto(site.url, { waitUntil: 'load' });
+
+  for (const id of ['theme-toggle', 'compartilhar']) {
+    assert.equal(
+      await pagina.locator(`#${id}`).isHidden(),
+      true,
+      `#${id} aparece sem JavaScript e não faz nada`,
+    );
+  }
+
+  // E o conteúdo continua todo lá: a página não depende de script para servir.
+  assert.ok((await pagina.locator('.entry').count()) > 0, 'a agenda precisa aparecer sem JavaScript');
+  await contexto.close();
+});
+
 test('robots.txt e sitemap saem prontos para o crawler', async () => {
   const robots = await readFile(new URL('robots.txt', SITE), 'utf8');
   assert.match(robots, /^User-agent: \*$/m);

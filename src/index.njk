@@ -67,6 +67,8 @@ permalink: /index.html
     {%- endif %}
     {#- Not deferred: it applies the saved theme before the first paint. -#}
     <script src="theme.js"></script>
+    {#- Com defer: nada aqui precisa acontecer antes da primeira pintura. -#}
+    <script src="compartilhar.js" defer></script>
     {%- if site.structuredData %}
     {#- A data block, not executable script: CSP script-src does not apply. -#}
     <script type="application/ld+json">{{ site.structuredData | safe }}</script>
@@ -85,6 +87,7 @@ permalink: /index.html
     <div class="backdrop" aria-hidden="true"></div>
 
     <div class="frame">
+      <div class="acoes">
       {#- Revealed by theme.js; without JavaScript it would be a dead control. -#}
       <button
         id="theme-toggle"
@@ -105,6 +108,29 @@ permalink: /index.html
           <path d="m5.6 5.6 1.4 1.4"/><path d="m17 17 1.4 1.4"/><path d="m18.4 5.6-1.4 1.4"/><path d="m7 17-1.4 1.4"/>
         </svg>
       </button>
+
+      {#- Escondido até o script confirmar que o navegador sabe compartilhar ou
+          copiar; senão seria um botão que não faz nada. -#}
+      <button
+        id="compartilhar"
+        class="theme-toggle"
+        type="button"
+        hidden
+        aria-label="Compartilhar esta página"
+        data-titulo="{{ site.seo.title }}"
+        data-texto="{{ site.seo.description }}"
+        {% if site.canonical %}data-url="{{ site.canonical }}"{% endif %}
+        data-copiado="Endereço copiado"
+        data-falhou="Não consegui copiar o endereço"
+      >
+        <svg class="icon icon--stroke" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false">
+          <path d="M12 2v13"/>
+          <path d="m8 6 4-4 4 4"/>
+          <path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-7"/>
+        </svg>
+      </button>
+      <p id="compartilhar-aviso" class="visually-hidden" role="status" aria-live="polite"></p>
+      </div>
 
       <header class="profile">
         {%- if site.profile.avatar %}

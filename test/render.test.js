@@ -94,12 +94,20 @@ test('a CSP não abre exceção para inline', async () => {
   assert.ok(!html.includes('<style'), 'CSS inline quebraria a CSP');
   assert.ok(!/<[a-z]+[^>]*\sstyle="/.test(html), 'atributo style quebraria a CSP');
 
-  // Um script executável só, o próprio, servido como arquivo. O outro elemento
-  // <script> é bloco de dados JSON-LD, que a CSP não trata como script.
-  const executaveis = (html.match(/<script(?![^>]*type="application\/ld\+json")[^>]*>/g) ?? []);
-  assert.equal(executaveis.length, 1, 'só o toggle de tema deveria carregar script');
-  assert.match(executaveis[0], /src="theme\.js"/);
-  assert.ok(!executaveis[0].includes('defer'), 'defer faria o tema piscar antes de aplicar');
+  // Todo script executável precisa vir de arquivo do próprio site. A asserção
+  // é sobre isso, e não sobre quantos são, para continuar valendo quando um
+  // terceiro aparecer. O elemento JSON-LD é bloco de dados e não conta.
+  const executaveis = [
+    ...html.matchAll(/<script(?![^>]*type="application\/ld\+json")([^>]*)>/g),
+  ].map((m) => m[1]);
+  assert.ok(executaveis.length > 0, 'nenhum script encontrado');
+  for (const atributos of executaveis) {
+    assert.match(atributos, /\ssrc="[^":]+"/, `script inline ou de outro domínio: ${atributos}`);
+  }
+
+  const tema = executaveis.find((a) => /src="theme\.js"/.test(a));
+  assert.ok(tema, 'o script de tema sumiu');
+  assert.ok(!tema.includes('defer'), 'defer faria o tema piscar antes de aplicar');
 });
 
 test('sem avatar, cai para as iniciais e não gera img quebrada', async () => {
@@ -270,7 +278,11 @@ events:
   assert.equal(museu.name, 'Museu');
 
   assert.ok(!bloco[1].includes('</script'), 'nenhum fechamento de elemento pode sobreviver cru');
-  assert.equal((html.match(/<script/g) ?? []).length, 2, 'theme.js e o bloco de dados, nada mais');
+  assert.equal(
+    (html.match(/type="application\/ld\+json"/g) ?? []).length,
+    1,
+    'um bloco de dados só, senão o buscador vê a agenda duas vezes',
+  );
 });
 
 test('sem eventos, a instituição continua declarada', async () => {

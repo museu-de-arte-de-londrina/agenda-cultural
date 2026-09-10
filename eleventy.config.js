@@ -102,6 +102,7 @@ export default function (eleventyConfig) {
   // Only used for a custom domain; harmless when the file is absent.
   eleventyConfig.addPassthroughCopy('src/CNAME');
   eleventyConfig.addPassthroughCopy('src/theme.js');
+  eleventyConfig.addPassthroughCopy('src/compartilhar.js');
 
   return {
     dir: {
