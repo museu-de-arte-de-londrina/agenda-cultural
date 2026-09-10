@@ -18,9 +18,7 @@ jobs:
     # Só automatiza para quem já tem acesso de escrita. O repositório é
     # público e qualquer pessoa pode abrir issue; de terceiros isso vira um
     # pedido para alguém ler, nunca uma alteração no repositório.
-    if: >-
-      contains(github.event.issue.labels.*.name, 'evento') &&
-      contains(fromJSON('["OWNER", "MEMBER", "COLLABORATOR"]'), github.event.issue.author_association)
+    if: always()
 
     permissions:
       contents: write
@@ -28,6 +26,15 @@ jobs:
       issues: write
 
     steps:
+      - name: DIAGNOSTICO
+        run: |
+          echo 'rotulos: ${{ toJSON(github.event.issue.labels.*.name) }}'
+          echo 'associacao: ${{ github.event.issue.author_association }}'
+          echo 'acao: ${{ github.event.action }}'
+          echo 'tem-rotulo: ${{ contains(github.event.issue.labels.*.name, 'evento') }}'
+          echo 'tem-acesso: ${{ contains(fromJSON('["OWNER", "MEMBER", "COLLABORATOR"]'), github.event.issue.author_association) }}'
+          exit 1
+
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
