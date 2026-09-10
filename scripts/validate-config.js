@@ -12,9 +12,9 @@ const target = process.argv[2] ?? new URL('../config.yaml', import.meta.url);
 
 /**
  * A link pointing at the same URL as one of the contact icons is usually an
- * oversight: the page shows the destination twice. It is not always wrong —
- * an icon plus a prominent button is a fair choice — so this warns instead of
- * failing the build.
+ * oversight: the page shows the destination twice. It is not always wrong,
+ * since an icon plus a prominent button is a fair choice, so this warns
+ * instead of failing the build.
  */
 function warnAboutDuplicates(config) {
   const icons = new Map(config.social.map((entry) => [entry.url, entry.platform]));
@@ -32,7 +32,7 @@ try {
   const config = await loadConfigFile(target);
   const label = typeof target === 'string' ? target : 'config.yaml';
   console.log(
-    `✓ ${label} válido — ${config.events.length} evento(s), ${config.links.length} link(s), ${config.social.length} rede(s) social(is).`,
+    `✓ ${label} válido: ${config.events.length} evento(s), ${config.links.length} link(s), ${config.social.length} rede(s) social(is).`,
   );
   warnAboutDuplicates(config);
 } catch (error) {

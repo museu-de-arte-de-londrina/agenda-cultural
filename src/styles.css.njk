@@ -7,9 +7,9 @@ permalink: /styles.css
   lets the CSP stay at `style-src 'self'` with no 'unsafe-inline'.
 
   Theme resolution, in order of precedence:
-    1. :root[data-theme="..."]  — the toggle, and theme.mode when it is fixed
-    2. prefers-color-scheme     — the reader's system setting
-    3. :root                    — light, the base every token is defined in
+    1. :root[data-theme="..."]  the toggle, and theme.mode when it is fixed
+    2. prefers-color-scheme     the reader's system setting
+    3. :root                    light, the base every token is defined in
 */
 
 /* Archivo, by Omnibus-Type (Buenos Aires). Self-hosted: no request ever
@@ -512,6 +512,7 @@ h1 {
 }
 
 .links {
+  perspective: 800px;
   list-style: none;
   margin: 0;
   padding: 0;
@@ -577,10 +578,8 @@ h1 {
   text-decoration: none;
 }
 
-a.footer__inner:hover {
-  color: var(--text);
-  background: var(--surface-hover);
-}
+/* No hover here on purpose: the seal is a credit, not a call to action.
+   :focus-visible still applies, so keyboard users keep their indicator. */
 
 .footer__logos {
   display: flex;
@@ -675,7 +674,7 @@ a.footer__inner:hover {
   reader who asked for stillness gets it.
 
   The photo drifts inside a frame that clips it, so near and far layers travel
-  at different rates — which is what parallax actually is. The scale keeps the
+  at different rates, which is what parallax actually is. The scale keeps the
   image larger than its frame so the drift never exposes an edge.
 */
 @supports (animation-timeline: view()) {
@@ -683,7 +682,7 @@ a.footer__inner:hover {
     /* The timeline is named on the frame, not taken from the image. The frame
        clips with overflow:hidden, which makes it a scroll container, so an
        image asking for view() would measure itself against the frame it never
-       moves inside — and sit frozen at 50% forever. */
+       moves inside, and sit frozen at 50% forever. */
     .entry__media {
       view-timeline-name: --entry-media;
     }
@@ -730,7 +729,64 @@ a.footer__inner:hover {
   .theme-toggle,
   .entry,
   .entry__link {
-    transition: background-color 150ms ease, color 150ms ease, border-color 150ms ease,
-      filter 150ms ease;
+    transition: transform 180ms ease, translate 180ms ease, rotate 180ms ease,
+      box-shadow 180ms ease, background-color 150ms ease, color 150ms ease,
+      border-color 150ms ease, filter 150ms ease;
+  }
+
+  .entry__media {
+    transition: transform 300ms ease;
+  }
+}
+
+/*
+  Depth on hover: the surface tips towards the pointer and lifts, and the
+  shadow deepens with it, so the movement reads as the card coming off the
+  page rather than sliding across it.
+
+  Gated on `hover: hover` so a touch screen, which fires hover on tap and then
+  keeps it, never leaves an element stuck mid-tilt, and on
+  reduced-motion so a reader who asked for stillness keeps it.
+*/
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .entry:hover {
+    transform: perspective(900px) rotateX(2deg) translateY(-3px);
+    box-shadow: var(--shadow-2);
+  }
+
+  /* The photo pushes further forward than its frame: near and far move by
+     different amounts, which is what makes it read as depth. */
+  .entry:hover .entry__media {
+    transform: perspective(900px) translateZ(14px) scale(1.03);
+  }
+
+  /* The link already runs the scroll-driven `lift` animation, and an animation
+     beats a normal :hover rule in the cascade, so a `transform` here would
+     never apply. `translate` and `rotate` are separate properties that compose
+     with the animation's transform instead of competing with it. */
+  .link:hover {
+    translate: 0 -3px;
+    rotate: x 3deg;
+    box-shadow: var(--shadow-2);
+  }
+
+  .social__link:hover,
+  .theme-toggle:hover {
+    transform: perspective(500px) translateZ(10px);
+    box-shadow: var(--shadow-2);
+  }
+
+  /* Pressing puts it back down, so the click has somewhere to land. */
+  .entry:active,
+  .social__link:active,
+  .theme-toggle:active {
+    transform: translateY(0) scale(0.995);
+    box-shadow: var(--shadow-1);
+  }
+
+  .link:active {
+    translate: 0 0;
+    rotate: none;
+    box-shadow: var(--shadow-1);
   }
 }

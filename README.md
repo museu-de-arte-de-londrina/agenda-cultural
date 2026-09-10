@@ -1,4 +1,4 @@
-# Agenda Cultural — agregador de links
+# Agenda Cultural: agregador de links
 
 Uma página só, estática, com a **agenda de eventos** em primeiro plano e os
 canais de contato logo abaixo do título. O conteúdo é seu: mora no seu
@@ -34,7 +34,7 @@ some sozinho no build seguinte.
 | Custo | R$ 0 | Grátis com limite, ou assinatura |
 
 O YAML é lido **no build**, não no navegador: o Eleventy gera o HTML final já
-pronto. Nada de `fetch('config.yaml')` no cliente — isso custaria SEO,
+pronto. Nada de `fetch('config.yaml')` no cliente, porque isso custaria SEO,
 performance e abriria superfície de XSS à toa.
 
 ## Preview
@@ -103,7 +103,7 @@ Pronto. A cada push na `main` o site é reconstruído e publicado em
 
 ## Referência do `config.yaml`
 
-Campos sem "obrigatório" podem ser omitidos — o default entra no lugar.
+Campos sem "obrigatório" podem ser omitidos: o default entra no lugar.
 
 ### `lang`
 
@@ -115,7 +115,7 @@ Campos sem "obrigatório" podem ser omitidos — o default entra no lugar.
 
 | Campo | Tipo | Obrigatório | Default | Descrição |
 | --- | --- | --- | --- | --- |
-| `profile.name` | texto, até 80 | **sim** | — | Título da página e `<h1>`. |
+| `profile.name` | texto, até 80 | **sim** | (sem default) | Título da página e `<h1>`. |
 | `profile.tagline` | texto, até 160 | não | vazio | Linha sob o nome. Omitida, o parágrafo some. |
 | `profile.handle` | texto começando com `@` | não | nenhum | Arroba mostrada abaixo do nome. Precisa de aspas no YAML. |
 | `profile.handle_url` | URL `https:`, `mailto:` ou `tel:` | não | nenhum | Destino da arroba. Sem isso, ela é só texto. |
@@ -138,13 +138,13 @@ escolhido. Aspas no YAML são necessárias: `accent: "#a4343a"`.
 
 ### `events[]`
 
-A agenda — o miolo da página. Cada evento vira um cartão com miniatura, data,
+A agenda, o miolo da página. Cada evento vira um cartão com miniatura, data,
 hora e título.
 
 | Campo | Tipo | Obrigatório | Default | Descrição |
 | --- | --- | --- | --- | --- |
-| `title` | texto, até 140 | **sim** | — | Título do evento. |
-| `start` | `AAAA-MM-DD` ou `AAAA-MM-DDTHH:MM` | **sim** | — | Início. Data impossível (`2026-02-31`) quebra o build. |
+| `title` | texto, até 140 | **sim** | (sem default) | Título do evento. |
+| `start` | `AAAA-MM-DD` ou `AAAA-MM-DDTHH:MM` | **sim** | (sem default) | Início. Data impossível (`2026-02-31`) quebra o build. |
 | `end` | mesmo formato | não | nenhum | Fim. Precisa ser depois do `start`. |
 | `kind` | texto, até 40 | não | nenhum | Etiqueta do tipo (Oficina, Exposição...). |
 | `image` | caminho ou URL `https://` | não | ladrilho com a data | Miniatura quadrada; 320×320 basta. |
@@ -166,13 +166,13 @@ Links secundários, abaixo da agenda, na ordem em que aparecem.
 
 Um link que aponta para o mesmo endereço de um ícone de `social` mostra o
 mesmo destino duas vezes na página. `npm run validate` avisa quando isso
-acontece — avisa, não quebra: um ícone mais um botão em destaque é uma
+acontece. Avisa, não quebra: um ícone mais um botão em destaque é uma
 escolha legítima.
 
 | Campo | Tipo | Obrigatório | Default | Descrição |
 | --- | --- | --- | --- | --- |
-| `label` | texto, até 80 | **sim** | — | Texto do botão. |
-| `url` | URL `https:`, `mailto:` ou `tel:` | **sim** | — | Qualquer outro esquema **quebra o build**. |
+| `label` | texto, até 80 | **sim** | (sem default) | Texto do botão. |
+| `url` | URL `https:`, `mailto:` ou `tel:` | **sim** | (sem default) | Qualquer outro esquema **quebra o build**. |
 | `icon` | nome de ícone | não | sem ícone | Veja [Ícones](#ícones). |
 | `highlight` | `true` \| `false` | não | `false` | Pinta o botão com a cor de destaque. |
 
@@ -182,8 +182,8 @@ Os ícones redondos no rodapé do cartão.
 
 | Campo | Tipo | Obrigatório | Default | Descrição |
 | --- | --- | --- | --- | --- |
-| `platform` | nome de ícone | **sim** | — | Vira também o rótulo acessível do link. |
-| `url` | URL `https:`, `mailto:` ou `tel:` | **sim** | — | Mesma allowlist dos links. |
+| `platform` | nome de ícone | **sim** | (sem default) | Vira também o rótulo acessível do link. |
+| `url` | URL `https:`, `mailto:` ou `tel:` | **sim** | (sem default) | Mesma allowlist dos links. |
 
 ### `seo`
 
@@ -209,7 +209,7 @@ seo:
 
 ### `footer`
 
-Selo institucional abaixo do cartão — útil quando a página pertence a um órgão
+Selo institucional abaixo do cartão, útil quando a página pertence a um órgão
 ou a uma organização maior. O bloco inteiro é opcional.
 
 | Campo | Tipo | Obrigatório | Default | Descrição |
@@ -222,7 +222,7 @@ ou a uma organização maior. O bloco inteiro é opcional.
 
 O campo `icon` (em `links`) e `platform` (em `social`) aceitam:
 
-- **qualquer slug do [Simple Icons](https://simpleicons.org)** — `github`,
+- **qualquer slug do [Simple Icons](https://simpleicons.org)**: `github`,
   `instagram`, `whatsapp`, `youtube`, `mastodon`, `spotify`, `bluesky`,
   `tiktok`, `telegram`, e mais de 3 mil outros;
 - **três genéricos**, para o que não é marca: `email`, `website`, `link`.
@@ -230,12 +230,12 @@ O campo `icon` (em `links`) e `platform` (em `social`) aceitam:
 Os ícones são embutidos no HTML durante o build. Nada é baixado de CDN, então
 o IP do visitante nunca chega a um terceiro.
 
-Nome errado quebra o build com a lista de alternativas — sem ícone fantasma.
+Nome errado quebra o build com a lista de alternativas, sem ícone fantasma.
 
 > Marcas entram e saem do Simple Icons: a LinkedIn, por exemplo, pediu a
 > remoção do próprio logo e ele não existe mais a partir da versão 14. Quando
 > uma atualização remove um ícone que você usa, o build falha apontando o
-> campo — troque por outro slug ou por um genérico.
+> campo. Troque por outro slug ou por um genérico.
 
 ## Desenvolvimento local
 
@@ -282,12 +282,12 @@ direto pelo `actions/deploy-pages`, sem branch `gh-pages`.
 O build gera um QR code apontando para o endereço em `seo.base_url`, publicado
 em dois formatos:
 
-- `qrcode.svg` — vetorial, para impressão em qualquer tamanho (cartaz, etiqueta
+- `qrcode.svg`: vetorial, para impressão em qualquer tamanho (cartaz, etiqueta
   de parede, folder);
-- `qrcode.png` — 1024×1024, para slide, story ou apresentação.
+- `qrcode.png`: 1024×1024, para slide, story ou apresentação.
 
 No site publicado eles ficam em `SEU-ENDERECO/qrcode.svg` e `.../qrcode.png`.
-São regerados a cada build, então mudar `seo.base_url` já corrige o código —
+São regerados a cada build, então mudar `seo.base_url` já corrige o código, e
 não existe cópia antiga para esquecer de atualizar. Sem `seo.base_url`, nada é
 gerado: um QR para um endereço desconhecido é pior que nenhum.
 
@@ -304,7 +304,7 @@ gerado: um QR para um endereço desconhecido é pior que nenhum.
    `og:image` e o canonical continuam apontando para o `github.io`.
 
 Se preferir versionar o domínio junto com o código, crie um arquivo
-`src/CNAME` com o domínio em uma linha — ele é copiado para a raiz do site.
+`src/CNAME` com o domínio em uma linha, que é copiado para a raiz do site.
 
 ## Limitações conhecidas
 
@@ -321,7 +321,7 @@ Se preferir versionar o domínio junto com o código, crie um arquivo
 Decisões que não são óbvias lendo o CSS:
 
 - **A agenda é agrupada por dia.** A data fica num trilho à esquerda e é
-  impressa uma vez por dia, não uma vez por evento — seis atividades no mesmo
+  impressa uma vez por dia, não uma vez por evento: seis atividades no mesmo
   dia imprimiam a mesma data seis vezes.
 - **Nenhum evento recebe tratamento visual próprio.** Os dias são separados
   por um fio e pelo trilho de data; dentro do dia, todas as linhas são iguais.
@@ -336,16 +336,16 @@ Decisões que não são óbvias lendo o CSS:
   escuro. `lib/color.js` clareia ou escurece a cor preservando o matiz até
   passar em AA, então qualquer `theme.accent` continua legível nos dois temas.
 - **Alvo de toque mínimo de 44px.** Os ícones de contato têm 48px (o mínimo do
-  Android), e a arroba ganha preenchimento com margem negativa — cresce o alvo
+  Android), e a arroba ganha preenchimento com margem negativa, que cresce o alvo
   sem mexer no layout. O cartão de evento inteiro é clicável por um `::after`
   que cobre a linha, então o alvo real é a linha, não o texto do título.
 - **O botão de tema é ancorado no cartão, não na viewport.** Fixo no canto da
-  tela ele montava na borda arredondada do cartão em toda largura de celular —
-  ali o cartão ocupa quase toda a tela e não sobra canto livre. Dentro do
+  tela ele montava na borda arredondada do cartão em toda largura de celular,
+  onde o cartão ocupa quase toda a tela e não sobra canto livre. Dentro do
   cartão ele sai de cena junto com o cabeçalho, o que é aceitável para um
   controle que se ajusta uma vez.
 - **O fundo é a fachada do museu, fora de foco.** O desfoque está assado no
-  arquivo (19 KB), não em `filter: blur()` — filtrar uma camada do tamanho da
+  arquivo (19 KB), não em `filter: blur()`, porque filtrar uma camada do tamanho da
   viewport faria o compositor refazer o borrão a cada scroll. Sobre a foto vai
   um véu que escurece de cima para baixo, e todo o conteúdo fica em superfícies
   opacas, então o contraste do texto não depende da imagem.
@@ -357,7 +357,7 @@ Decisões que não são óbvias lendo o CSS:
 
 Detalhe completo em [SECURITY.md](SECURITY.md). Em resumo:
 
-- todo valor do YAML é escapado no HTML — nenhum campo é interpolado como
+- todo valor do YAML é escapado no HTML, e nenhum campo é interpolado como
   markup, nada usa `| safe`;
 - URLs passam por allowlist de esquema (`https:`, `mailto:`, `tel:`);
   `javascript:`, `data:` e `vbscript:` **quebram o build**;
@@ -378,7 +378,7 @@ são todos do museu e têm termos próprios:
 
 | Arquivo | Origem | Termos |
 | --- | --- | --- |
-| `fonts/archivo-*.woff2` | Archivo, da Omnibus-Type | SIL Open Font License 1.1 — texto em [`fonts/OFL.txt`](src/assets/fonts/OFL.txt) |
+| `fonts/archivo-*.woff2` | Archivo, da Omnibus-Type | SIL Open Font License 1.1, texto em [`fonts/OFL.txt`](src/assets/fonts/OFL.txt) |
 | `museu-33-anos.webp`, `museu-de-arte-de-londrina.webp`, `og-museu-33-anos.jpg` | Museu de Arte de Londrina | Marca do museu |
 | `prefeitura-londrina.png` | Prefeitura de Londrina | Marca do município |
 | `fundo-museu.webp` | Foto de Emerson Dias, do portal da Prefeitura | Direitos do autor e da Prefeitura |

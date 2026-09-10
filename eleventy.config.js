@@ -12,8 +12,8 @@ const CONFIG = new URL('config.yaml', import.meta.url);
  * code follows. Written straight to the output directory because Eleventy
  * templates emit text, and one of these two files is binary.
  *
- * Skipped when base_url is unset — a QR code for an address we do not know
- * would be worse than none.
+ * Skipped when base_url is unset, because a QR code for an address we do not
+ * know would be worse than none.
  */
 async function writeQrCodes(outputDir) {
   const config = await loadConfigFile(process.env.CONFIG_FILE ?? CONFIG);

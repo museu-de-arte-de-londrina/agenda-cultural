@@ -2,7 +2,8 @@
  * Theme toggle.
  *
  * Loaded from <head> without defer so the stored choice is applied before the
- * first paint — deferring it would flash the wrong theme on every load. It is
+ * first paint, since deferring it would flash the wrong theme on every load.
+ * It is
  * an external file rather than an inline script so the CSP can stay at
  * script-src 'self' with no 'unsafe-inline'.
  *

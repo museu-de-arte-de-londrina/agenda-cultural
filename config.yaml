@@ -39,7 +39,7 @@ events:
     kind: Exposição
     image: assets/eventos/exposicao-gira-mundo.webp
     url: https://visite.museus.gov.br/20a-primavera-dos-museus/exposicao-gira-mundo/
-    description: 22 obras do acervo — telas, gravuras e esculturas de 18 artistas — que rememoram as
+    description: 22 obras do acervo, entre telas, gravuras e esculturas de 18 artistas, que rememoram as
       mostras do período de restauro do prédio.
   - title: Apresentação de Taiko
     start: 2026-09-21T19:00

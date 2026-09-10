@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------------
-# config.example.yaml — modelo comentado.
+# config.example.yaml: modelo comentado.
 #
 # Copie para config.yaml e edite. Esse é o ÚNICO arquivo que você precisa
 # tocar: nada de HTML, CSS ou JS. Rode `npm run validate` antes de publicar.
@@ -15,7 +15,7 @@ profile:
   # (obrigatório) Até 80 caracteres.
   name: Ada Lovelace
 
-  # (opcional, default: vazio — o parágrafo some) Até 160 caracteres.
+  # (opcional, default: vazio, o parágrafo some) Até 160 caracteres.
   tagline: Matemática. Primeira programadora do mundo.
 
   # (opcional, default: nenhum) Arroba mostrada logo abaixo do nome.
@@ -26,7 +26,7 @@ profile:
   # texto simples. Mesma allowlist de esquemas dos demais links.
   handle_url: https://www.instagram.com/umperfilqualquer/
 
-  # (opcional, default: nenhum — vira um círculo com as iniciais)
+  # (opcional, default: nenhum, vira um círculo com as iniciais)
   # Caminho relativo dentro de src/assets/, ou uma URL https://
   avatar: assets/avatar.svg
 
@@ -48,7 +48,7 @@ theme:
 #
 # Eventos que já terminaram não são renderizados: o corte acontece no build,
 # e o workflow de deploy roda uma vez por dia para o corte não envelhecer.
-# A ordem no arquivo não importa — a lista é ordenada por data.
+# A ordem no arquivo não importa: a lista é ordenada por data.
 events:
   - # (obrigatório) Até 140 caracteres.
     title: Abertura da exposição
@@ -121,7 +121,7 @@ social:
 # (opcional, o bloco inteiro pode sumir)
 seo:
   # (opcional, default: profile.name) Até 70 caracteres.
-  title: Ada Lovelace — links
+  title: Ada Lovelace, links
 
   # (opcional, default: profile.tagline, ou profile.name) Até 200 caracteres.
   description: Todos os meus links em um lugar só.
@@ -131,7 +131,7 @@ seo:
 
   # (opcional, default: nenhum) Endereço final do site, com https://.
   # Sem ele, og:image e <link rel="canonical"> são omitidos quando as imagens
-  # são caminhos relativos — porque Open Graph exige URL absoluta.
+  # são caminhos relativos, porque Open Graph exige URL absoluta.
   base_url: https://octocat.github.io/links
 
 # (opcional, o bloco inteiro pode sumir) Selo institucional abaixo do cartão.

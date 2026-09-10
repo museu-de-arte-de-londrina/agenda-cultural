@@ -81,7 +81,7 @@ const ALLOWED_SCHEMES_HINT = ALLOWED_URL_PROTOCOLS.join(', ');
 /**
  * zod 4 replaced required_error/invalid_type_error with a single `error` hook.
  * It fires for every issue on the field, so anything we do not translate must
- * return undefined — otherwise a generic message would bury the specific one
+ * return undefined, otherwise a generic message would bury the specific one
  * (a typo'd key reported as "wrong type", for instance).
  */
 const message = (wrongType) => (issue) => {

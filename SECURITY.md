@@ -20,7 +20,7 @@ o impacto que você enxerga.
 | Correção ou plano público | 30 dias corridos |
 
 São prazos de um projeto mantido por voluntários, não um SLA contratual. Se o
-prazo estourar, cobre — não é falta de interesse.
+prazo estourar, cobre. Não é falta de interesse.
 
 Divulgação coordenada: peço que o relato só vire público depois da correção,
 ou após 90 dias, o que vier primeiro. Crédito no changelog se você quiser.
@@ -38,8 +38,8 @@ Está **fora** do escopo:
 
 - os sites de terceiros para onde os links apontam;
 - a infraestrutura do GitHub Pages em si (reporte ao GitHub);
-- conteúdo que o próprio dono do site escreveu no `config.yaml` — quem edita o
-  config já controla a página.
+- conteúdo que o próprio dono do site escreveu no `config.yaml`, já que quem
+  edita o config controla a página.
 
 ## Modelo de ameaça
 
