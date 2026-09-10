@@ -3,9 +3,11 @@ name: Publicar evento
 # Uma issue preenchida pelo formulário vira uma proposta de alteração.
 on:
   issues:
-    # labeled também: quando o rótulo é aplicado junto com a criação, o payload
-    # de opened pode chegar sem ele, e o trabalho era pulado sem explicação.
-    types: [opened, edited, labeled]
+    # Sem opened de propósito. O formulário aplica a etiqueta na própria
+    # criação, então opened e labeled chegam com dois segundos de diferença e o
+    # trabalho rodava duas vezes para a mesma issue. labeled sozinho cobre tanto
+    # o envio pelo formulário quanto a etiqueta posta à mão depois.
+    types: [edited, labeled]
 
 permissions:
   contents: read
