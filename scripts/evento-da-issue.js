@@ -63,6 +63,17 @@ export function paraIso(data, hora) {
 }
 
 /**
+ * O formulário publica direto no site, então a mesma issue não pode entrar
+ * duas vezes. Título e início identificam o evento: a mesma atividade se
+ * repete ao longo da semana, mas nunca no mesmo horário.
+ * @param {object[]} eventos
+ * @param {object} evento
+ */
+export function jaTemEvento(eventos, evento) {
+  return eventos.some((atual) => atual.title === evento.title && atual.start === evento.start);
+}
+
+/**
  * @param {Map<string, string>} campos
  * @returns {{evento: object, erros: string[]}}
  */
@@ -123,6 +134,14 @@ async function principal() {
   const doc = YAML.parseDocument(bruto);
 
   const atual = doc.toJS();
+
+  // Sai sem escrever nada, e quem chamou percebe pelo arquivo intacto. É o que
+  // acontece quando a issue é editada ou reaberta depois de já publicada.
+  if (jaTemEvento(atual.events ?? [], evento)) {
+    console.log(`Esse evento já está na agenda: ${evento.title} (${evento.start})`);
+    return;
+  }
+
   const eventos = [...(atual.events ?? []), evento];
 
   // A mesma validação do build: se quebraria o site, para aqui.

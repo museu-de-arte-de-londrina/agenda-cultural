@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 
-import { parseIssueForm, paraIso, montarEvento } from '../scripts/evento-da-issue.js';
+import { parseIssueForm, paraIso, montarEvento, jaTemEvento } from '../scripts/evento-da-issue.js';
 
 /** O formato que o GitHub gera a partir do formulário. */
 function corpo(campos) {
@@ -132,4 +132,17 @@ test('texto solto na issue não vira campo', () => {
   assert.equal(campos.size, 0);
   const { erros } = montarEvento(campos);
   assert.ok(erros.length > 0, 'sem os campos do formulário, nada é publicado');
+});
+
+test('o mesmo evento não entra duas vezes', () => {
+  const evento = { title: 'Visita mediada', start: '2026-09-21T14:00' };
+  const agenda = [{ title: 'Outra coisa', start: '2026-09-21T14:00' }, evento];
+
+  assert.equal(jaTemEvento(agenda, { ...evento }), true, 'título e início iguais');
+  assert.equal(jaTemEvento([], evento), false, 'agenda vazia');
+  assert.equal(
+    jaTemEvento(agenda, { title: 'Visita mediada', start: '2026-09-21T16:00' }),
+    false,
+    'a mesma atividade em outro horário é outro evento',
+  );
 });

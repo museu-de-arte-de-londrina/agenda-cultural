@@ -10,6 +10,12 @@ on:
 permissions:
   contents: read
 
+# Duas issues enviadas ao mesmo tempo escreveriam no mesmo arquivo. Em fila, a
+# segunda parte do config.yaml já com o evento da primeira.
+concurrency:
+  group: publicar-evento
+  cancel-in-progress: false
+
 jobs:
   # Só automatiza para quem já tem acesso de escrita. O repositório é público e
   # qualquer pessoa pode abrir issue; de terceiros isso vira um pedido para
@@ -21,7 +27,11 @@ jobs:
   conferir:
     name: Conferir quem pediu
     runs-on: ubuntu-latest
-    if: contains(github.event.issue.labels.*.name, 'evento')
+    # Fechada quer dizer publicada. Sem isso, editar a issue depois publicaria
+    # o evento de novo.
+    if: >-
+      github.event.issue.state == 'open' &&
+      contains(github.event.issue.labels.*.name, 'evento')
 
     permissions:
       contents: read
@@ -58,14 +68,13 @@ jobs:
             'Recebemos o pedido. A publicação automática vale só para quem cuida do repositório, então alguém da equipe do museu confere os dados e publica. Não precisa fazer mais nada por aqui.'
 
   publicar:
-    name: Transformar a issue em proposta
+    name: Publicar o evento
     runs-on: ubuntu-latest
     needs: conferir
     if: needs.conferir.outputs.pode == 'true'
 
     permissions:
       contents: write
-      pull-requests: write
       issues: write
 
     steps:
@@ -114,44 +123,45 @@ jobs:
           npm test
           npm run build
 
-      - name: Abrir a proposta de alteração
+      - name: Publicar no site
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NUMERO: ${{ github.event.issue.number }}
-          TITULO: ${{ github.event.issue.title }}
+          SITE: ${{ github.event.repository.homepage }}
         run: |
           set -euo pipefail
-          BRANCH="evento/issue-$NUMERO"
+
+          # O script sai sem escrever quando o evento já está na agenda.
+          if git diff --quiet -- config.yaml; then
+            gh issue comment "$NUMERO" --body 'Esse evento já está na agenda. Nada a fazer.'
+            gh issue close "$NUMERO" --reason completed
+            exit 0
+          fi
 
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git checkout -b "$BRANCH"
           git add config.yaml
 
-          cat > mensagem.txt <<'FIM'
+          cat > mensagem.txt <<FIM
           feat(agenda): novo evento vindo do formulário
 
-          Gerado a partir de uma issue preenchida no formulário de publicação.
-          Confira data, hora e descrição antes de publicar.
+          Publicado a partir da issue #$NUMERO, depois de passar pela validação
+          do schema, pelos testes e por um build completo.
           FIM
           git commit --file mensagem.txt
           rm mensagem.txt
-          git push --force origin "$BRANCH"
 
-          cat > corpo.md <<FIM
-          Fecha #$NUMERO
+          # Outra issue pode ter publicado enquanto esta rodava. Refaz por cima
+          # em vez de perder o evento.
+          publicado=nao
+          for _ in 1 2 3; do
+            if git push origin HEAD:main; then
+              publicado=sim
+              break
+            fi
+            git pull --rebase origin main
+          done
+          [ "$publicado" = sim ]
 
-          Gerado a partir do formulário. Confira data, hora e descrição, e
-          adicione a foto em \`src/assets/eventos/\` se houver.
-
-          O site só publica depois que esta proposta for integrada.
-          FIM
-
-          if gh pr view "$BRANCH" --json number > /dev/null 2>&1; then
-            gh pr comment "$BRANCH" --body "Atualizado a partir da issue #$NUMERO."
-          else
-            gh pr create --base main --head "$BRANCH" --title "Agenda: $TITULO" --body-file corpo.md
-          fi
-
-          URL=$(gh pr view "$BRANCH" --json url --jq .url)
-          gh issue comment "$NUMERO" --body "Proposta aberta: $URL"
+          gh issue comment "$NUMERO" --body "Publicado. O site atualiza em cerca de um minuto: $SITE"
+          gh issue close "$NUMERO" --reason completed

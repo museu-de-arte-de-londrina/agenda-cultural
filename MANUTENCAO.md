@@ -7,7 +7,7 @@ programa. Não é preciso instalar nada nem saber mexer em código.
 
 Toda a página nasce de um arquivo só, o `config.yaml`. Os eventos, os links, as
 redes sociais, o texto do rodapé: está tudo lá. Mudou o arquivo, o site se
-reconstrói sozinho e vai para o ar em poucos minutos.
+reconstrói sozinho e vai para o ar em cerca de um minuto.
 
 Você quase nunca vai abrir esse arquivo. O caminho normal é preencher um
 formulário, e o resto acontece sem você.
@@ -34,57 +34,40 @@ Preencha o que souber. Só o título e a data são obrigatórios:
 
 Clique em **Submit new issue**.
 
-### 2. A conferência automática, que leva cerca de um minuto
+### 2. O resto acontece sozinho
 
-Assim que você envia, uma automação lê o formulário e faz três coisas:
+Assim que você envia, a automação:
 
-1. Confere se as datas fazem sentido e se os campos cabem nos limites.
+1. Lê os campos e confere se as datas fazem sentido.
 2. Reconstrói o site inteiro com o evento novo, para garantir que ele não quebra
    a página.
-3. Abre uma **proposta de alteração**, que no GitHub se chama *pull request*.
+3. Escreve o evento no `config.yaml` e publica.
 
-**Se algo estiver errado**, ela não abre proposta nenhuma. Em vez disso, escreve
-um comentário na sua própria issue dizendo o que não entendeu, em português. Aí
-é só clicar nos três pontinhos do formulário, escolher **Edit**, corrigir e
+O site fica no ar cerca de um minuto depois do envio. A automação comenta na
+issue com o endereço da página e fecha a issue. Você não precisa clicar em mais
+nada.
+
+**Se algo estiver errado**, nada é publicado. Em vez disso, ela escreve um
+comentário na sua própria issue dizendo o que não entendeu, em português. Aí é
+só clicar nos três pontinhos do formulário, escolher **Edit**, corrigir e
 salvar. A conferência roda de novo sozinha.
 
-**Se estiver tudo certo**, ela comenta na issue com o endereço da proposta:
-
-> Proposta aberta: https://github.com/museu-de-arte-de-londrina/agenda-cultural/pull/…
-
-### 3. Revisar e publicar
-
-Esta é a parte que continua sendo humana, de propósito. Nada vai ao ar sem
-alguém olhar.
-
-Abra o endereço da proposta. Na aba **Files changed** você vê exatamente o que
-vai mudar no arquivo: umas cinco linhas, o evento novo e nada mais.
-
-Confira data, hora e descrição. Se estiver bom, volte para a aba
-**Conversation** e clique em **Merge pull request**, depois em **Confirm
-merge**.
-
-A issue do formulário fecha sozinha junto com a proposta.
-
-### 4. O site vai ao ar
-
-A publicação leva cerca de dois minutos depois da integração. Não precisa fazer
-nada. Se quiser acompanhar, a aba **Actions** mostra a tarefa **Deploy**
-rodando; quando ficar verde, a página já está atualizada.
+Como a issue fecha ao publicar, editar o formulário depois disso não publica de
+novo. Para mexer em um evento que já está no ar, veja
+[Tirar ou corrigir um evento](#tirar-ou-corrigir-um-evento-antes-da-data).
 
 ## A foto do evento
 
 O formulário ainda não recebe imagem, então o evento entra sem foto. O cartão
 funciona do mesmo jeito, só fica sem miniatura.
 
-Para colocar a foto, faça isso **na proposta, antes de integrar**:
+Para colocar a foto, são duas edições pela interface do GitHub, feitas depois de
+publicar:
 
-1. Na proposta aberta, vá na aba **Files changed** e depois em **Add files →
-   Upload files**, ou navegue até a pasta `src/assets/eventos/` no ramo da
-   proposta.
-2. Envie a imagem com um nome curto, sem acento e sem espaço, por exemplo
+1. Abra a pasta `src/assets/eventos/` no repositório e use **Add file → Upload
+   files**. Dê à imagem um nome curto, sem acento e sem espaço, por exemplo
    `oficina-de-gravura.webp`.
-3. Edite o `config.yaml` na mesma proposta e acrescente uma linha `image:` no
+2. Abra o `config.yaml`, clique no lápis e acrescente uma linha `image:` no
    bloco do evento, logo abaixo de `kind:`:
 
 ```yaml
@@ -138,7 +121,7 @@ formulário, é edição direta do arquivo, e continua sendo simples.
    mudança, por exemplo "cancelar a oficina de 3 de outubro", e clique em
    **Commit changes**.
 
-O site se reconstrói e publica em cerca de dois minutos.
+O site se reconstrói e publica em cerca de um minuto.
 
 > Se você errar a digitação e o arquivo ficar inválido, a publicação falha e a
 > página que está no ar **não** é substituída por uma quebrada. A aba
@@ -185,13 +168,13 @@ mão, sem o formulário, a automação não reconhece os campos e não faz nada.
 **A automação comentou que não entendeu a data.** O formato é dia/mês/ano com
 quatro dígitos no ano, como `03/10/2026`. Hora é `19:00`, com dois pontos.
 
-**A proposta foi aberta, mas o evento não apareceu no site.** A proposta precisa
-ser integrada com **Merge pull request**. Enquanto ela estiver aberta, a mudança
-existe só na proposta, e não no site.
+**A automação disse que publicou, mas o site continua igual.** Espere um minuto
+e recarregue a página segurando Shift, para forçar o navegador a buscar a versão
+nova em vez de usar a que ele guardou.
 
-**Integrei e o site continua igual.** Espere uns dois minutos e recarregue a
-página segurando Shift, para forçar o navegador a buscar a versão nova em vez de
-usar a que ele guardou.
+**Enviei o mesmo evento duas vezes.** Ele entra uma vez só. A automação compara
+título e horário de início com o que já está na agenda, avisa na issue e não
+escreve nada.
 
 **Está tudo vermelho na aba Actions.** Abra a linha mais recente e leia a última
 mensagem. Se não fizer sentido, o `SECURITY.md` explica como pedir ajuda.
@@ -215,13 +198,10 @@ automática estiver verde, podem ser integradas sem medo.
 ## Resumo do ciclo
 
 ```
-formulário  ->  conferência automática  ->  proposta de alteração
-                                                    |
-                                            revisão de alguém
-                                                    |
-                                                 integrar
-                                                    |
-                                          site no ar em ~2 min
-                                                    |
-                              evento some sozinho depois que a data passa
+formulário  ->  confere e constrói  ->  escreve no config.yaml  ->  site no ar
+                      ~30s                                             ~40s
+
+                        um envio seu, nenhum clique depois
+                                        |
+                   evento some sozinho depois que a data passa
 ```
