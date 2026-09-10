@@ -18,6 +18,19 @@ import {
 
 const DEFAULT_CONFIG = new URL('../../config.yaml', import.meta.url);
 
+/**
+ * The zebra tones, defined here and handed to the stylesheet, because the
+ * readable-accent calculation below needs the exact value the row will use.
+ * Keeping a second copy in the CSS is how the time labels quietly slipped
+ * under AA when the zebra was darkened.
+ *
+ * These are the worst case for accent-coloured text: in the light theme the
+ * accent is dark, so the tinted row is the least contrasty background it sits
+ * on; in the dark theme the accent is light, so the tinted row is again the
+ * closest to it.
+ */
+const ZEBRA = { light: '#eaf0f9', dark: '#17233d' };
+
 /** Two initials, used when no avatar is set. */
 function initials(name) {
   return name
@@ -103,9 +116,10 @@ export default async function site() {
     // legible and on the other nearly invisible, so each theme gets a version
     // lightened or darkened until it clears AA against its own surface.
     accentText: {
-      light: readableOn('#f5f8fc', accent, '#0c1220'),
-      dark: readableOn('#121c2f', accent, '#e9eff8'),
+      light: readableOn(ZEBRA.light, accent, '#0c1220'),
+      dark: readableOn(ZEBRA.dark, accent, '#e9eff8'),
     },
+    zebra: ZEBRA,
     focusRing: {
       light: contrastRatio(accent, '#ffffff') >= 3 ? accent : '#0f172a',
       dark: contrastRatio(accent, '#0b1120') >= 3 ? accent : '#e8edf7',

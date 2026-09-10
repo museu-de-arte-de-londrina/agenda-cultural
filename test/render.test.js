@@ -180,7 +180,7 @@ events:
   assert.equal((html.match(/class="entry__title"/g) ?? []).length, 4);
 });
 
-test('só o próximo evento mostra descrição, e é o único elevado', async () => {
+test('só o próximo evento mostra descrição', async () => {
   const html = await render(`
 profile:
   name: Museu
@@ -193,9 +193,28 @@ events:
     description: Este texto não deve aparecer.
 `);
 
-  assert.equal((html.match(/entry--featured/g) ?? []).length, 1, 'um único destaque');
   assert.ok(html.includes('Este texto deve aparecer.'));
-  assert.ok(!html.includes('Este texto não deve aparecer.'), 'descrição fora do destaque polui a lista');
+  assert.ok(!html.includes('Este texto não deve aparecer.'), 'descrição em toda linha polui a lista');
+
+  // Nada distingue o primeiro visualmente: a zebra é quem dá o ritmo.
+  assert.ok(!html.includes('entry--featured'), 'o destaque visual foi removido de propósito');
+});
+
+test('links podem explicar para onde levam', async () => {
+  const html = await render(`
+profile:
+  name: Museu
+links:
+  - label: Portal
+    url: https://example.org
+    description: O que você encontra quando chega lá.
+  - label: Sem explicação
+    url: https://example.com
+`);
+
+  assert.match(html, /class="link__label">Portal<[\s\S]*?class="link__description">O que você encontra quando chega lá\./);
+  const semDescricao = html.slice(html.indexOf('Sem explicação'));
+  assert.ok(!semDescricao.includes('link__description'), 'sem description, nada é renderizado');
 });
 
 test('temporada de vários dias diz até quando vai', async () => {

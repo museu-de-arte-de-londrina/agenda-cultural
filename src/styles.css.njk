@@ -47,6 +47,9 @@ permalink: /styles.css
   --surface: #ffffff;
   --surface-2: #f5f8fc;
   --surface-hover: #e8eef7;
+  /* Comes from site.js: the readable-accent calculation needs this exact
+     value, so it is defined once there instead of twice. */
+  --zebra: {{ site.zebra.light }};
   --text: #0c1220;
   --muted: #4d5c73;
   --border: #d8e0ec;
@@ -79,6 +82,7 @@ permalink: /styles.css
   --surface: #0d1524;
   --surface-2: #121c2f;
   --surface-hover: #1a2540;
+  --zebra: {{ site.zebra.dark }};
   --text: #e9eff8;
   --muted: #9db0cb;
   --border: #22304a;
@@ -414,6 +418,13 @@ h1 {
   margin-top: 0.5rem;
 }
 
+/* Zebra: alternating fill gives the eye a rhythm to follow down a long day,
+   and restarts on each day so a new date always opens on the lighter tone. */
+.entry:nth-child(even),
+.links li:nth-child(even) .link {
+  background: var(--zebra);
+}
+
 .entry:hover {
   border-color: var(--accent-text);
 }
@@ -490,26 +501,6 @@ h1 {
   object-fit: cover;
 }
 
-/* The next thing happening is the only card on the page. One raised element
-   is enough to say "start here". */
-.entry--featured {
-  margin: 0.25rem 0 0.5rem;
-  padding: 0.875rem;
-  border: 1px solid var(--border);
-  border-radius: 0.875rem;
-  background: var(--surface-2);
-  box-shadow: var(--shadow-2), var(--ring);
-}
-
-.entry--featured .entry__title {
-  font-size: 1.0625rem;
-}
-
-.entry--featured .entry__media {
-  width: 3.75rem;
-  height: 3.75rem;
-}
-
 .entry__description {
   margin: 0.5rem 0 0;
   font-size: 0.875rem;
@@ -538,7 +529,7 @@ h1 {
 
 .link {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 0.625rem;
   min-height: 2.875rem;
   padding: 0.5rem 0.875rem;
@@ -568,8 +559,35 @@ h1 {
   filter: brightness(0.94);
 }
 
+.link .icon {
+  /* Sits on the label's line rather than centred against two lines of text. */
+  margin-top: 0.1875rem;
+}
+
+.link__text {
+  display: grid;
+  gap: 0.0625rem;
+  min-width: 0;
+}
+
 .link__label {
+  font-weight: 500;
   overflow-wrap: anywhere;
+}
+
+/* The label says where the link goes; this says what is there when you
+   arrive, which the label alone was leaving to guesswork. */
+.link__description {
+  font-size: 0.8125rem;
+  font-weight: 400;
+  line-height: 1.4;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+
+.link--highlight .link__description {
+  color: inherit;
+  opacity: 0.85;
 }
 
 /* ---------------------------------------------------------------- footer -- */
@@ -680,10 +698,6 @@ a.footer__inner:hover {
     height: 4rem;
   }
 
-  .entry--featured .entry__media {
-    width: 5rem;
-    height: 5rem;
-  }
 }
 
 /* ---------------------------------------------------------------- motion -- */

@@ -174,6 +174,7 @@ escolha legítima.
 | `label` | texto, até 80 | **sim** | — | Texto do botão. |
 | `url` | URL `https:`, `mailto:` ou `tel:` | **sim** | — | Qualquer outro esquema **quebra o build**. |
 | `icon` | nome de ícone | não | sem ícone | Veja [Ícones](#ícones). |
+| `description` | texto, até 200 | não | nenhum | Uma linha sobre o que há do outro lado. O rótulo diz para onde vai; isto diz o que tem lá. |
 | `highlight` | `true` \| `false` | não | `false` | Pinta o botão com a cor de destaque. |
 
 ### `social[]`
@@ -308,8 +309,13 @@ Decisões que não são óbvias lendo o CSS:
 - **A agenda é agrupada por dia.** A data fica num trilho à esquerda e é
   impressa uma vez por dia, não uma vez por evento — seis atividades no mesmo
   dia imprimiam a mesma data seis vezes.
-- **Só o próximo evento é um cartão elevado.** O resto são linhas separadas por
-  fio de 1px. Catorze cartões idênticos deixam de ser hierarquia e viram ruído.
+- **A lista é zebrada.** O preenchimento alterna a cada linha e reinicia a cada
+  dia, então uma data nova sempre abre no tom claro. É o que dá ritmo de
+  leitura numa lista longa — nenhum item recebe tratamento visual próprio.
+- **O tom da zebra mora no `src/_data/site.js`, não no CSS.** O cálculo do
+  accent legível precisa do valor exato que a linha vai usar; manter uma
+  segunda cópia no CSS foi como os horários escorregaram para 4,41:1 quando a
+  zebra foi escurecida.
 - **Profundidade é uma escala de três níveis**, com sombra tingida do ink da
   paleta e um filete de luz no topo das superfícies elevadas. Só o frame, o
   destaque e o botão de tema sobem; o resto fica plano.

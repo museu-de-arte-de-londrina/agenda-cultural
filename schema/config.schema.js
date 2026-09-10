@@ -203,6 +203,7 @@ const linkSchema = z
     label: text(80),
     url: urlField,
     icon: iconField.optional(),
+    description: text(200).optional(),
     highlight: z.boolean({ error: message('deve ser true ou false') }).default(false),
     },
     objectError,

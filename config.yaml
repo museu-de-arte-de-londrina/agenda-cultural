@@ -131,22 +131,25 @@ links:
   - label: Programação oficial no Londrina Cultura
     url: https://londrinacultura.londrina.pr.gov.br/espaco/1/
     icon: website
+    description: Horários de visitação, exposições em cartaz e a agenda completa,
+      mantidas pela Secretaria Municipal de Cultura.
 
   - label: O museu no portal da Prefeitura
     url: https://portal.londrina.pr.gov.br/espacos-culturais/museu-arte-sec-cultura
     icon: link
-
-
-
-
+    description: Página institucional — endereço, telefone, história do prédio e
+      informações de acessibilidade.
 
   - label: Notícias do museu no blog da Prefeitura
     url: https://blog.londrina.pr.gov.br/?s=museu+de+arte
     icon: link
+    description: Busca no blog da Prefeitura com a cobertura de aberturas, oficinas
+      e ações educativas do museu.
 
   - label: Instagram da Secretaria Municipal de Cultura
     url: https://www.instagram.com/secretariadeculturalondrina/
     icon: instagram
+    description: Programação cultural de Londrina inteira, para além do museu.
 
 social:
   - platform: instagram

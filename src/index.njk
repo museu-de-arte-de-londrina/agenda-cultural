@@ -130,7 +130,7 @@ permalink: /index.html
 
             <ol class="day__entries">
               {%- for event in day.events %}
-              <li class="entry{% if event.featured %} entry--featured{% endif %}">
+              <li class="entry">
                 <div class="entry__text">
                   <p class="entry__time">
                     <time datetime="{{ event.iso }}">{{ event.time if event.time else 'Dia todo' }}</time>
@@ -175,7 +175,10 @@ permalink: /index.html
             <li>
               <a class="link{% if link.highlight %} link--highlight{% endif %}" href="{{ link.url }}" target="_blank" rel="noopener noreferrer">
                 {%- if link.iconData %}{{ icon(link.iconData) }}{% endif %}
-                <span class="link__label">{{ link.label }}</span>
+                <span class="link__text">
+                  <span class="link__label">{{ link.label }}</span>
+                  {%- if link.description %}<span class="link__description">{{ link.description }}</span>{% endif %}
+                </span>
               </a>
             </li>
             {%- endfor %}
