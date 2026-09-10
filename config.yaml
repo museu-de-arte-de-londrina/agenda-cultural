@@ -24,24 +24,24 @@ events:
     kind: Ação Educativa
     image: assets/eventos/programa-museu-educativo-4.webp
     url: https://visite.museus.gov.br/20a-primavera-dos-museus/atendimento-pelo-programa-museu-educativo/
-    description: Contação de histórias do livro “A mão livre do vovô”, visita mediada e atividade
-      arte-educativa. Para alunos da Escola Municipal Corina Mantovan.
+    description: Contação de histórias do livro “A mão livre do vovô”, visita mediada e atividade arte-educativa.
+      Para alunos da Escola Municipal Corina Mantovan.
   - title: '“A Riqueza de um patrimônio em movimento: por dentro da vida e da coleção Vladimir Kozák”'
     start: 2026-09-21T11:00
     end: 2026-09-25T17:00
     kind: Exposição
     image: assets/eventos/a-riqueza-de-um-patrimonio-em-movimento-por-.webp
     url: https://visite.museus.gov.br/20a-primavera-dos-museus/a-riqueza-de-um-patrimonio-em-movimento-por-dentro-da-vida-e-da-colecao-vladimir-kozak/
-    description: Acervo do Museu Paranaense sobre Vladimir Kozák (1897–1979), ligado à história do
-      Norte do Paraná e aos povos indígenas.
+    description: Acervo do Museu Paranaense sobre Vladimir Kozák (1897–1979), ligado à história do Norte
+      do Paraná e aos povos indígenas.
   - title: Exposição Gira Mundo
     start: 2026-09-21T11:00
     end: 2026-09-27T17:00
     kind: Exposição
     image: assets/eventos/exposicao-gira-mundo.webp
     url: https://visite.museus.gov.br/20a-primavera-dos-museus/exposicao-gira-mundo/
-    description: 22 obras do acervo, entre telas, gravuras e esculturas de 18 artistas, que
-      rememoram as mostras do período de restauro do prédio.
+    description: 22 obras do acervo, entre telas, gravuras e esculturas de 18 artistas, que rememoram
+      as mostras do período de restauro do prédio.
   - title: Apresentação de Taiko
     start: 2026-09-21T19:00
     end: 2026-09-21T20:00
@@ -55,8 +55,8 @@ events:
     kind: Abertura
     image: assets/eventos/abertura-da-programacao-local-da-20a-primave.webp
     url: https://visite.museus.gov.br/20a-primavera-dos-museus/abertura-oficial-da-programacao-local-da-20a-primavera-dos-museus/
-    description: Sessão de abertura com representantes do Museu de Arte, do Museu do Café/Sesc
-      Cadeião e do Museu Histórico de Londrina/UEL.
+    description: Sessão de abertura com representantes do Museu de Arte, do Museu do Café/Sesc Cadeião
+      e do Museu Histórico de Londrina/UEL.
   - title: Mostra de curta-metragens
     start: 2026-09-21T21:00
     end: 2026-09-21T22:00
@@ -85,48 +85,39 @@ events:
     kind: Teatro
     image: assets/eventos/espetaculo-teatral-mundus-euridice.webp
     url: https://visite.museus.gov.br/20a-primavera-dos-museus/espetaculo-teatral-mundus-euridice/
-    description: Duas cientistas nadam pelo cosmos atrás de rastros de uma memória de amor,
-      revisitando o mito de Orfeu e Eurídice.
+    description: Duas cientistas nadam pelo cosmos atrás de rastros de uma memória de amor, revisitando
+      o mito de Orfeu e Eurídice.
   - title: Programa Museu Educativo
     start: 2026-09-24T14:00
     end: 2026-09-24T15:30
     kind: Ação Educativa
     image: assets/eventos/programa-museu-educativo-3.webp
     url: https://visite.museus.gov.br/20a-primavera-dos-museus/atendimento-programa-museu-educativo/
-    description: Contação de histórias do livro “Perigo na Floresta”, visita mediada e atividade
-      arte-educativa. Para alunos da Escola Ateliê de Artes.
+    description: Contação de histórias do livro “Perigo na Floresta”, visita mediada e atividade arte-educativa.
+      Para alunos da Escola Ateliê de Artes.
   - title: Show musical “Novo Caminho”
     start: 2026-09-24T16:00
     end: 2026-09-24T17:30
     kind: Show Musical
     image: assets/eventos/show-musical-novo-caminho.webp
     url: https://visite.museus.gov.br/20a-primavera-dos-museus/show-musical-novo-caminho/
-    description: Choro com composições de artistas locais, pelo projeto Novo Caminho de Regional
-      Simplicidade.
+    description: Choro com composições de artistas locais, pelo projeto Novo Caminho de Regional Simplicidade.
   - title: '“BRISA: Saraus Artísticos 6ª Temporada”'
     start: 2026-09-24T18:00
     end: 2026-09-24T20:00
     kind: Sarau
     image: assets/eventos/brisa-saraus-artisticos-6a-temporada.webp
     url: https://visite.museus.gov.br/20a-primavera-dos-museus/brisa-saraus-artisticos-6a-temporada/
-    description: Sarau com apresentações e atividades culturais junto a pessoas em situação de rua
-      ou acolhimento institucional.
+    description: Sarau com apresentações e atividades culturais junto a pessoas em situação de rua ou
+      acolhimento institucional.
   - title: Programa Museu Educativo
     start: 2026-09-25T10:00
     end: 2026-09-25T11:30
     kind: Ação Educativa
     image: assets/eventos/programa-museu-educativo-2.webp
     url: https://visite.museus.gov.br/20a-primavera-dos-museus/programa-museu-educativo/
-    description: Contação de histórias do livro “Perigo na Floresta”, visita mediada e atividade
-      arte-educativa. Para alunos da Escola Municipal Profª Tereza Canhadas Bertan.
-  - title: Programa Museu Educativo
-    start: 2026-09-25T14:00
-    end: 2026-09-25T15:30
-    kind: Ação Educativa
-    image: assets/eventos/programa-museu-educativo.webp
-    url: https://visite.museus.gov.br/20a-primavera-dos-museus/programa-museu-educativo-2/
-    description: Contação de histórias do livro “Perigo na Floresta”, visita mediada e atividade
-      arte-educativa. Para alunos da Escola Municipal Profª Tereza Canhadas Bertan.
+    description: Contação de histórias do livro “Perigo na Floresta”, visita mediada e atividade arte-educativa.
+      Para alunos da Escola Municipal Profª Tereza Canhadas Bertan.
 links:
   - label: Programação oficial no Londrina Cultura
     url: https://londrinacultura.londrina.pr.gov.br/espaco/1/
