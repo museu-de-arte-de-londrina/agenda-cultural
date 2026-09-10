@@ -6,7 +6,6 @@ lang: pt-BR
 
 profile:
   name: Museu de Arte de Londrina
-  tagline: Programação, exposições e canais oficiais do museu.
   handle: "@museudeartedelondrina"
   handle_url: https://www.instagram.com/museudeartedelondrina/
   avatar: assets/museu-33-anos.webp
