@@ -327,6 +327,11 @@ Se preferir versionar o domínio junto com o código, crie um arquivo
 - **Os textos da interface são fixos em português.** `lang` muda o atributo do
   `<html>`, mas o skip link e os rótulos de navegação continuam em pt-BR.
   Traduzi-los exige editar `src/index.njk`. i18n de verdade está fora do escopo.
+- **O mínimo de Performance no CI é 80, não 95.** A nota composta depende da
+  CPU disponível na hora da medição: nesta base o `benchmarkIndex` do próprio
+  relatório variou de 840 a 1506 entre execuções da mesma página, sem uma linha
+  de diferença, e a nota foi de 70 a 99 junto. As outras três categorias não
+  dependem de CPU e ficam em 95.
 - **A auditoria de `robots.txt` do Lighthouse é pulada de propósito.** Ela busca
   o arquivo com `fetch()` de dentro da página, e a CSP daqui usa
   `connect-src 'none'`. Um crawler de verdade pede direto ao servidor e não é

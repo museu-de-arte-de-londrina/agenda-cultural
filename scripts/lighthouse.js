@@ -20,9 +20,21 @@ import { servirSite } from './servir.js';
 
 const RAIZ = new URL('../_site/', import.meta.url).pathname;
 
-/** Lowest acceptable score per category, 0 to 100. */
+/**
+ * Nota mínima por categoria, de 0 a 100.
+ *
+ * Performance entra mais baixa de propósito. A nota composta depende da CPU
+ * disponível no momento da medição, e o próprio relatório expõe isso no
+ * benchmarkIndex, que nesta base variou de 840 a 1506 entre execuções da mesma
+ * página sem uma linha de diferença. Um limite de 95 ali reprovaria por ruído,
+ * e um limite que reprova sozinho ensina a ignorar a esteira. 80 continua
+ * pegando o que importa: uma imagem gigante, um script novo que trava a
+ * thread, uma fonte que passou a bloquear o render.
+ *
+ * As outras três não dependem de CPU e ficam onde o projeto se comprometeu.
+ */
 const MINIMOS = {
-  performance: 90,
+  performance: 80,
   accessibility: 95,
   'best-practices': 95,
   seo: 95,
