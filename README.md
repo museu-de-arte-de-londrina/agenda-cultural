@@ -316,6 +316,11 @@ Decisões que não são óbvias lendo o CSS:
 - **O accent também é cor de texto**, e um accent escuro fica ilegível no tema
   escuro. `lib/color.js` clareia ou escurece a cor preservando o matiz até
   passar em AA, então qualquer `theme.accent` continua legível nos dois temas.
+- **O botão de tema é ancorado no cartão, não na viewport.** Fixo no canto da
+  tela ele montava na borda arredondada do cartão em toda largura de celular —
+  ali o cartão ocupa quase toda a tela e não sobra canto livre. Dentro do
+  cartão ele sai de cena junto com o cabeçalho, o que é aceitável para um
+  controle que se ajusta uma vez.
 - **O fundo é a fachada do museu, fora de foco.** O desfoque está assado no
   arquivo (19 KB), não em `filter: blur()` — filtrar uma camada do tamanho da
   viewport faria o compositor refazer o borrão a cada scroll. Sobre a foto vai

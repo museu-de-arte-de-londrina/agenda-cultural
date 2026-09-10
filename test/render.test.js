@@ -237,6 +237,18 @@ test('o botão de tema começa escondido e traz os dois rótulos', async () => {
   assert.match(button[0], /aria-pressed="false"/);
 });
 
+test('o botão de tema fica dentro do frame, não solto sobre a página', async () => {
+  const html = await render('profile:\n  name: Museu\n');
+
+  // Fixo no canto da viewport ele montava na borda arredondada do cartão em
+  // qualquer largura de celular, e ficava lá cobrindo conteúdo o scroll todo.
+  const frame = html.slice(html.indexOf('<div class="frame">'));
+  assert.ok(frame.includes('id="theme-toggle"'), 'o botão precisa estar dentro do frame');
+
+  const antes = html.slice(0, html.indexOf('<div class="frame">'));
+  assert.ok(!antes.includes('id="theme-toggle"'), 'nada de botão solto antes do frame');
+});
+
 test('theme.mode fixo vira data-theme no html, e auto não', async () => {
   const escuro = await render('profile:\n  name: Museu\ntheme:\n  mode: dark\n');
   assert.match(escuro, /<html lang="pt-BR" data-theme="dark">/);

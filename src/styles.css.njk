@@ -169,11 +169,13 @@ body {
 
 /* ---------------------------------------------------------------- toggle -- */
 
+/* Anchored to the card, not to the viewport. Fixed to the corner of the
+   screen it straddled the card's rounded edge at every phone width, and being
+   fixed it stayed there covering content for the whole scroll. */
 .theme-toggle {
-  position: fixed;
-  top: 0.75rem;
-  right: 0.75rem;
-  z-index: 2;
+  position: absolute;
+  top: 0.625rem;
+  right: 0.625rem;
   display: grid;
   place-items: center;
   width: 2.75rem;
@@ -225,6 +227,7 @@ body {
 /* The one surface that lifts off the dot field. Everything inside it is flat
    by default, so the page has a single, readable elevation story. */
 .frame {
+  position: relative;
   width: 100%;
   max-width: 46rem;
   margin: 0 auto;
@@ -662,6 +665,11 @@ a.footer__inner:hover {
 
   .frame {
     padding: 1.75rem 1.75rem 1.5rem;
+  }
+
+  .theme-toggle {
+    top: 0.875rem;
+    right: 0.875rem;
   }
 
   .avatar {
