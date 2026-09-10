@@ -142,25 +142,63 @@ events:
 
   assert.ok(!html.includes('Evento que já passou'), 'evento encerrado não deveria aparecer');
 
-  const ordem = [...html.matchAll(/class="event__title">\s*([^<\n]+)/g)].map((m) => m[1].trim());
+  const ordem = [...html.matchAll(/class="entry__title">\s*(?:<a[^>]*>)?([^<\n]+)/g)].map((m) => m[1].trim());
   assert.deepEqual(ordem, ['Evento de 2098', 'Evento de 2099'], 'ordenado por data, não pela ordem do arquivo');
 
   assert.match(html, /<time datetime="2098-03-05T10:00">/);
-  assert.match(html, /class="event__kind">Oficina</);
+  assert.match(html, /class="entry__kind">Oficina</);
 });
 
-test('evento sem imagem ganha o ladrilho de data', async () => {
-  const html = await render('profile:\n  name: Museu\nevents:\n  - title: Sem foto\n    start: 2099-07-04\n');
+test('a data aparece uma vez por dia, não uma vez por evento', async () => {
+  const html = await render(`
+profile:
+  name: Museu
+events:
+  - title: Manhã
+    start: 2099-05-04T09:00
+  - title: Tarde
+    start: 2099-05-04T14:00
+  - title: Noite
+    start: 2099-05-04T20:00
+  - title: Outro dia
+    start: 2099-05-05T10:00
+`);
 
-  assert.ok(!html.includes('event__image'), 'não deveria inventar imagem');
-  assert.match(html, /event__tile-day">04</);
-  assert.match(html, /event__tile-month">JUL</);
+  // Três eventos no mesmo dia compartilham um único trilho de data.
+  assert.equal((html.match(/class="day__rail"/g) ?? []).length, 2, 'um trilho por dia');
+  assert.equal((html.match(/class="day__number">04</g) ?? []).length, 1, 'o dia 04 é impresso uma vez');
+  assert.equal((html.match(/class="entry__title"/g) ?? []).length, 4);
+});
+
+test('só o próximo evento mostra descrição, e é o único elevado', async () => {
+  const html = await render(`
+profile:
+  name: Museu
+events:
+  - title: Primeiro
+    start: 2099-05-04T09:00
+    description: Este texto deve aparecer.
+  - title: Segundo
+    start: 2099-05-04T14:00
+    description: Este texto não deve aparecer.
+`);
+
+  assert.equal((html.match(/entry--featured/g) ?? []).length, 1, 'um único destaque');
+  assert.ok(html.includes('Este texto deve aparecer.'));
+  assert.ok(!html.includes('Este texto não deve aparecer.'), 'descrição fora do destaque polui a lista');
+});
+
+test('temporada de vários dias diz até quando vai', async () => {
+  const html = await render(
+    'profile:\n  name: Museu\nevents:\n  - title: Mostra\n    start: 2099-05-04\n    end: 2099-05-20\n',
+  );
+  assert.match(html, /class="entry__until">até 20 de maio</);
 });
 
 test('agenda vazia mostra um aviso em vez de sumir', async () => {
   const html = await render('profile:\n  name: Museu\n');
   assert.match(html, /class="empty"/);
-  assert.ok(!html.includes('<ol class="events">'));
+  assert.ok(!html.includes('class="day__rail"'));
 });
 
 test('o título do evento é escapado como todo o resto', async () => {

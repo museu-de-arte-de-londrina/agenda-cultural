@@ -64,7 +64,7 @@ A superfície real é o `config.yaml` virando HTML. As defesas são:
 | Script injetado na página | CSP com `script-src 'self'`, sem `unsafe-inline` nem `unsafe-eval` | `<meta>` em `src/index.njk` |
 | Script de terceiro | Só existe um arquivo JS, próprio e versionado (`src/theme.js`) | `src/theme.js` |
 | Data forjada no YAML | Parse estrito de `AAAA-MM-DD[THH:MM]`, com rejeição de data de calendário impossível | `lib/datetime.js` |
-| Vazamento de IP do visitante para CDN | zero recursos externos; fontes do sistema, ícones embutidos | `src/styles.css.njk` |
+| Vazamento de IP do visitante para CDN | zero recursos externos; fonte hospedada no repositório, ícones embutidos | `src/styles.css.njk` |
 | Referrer vazando para o destino | `<meta name="referrer" content="no-referrer">` | `src/index.njk` |
 | Action comprometida por tag movida | actions pinadas por SHA completo | `.github/workflows/` |
 | Token com poder demais no CI | `permissions` mínimas por job; só o job de deploy tem `pages: write` | `.github/workflows/` |

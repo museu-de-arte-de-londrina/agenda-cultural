@@ -263,6 +263,7 @@ npm run build      # valida e gera o site em _site/
 | `lib/icons.js` | Resolução de ícones para dados de path SVG. |
 | `lib/color.js` | Contraste WCAG, para garantir AA sobre qualquer accent. |
 | `lib/datetime.js` | Datas dos eventos: parse, ordenação e formatação. |
+| `src/assets/fonts/` | Archivo (OFL), hospedada aqui. Nenhuma requisição sai para CDN de fonte. |
 | `scripts/validate-config.js` | O `npm run validate`. |
 | `test/` | Testes com `node:test`, sem framework. |
 
@@ -294,6 +295,25 @@ Se preferir versionar o domínio junto com o código, crie um arquivo
 - **A agenda é tão fresca quanto o último build.** É um site estático: sem
   rebuild, um evento encerrado continua na página. Daí o agendamento diário.
 
+## Notas de design
+
+Decisões que não são óbvias lendo o CSS:
+
+- **A agenda é agrupada por dia.** A data fica num trilho à esquerda e é
+  impressa uma vez por dia, não uma vez por evento — seis atividades no mesmo
+  dia imprimiam a mesma data seis vezes.
+- **Só o próximo evento é um cartão elevado.** O resto são linhas separadas por
+  fio de 1px. Catorze cartões idênticos deixam de ser hierarquia e viram ruído.
+- **Profundidade é uma escala de três níveis**, com sombra tingida do ink da
+  paleta e um filete de luz no topo das superfícies elevadas. Só o frame, o
+  destaque e o botão de tema sobem; o resto fica plano.
+- **O accent também é cor de texto**, e um accent escuro fica ilegível no tema
+  escuro. `lib/color.js` clareia ou escurece a cor preservando o matiz até
+  passar em AA, então qualquer `theme.accent` continua legível nos dois temas.
+- **A tipografia usa uma família só** (Archivo, variável) para títulos,
+  horários e o trilho de data; o texto corrido fica na pilha do sistema, que
+  não custa download.
+
 ## Segurança e acessibilidade
 
 Detalhe completo em [SECURITY.md](SECURITY.md). Em resumo:
@@ -306,7 +326,7 @@ Detalhe completo em [SECURITY.md](SECURITY.md). Em resumo:
   `script-src 'self'`, sem `unsafe-inline` e sem `unsafe-eval`
   ([limitações do `<meta>`](SECURITY.md#limitação-conhecida-csp-por-meta));
 - links externos sempre com `rel="noopener noreferrer"`;
-- zero recursos externos: sem CDN, sem Google Fonts, sem analytics;
+- zero recursos externos: sem CDN, sem analytics, e a fonte é servida do próprio repositório;
 - actions pinadas por SHA, `permissions` mínimas por job, Dependabot e
   `npm audit` no CI;
 - HTML semântico, contraste AA calculado, foco visível, navegação por teclado

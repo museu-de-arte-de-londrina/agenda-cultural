@@ -38,13 +38,14 @@ permalink: /index.html
     {%- if site.profile.avatar %}
     <link rel="icon" href="{{ site.profile.avatar }}">
     {%- endif %}
+    <link rel="preload" href="assets/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="styles.css">
     {#- Not deferred: it applies the saved theme before the first paint. -#}
     <script src="theme.js"></script>
   </head>
 
   <body>
-    {%- if site.events.length %}
+    {%- if site.agenda.length %}
     <a class="skip-link" href="#agenda">Pular para a agenda</a>
     {%- elif site.links.length %}
     <a class="skip-link" href="#links">Pular para os links</a>
@@ -70,6 +71,9 @@ permalink: /index.html
         <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
       </svg>
     </button>
+
+    {#- The dot field sits behind everything and never takes a pointer. -#}
+    <div class="backdrop" aria-hidden="true"></div>
 
     <div class="frame">
       <header class="profile">
@@ -111,52 +115,57 @@ permalink: /index.html
       </header>
 
       <main>
-        <section class="section" id="agenda" aria-labelledby="agenda-title">
-          <h2 class="section__title" id="agenda-title">Agenda</h2>
+        <section class="agenda" id="agenda" aria-labelledby="agenda-title">
+          <h2 class="agenda__title" id="agenda-title">Programação</h2>
 
-          {%- if site.events.length %}
-          <ol class="events">
-            {%- for event in site.events %}
-            <li>
-              <article class="event">
-                <div class="event__media">
-                  {%- if event.image %}
-                  <img class="event__image" src="{{ event.image }}" width="96" height="96" alt="" loading="lazy" decoding="async">
-                  {%- else %}
-                  <p class="event__tile" aria-hidden="true">
-                    <span class="event__tile-day">{{ event.tile.day }}</span>
-                    <span class="event__tile-month">{{ event.tile.month }}</span>
-                  </p>
-                  {%- endif %}
-                </div>
+          {%- if site.agenda.length %}
+          {%- for day in site.agenda %}
+          <section class="day" aria-label="{{ day.heading.full }}">
+            <p class="day__rail">
+              <span class="day__weekday">{{ day.heading.weekday }}</span>
+              <span class="day__number">{{ day.heading.day }}</span>
+              <span class="day__month">{{ day.heading.month }}</span>
+            </p>
 
-                <div class="event__body">
-                  <p class="event__when">
-                    <time datetime="{{ event.iso }}">{{ event.when.date }}</time>
-                    {%- if event.when.time %}<span class="event__time">{{ event.when.time }}</span>{% endif %}
+            <ol class="day__entries">
+              {%- for event in day.events %}
+              <li class="entry{% if event.featured %} entry--featured{% endif %}">
+                <div class="entry__text">
+                  <p class="entry__time">
+                    <time datetime="{{ event.iso }}">{{ event.time if event.time else 'Dia todo' }}</time>
                   </p>
-                  <h3 class="event__title">
+                  <h3 class="entry__title">
                     {%- if event.url -%}
-                    <a class="event__link" href="{{ event.url }}" target="_blank" rel="noopener noreferrer">{{ event.title }}</a>
+                    <a class="entry__link" href="{{ event.url }}" target="_blank" rel="noopener noreferrer">{{ event.title }}</a>
                     {%- else -%}
                     {{ event.title }}
                     {%- endif -%}
                   </h3>
-                  {%- if event.kind %}<p class="event__kind">{{ event.kind }}</p>{% endif %}
-                  {%- if event.description %}<p class="event__description">{{ event.description }}</p>{% endif %}
+                  <p class="entry__meta">
+                    {%- if event.kind %}<span class="entry__kind">{{ event.kind }}</span>{% endif %}
+                    {%- if event.runsUntil %}<span class="entry__until">até {{ event.runsUntil }}</span>{% endif %}
+                  </p>
+                  {%- if event.featured and event.description %}
+                  <p class="entry__description">{{ event.description }}</p>
+                  {%- endif %}
                 </div>
-              </article>
-            </li>
-            {%- endfor %}
-          </ol>
+
+                {%- if event.image %}
+                <img class="entry__image" src="{{ event.image }}" width="96" height="96" alt="" loading="lazy" decoding="async">
+                {%- endif %}
+              </li>
+              {%- endfor %}
+            </ol>
+          </section>
+          {%- endfor %}
           {%- else %}
-          <p class="empty">Nenhum evento publicado no momento. Confira os canais oficiais abaixo para a programação atual.</p>
+          <p class="empty">Nenhum evento publicado no momento. Os canais oficiais abaixo têm a programação atual.</p>
           {%- endif %}
         </section>
 
         {%- if site.links.length %}
-        <section class="section" id="links" aria-labelledby="links-title">
-          <h2 class="section__title" id="links-title">Mais informações</h2>
+        <section class="more" id="links" aria-labelledby="links-title">
+          <h2 class="more__title" id="links-title">Onde mais encontrar o museu</h2>
           <ul class="links">
             {%- for link in site.links %}
             <li>

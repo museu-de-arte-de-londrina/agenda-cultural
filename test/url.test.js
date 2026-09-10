@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 
 import { parseSafeUrl, parseImageSource, ALLOWED_URL_PROTOCOLS } from '../schema/config.schema.js';
-import { contrastRatio, bestContrast } from '../lib/color.js';
+import { contrastRatio, bestContrast, readableOn } from '../lib/color.js';
 
 const DANGEROUS = [
   'javascript:alert(1)',
@@ -52,6 +52,26 @@ test('parseImageSource aceita caminho relativo e https, e nada mais', () => {
   assert.equal(parseImageSource('javascript:alert(1)'), null);
   assert.equal(parseImageSource('data:image/svg+xml,<svg onload=alert(1)>'), null);
   assert.equal(parseImageSource('..\\..\\windows\\system32'), null, 'barra invertida');
+});
+
+test('o accent vira texto legível em qualquer tema', () => {
+  const surfaces = { claro: '#f5f8fc', escuro: '#121c2f' };
+
+  for (const accent of ['#004080', '#106070', '#a4343a', '#000000', '#ffffff', '#fde047']) {
+    for (const [nome, surface] of Object.entries(surfaces)) {
+      const texto = readableOn(surface, accent, nome === 'escuro' ? '#e9eff8' : '#0c1220');
+      assert.ok(
+        contrastRatio(surface, texto) >= 4.5,
+        `${accent} no tema ${nome} virou ${texto}, abaixo de AA`,
+      );
+    }
+  }
+});
+
+test('um accent que já é legível não é alterado', () => {
+  // Mexer numa cor que já passa só afastaria a página da marca.
+  assert.equal(readableOn('#ffffff', '#004080', '#000000'), '#004080');
+  assert.equal(readableOn('#121c2f', '#70b0e0', '#ffffff'), '#70b0e0');
 });
 
 test('contraste: os fundos escolhidos para o accent passam em AA', () => {
