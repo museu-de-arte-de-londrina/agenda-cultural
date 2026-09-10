@@ -129,7 +129,7 @@ events:
     description: Contação de História baseada no livro “Perigo na Floresta”, de Cláudia Rezende Barbeiro,
       Visita Mediada às exposições e à edificação, e Atividade Arte-Educativa para alunos da Escola…
 links:
-  - label: Programação e visitação
+  - label: Programação oficial no Londrina Cultura
     url: https://londrinacultura.londrina.pr.gov.br/espaco/1/
     icon: website
 
@@ -137,24 +137,15 @@ links:
     url: https://portal.londrina.pr.gov.br/espacos-culturais/museu-arte-sec-cultura
     icon: link
 
-  - label: Instagram do museu
-    url: https://www.instagram.com/museudeartedelondrina/
-    icon: instagram
 
-  - label: Fale conosco no WhatsApp
-    url: https://wa.me/554333716607
-    icon: whatsapp
 
-  - label: Vídeos no Londrina Cultura
-    url: https://www.youtube.com/@LondrinaCultura
-    icon: youtube
 
 
   - label: Notícias do museu no blog da Prefeitura
     url: https://blog.londrina.pr.gov.br/?s=museu+de+arte
     icon: link
 
-  - label: Secretaria Municipal de Cultura
+  - label: Instagram da Secretaria Municipal de Cultura
     url: https://www.instagram.com/secretariadeculturalondrina/
     icon: instagram
 

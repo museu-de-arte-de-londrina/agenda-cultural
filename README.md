@@ -164,6 +164,11 @@ Três comportamentos que valem saber:
 
 Links secundários, abaixo da agenda, na ordem em que aparecem.
 
+Um link que aponta para o mesmo endereço de um ícone de `social` mostra o
+mesmo destino duas vezes na página. `npm run validate` avisa quando isso
+acontece — avisa, não quebra: um ícone mais um botão em destaque é uma
+escolha legítima.
+
 | Campo | Tipo | Obrigatório | Default | Descrição |
 | --- | --- | --- | --- | --- |
 | `label` | texto, até 80 | **sim** | — | Texto do botão. |
