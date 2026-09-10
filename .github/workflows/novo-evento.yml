@@ -11,16 +11,57 @@ permissions:
   contents: read
 
 jobs:
+  # Só automatiza para quem já tem acesso de escrita. O repositório é público e
+  # qualquer pessoa pode abrir issue; de terceiros isso vira um pedido para
+  # alguém ler, nunca uma alteração no repositório.
+  #
+  # A conferência olha a permissão real do repositório, e não o
+  # author_association do payload: quem tem participação privada na organização
+  # aparece ali como CONTRIBUTOR, e a automação recusava a própria equipe.
+  conferir:
+    name: Conferir quem pediu
+    runs-on: ubuntu-latest
+    if: contains(github.event.issue.labels.*.name, 'evento')
+
+    permissions:
+      contents: read
+      issues: write
+
+    outputs:
+      pode: ${{ steps.acesso.outputs.pode }}
+
+    steps:
+      - name: Ler a permissão de quem abriu a issue
+        id: acesso
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          AUTOR: ${{ github.event.issue.user.login }}
+          REPO: ${{ github.repository }}
+        run: |
+          nivel=$(gh api "repos/$REPO/collaborators/$AUTOR/permission" --jq .permission) || nivel=nenhum
+          echo "Acesso de $AUTOR ao repositório: $nivel"
+          case "$nivel" in
+            admin | maintain | write) echo 'pode=true' >> "$GITHUB_OUTPUT" ;;
+            *) echo 'pode=false' >> "$GITHUB_OUTPUT" ;;
+          esac
+
+      # Sem isso, quem preenche o formulário de fora fica esperando uma
+      # resposta que nunca chega.
+      - name: Avisar que o pedido vai para revisão
+        if: steps.acesso.outputs.pode != 'true' && github.event.action != 'edited'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE: ${{ github.event.issue.number }}
+          REPO: ${{ github.repository }}
+        run: |
+          gh issue comment "$ISSUE" --repo "$REPO" --body \
+            'Recebemos o pedido. A publicação automática vale só para quem cuida do repositório, então alguém da equipe do museu confere os dados e publica. Não precisa fazer mais nada por aqui.'
+
   publicar:
     name: Transformar a issue em proposta
     runs-on: ubuntu-latest
-
-    # Só automatiza para quem já tem acesso de escrita. O repositório é
-    # público e qualquer pessoa pode abrir issue; de terceiros isso vira um
-    # pedido para alguém ler, nunca uma alteração no repositório.
-    if: >-
-      contains(github.event.issue.labels.*.name, 'evento') &&
-      contains(fromJSON('["OWNER", "MEMBER", "COLLABORATOR"]'), github.event.issue.author_association)
+    needs: conferir
+    if: needs.conferir.outputs.pode == 'true'
 
     permissions:
       contents: write
