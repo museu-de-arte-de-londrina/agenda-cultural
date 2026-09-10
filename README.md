@@ -75,6 +75,11 @@ vira um pedido para alguém ler, nunca uma alteração automática.
 Editar o `config.yaml` na mão continua funcionando, e é o caminho para mexer em
 qualquer coisa que não seja evento.
 
+O [`MANUTENCAO.md`](MANUTENCAO.md) descreve esse ciclo inteiro passo a passo,
+para quem cuida da programação e não mexe em código: o que acontece depois que a
+issue é enviada, como acrescentar a foto, como cancelar um evento e por que os
+que já passaram somem sozinhos.
+
 ## Referência do `config.yaml`
 
 Campos sem "obrigatório" podem ser omitidos: o default entra no lugar.
