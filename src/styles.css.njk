@@ -548,10 +548,28 @@ h1 {
   text-underline-offset: 0.15em;
 }
 
-/* Sem sobreposição cobrindo o cartão: dois alvos clicáveis empilhados são
-   difíceis de acertar no toque e confusos no leitor de tela, que anunciava a
-   linha inteira como um link só. O título leva ao evento, o botão salva no
-   calendário, e cada um tem a própria área. */
+/* O cartão inteiro abre o evento: a camada do título cobre a área toda, então
+   qualquer ponto funciona, não só as duas linhas do texto.
+
+   O botão de calendário sobe acima dessa camada e continua recebendo o próprio
+   clique. Ele tem 48px de lado, então é alvo de sobra, ao contrário do link de
+   texto miúdo que ocupava esse papel antes. No DOM os dois são irmãos, e não um
+   dentro do outro, então o leitor de tela encontra dois links distintos. */
+.entry__link::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+
+.entry__calendar {
+  position: relative;
+  z-index: 1;
+}
+
+/* O cartão é um botão grande, e o cursor precisa dizer isso em toda a área. */
+.entry {
+  cursor: pointer;
+}
 
 /* Space alone separates the two parts. A rule or a dot between them lands at
    the start of a line whenever the row wraps, which it does on a phone. */
@@ -571,6 +589,9 @@ h1 {
 }
 
 .entry__media {
+  /* A coluna da mídia vem depois no DOM e pinta acima da camada do link, então
+     sem isto o clique em cima da foto não chegava a lugar nenhum. */
+  pointer-events: none;
   overflow: hidden;
   width: var(--media);
   height: var(--media);

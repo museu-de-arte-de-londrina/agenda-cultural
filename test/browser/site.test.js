@@ -103,6 +103,35 @@ test('todo alvo de toque cabe num polegar', async () => {
   }
 });
 
+test('o cartão inteiro do evento é clicável', async () => {
+  // Varre o cartão numa grade em vez de conferir uns poucos pontos: o buraco
+  // que existia ficava justamente sobre a foto, que uma amostra rala não pega.
+  for (const largura of [320, 390, 1280]) {
+    const { contexto, pagina } = await abrir({ largura, altura: 900 });
+    const resultado = await pagina.evaluate(() => {
+      const cartao = document.querySelector('.entry');
+      const caixa = cartao.getBoundingClientRect();
+      const contagem = { evento: 0, calendario: 0, morto: 0 };
+
+      for (let x = caixa.left + 4; x < caixa.right - 4; x += 12) {
+        for (let y = caixa.top + 4; y < caixa.bottom - 4; y += 10) {
+          const alvo = document.elementFromPoint(x, y);
+          const link = alvo && alvo.closest('a');
+          if (!link) contagem.morto += 1;
+          else if (link.classList.contains('entry__calendar')) contagem.calendario += 1;
+          else contagem.evento += 1;
+        }
+      }
+      return contagem;
+    });
+
+    assert.equal(resultado.morto, 0, `${largura}px tem ponto do cartão que não leva a lugar nenhum`);
+    assert.ok(resultado.evento > 0, 'o cartão precisa abrir o evento');
+    assert.ok(resultado.calendario > 0, 'o botão de calendário precisa continuar recebendo o próprio clique');
+    await contexto.close();
+  }
+});
+
 test('nenhuma área clicável fica por cima de outra', async () => {
   // Dois links empilhados são difíceis de acertar no toque e o leitor de tela
   // anuncia a região errada.

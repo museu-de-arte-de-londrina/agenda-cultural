@@ -363,12 +363,15 @@ Decisões que não são óbvias lendo o CSS:
   a página com JavaScript desligado para conferir.
 - **Compartilhar usa a folha do sistema quando ela existe** e copia o endereço
   quando não existe. Faltando os dois, o botão nem aparece.
-- **Nenhuma área clicável fica por cima de outra.** O cartão do evento já teve
-  uma sobreposição que o tornava inteiro clicável, com o botão de calendário
-  dentro dela. Dois alvos empilhados são difíceis de acertar no toque e o
-  leitor de tela anunciava a linha inteira como um link só. Hoje o título leva
-  ao evento e o botão salva no calendário, cada um com a própria área, e há
-  teste que reprova qualquer clicável dentro de outro.
+- **O cartão inteiro do evento é clicável**, e o botão de calendário fica acima
+  dessa camada com a própria área. No DOM os dois são irmãos, e não um dentro
+  do outro, então o leitor de tela encontra dois links distintos e há teste que
+  reprova qualquer clicável aninhado. O botão tem 48px de lado, alvo de sobra,
+  ao contrário do link de texto miúdo que ocupava esse papel antes.
+- **A foto deixa o clique passar.** A coluna da mídia vem depois no DOM e pinta
+  acima da camada do link, então clicar em cima da foto não levava a lugar
+  nenhum. O teste varre o cartão numa grade de centenas de pontos justamente
+  porque uma amostra rala não pegava esse buraco.
 - **O botão de calendário do evento é só o ícone.** Com rótulo em texto, cada
   cartão ganhava uma linha inteira e a agenda voltava a caber um evento por
   tela de celular. O rótulo vai no `aria-label`, e o alvo continua com 44px.
