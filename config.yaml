@@ -127,6 +127,13 @@ events:
     url: https://visite.museus.gov.br/20a-primavera-dos-museus/programa-museu-educativo-2/
     description: Contação de histórias do livro “Perigo na Floresta”, visita mediada e atividade
       arte-educativa. Para alunos da Escola Municipal Profª Tereza Canhadas Bertan.
+  - title: Evento de Teste
+    start: 2026-09-11T12:00
+    end: 2026-09-11T16:00
+    kind: Oficina
+    image: assets/eventos/evento-de-teste-202609111200.png
+    url: https://google.com
+    description: Breve descrição blablablablablabla
 links:
   - label: Programação oficial no Londrina Cultura
     url: https://londrinacultura.londrina.pr.gov.br/espaco/1/
