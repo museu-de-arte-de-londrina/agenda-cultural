@@ -401,6 +401,9 @@ h1 {
    sombra própria. */
 .horario {
   width: 100%;
+  /* Teto só no celular, onde a linha inteira encostaria nas duas bordas. Em
+     tela grande ele sai (veja o bloco responsivo) e o horário passa a ocupar a
+     largura do cartão, no mesmo alinhamento das linhas da agenda logo abaixo. */
   max-width: 24rem;
   margin-top: 0.125rem;
   padding-top: 0.75rem;
@@ -794,13 +797,6 @@ h1 {
 
 /* ---------------------------------------------------------------- footer -- */
 
-.updated {
-  margin: 1.5rem 0 0;
-  font-size: 0.75rem;
-  color: var(--muted);
-  text-align: center;
-}
-
 .footer {
   margin-top: 1rem;
   padding-top: 1.125rem;
@@ -887,6 +883,20 @@ h1 {
   .avatar {
     width: 5rem;
     height: 5rem;
+  }
+
+  .horario {
+    max-width: none;
+    padding-top: 0.875rem;
+  }
+
+  .horario__faixa {
+    padding: 0.4375rem 0;
+  }
+
+  .horario__dias,
+  .horario__hora {
+    font-size: 0.9375rem;
   }
 
   .day {
