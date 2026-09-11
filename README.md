@@ -82,7 +82,12 @@ repositório é público e qualquer pessoa pode abrir issue; vindo de fora, ela
 vira um pedido para alguém ler, nunca uma alteração automática.
 
 Editar o `config.yaml` na mão continua funcionando, e é o caminho para mexer em
-qualquer coisa que não seja evento.
+qualquer coisa que não seja evento. Um erro de digitação ali não derruba o site:
+a validação recusa o arquivo antes de publicar, a página no ar continua a de
+antes, e o workflow `avisar-erro-no-config` abre uma issue em português dizendo
+a linha e como arrumar, fechando sozinha quando o arquivo volta ao normal. Esse
+aviso pode ser testado sem quebrar nada, pelo botão **Run workflow** com a opção
+de simular marcada.
 
 O [`MANUTENCAO.md`](MANUTENCAO.md) descreve esse ciclo inteiro passo a passo,
 para quem cuida da programação e não mexe em código: o que acontece depois que a

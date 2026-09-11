@@ -9,6 +9,7 @@ import { z } from 'zod';
 import { parse as parseYaml } from 'yaml';
 import { resolveIcon, GENERIC_ICON_NAMES } from '../lib/icons.js';
 import { parseDateTime, toDate } from '../lib/datetime.js';
+import { explicarErroDeYaml } from '../lib/yaml-erro.js';
 
 /** URL schemes allowed anywhere in config.yaml. */
 export const ALLOWED_URL_PROTOCOLS = Object.freeze(['https:', 'mailto:', 'tel:']);
@@ -22,8 +23,8 @@ const CONTROL_CHARS = /[\u0000-\u001F\u007F]/;
 
 /** Thrown for any config problem; carries a message meant for a human. */
 export class ConfigError extends Error {
-  constructor(message) {
-    super(message);
+  constructor(message, options) {
+    super(message, options);
     this.name = 'ConfigError';
   }
 }
@@ -415,7 +416,11 @@ export async function loadConfigFile(filePath) {
   try {
     parsed = parseYaml(raw);
   } catch (error) {
-    throw new ConfigError(`${source} não é YAML válido:\n  ${error.message}`);
+    // Traduzido em vez de repassado: quem edita este arquivo cuida da
+    // programação do museu, e o texto do parser não diz o que fazer.
+    throw new ConfigError(`${source} está com um erro de digitação.\n\n${explicarErroDeYaml(error, raw)}`, {
+      cause: error,
+    });
   }
 
   return parseConfig(parsed, { source });

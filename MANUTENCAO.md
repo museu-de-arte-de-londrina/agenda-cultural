@@ -226,6 +226,12 @@ nova em vez de usar a que ele guardou.
 título e horário de início com o que já está na agenda, avisa na issue e não
 escreve nada.
 
+**Escrevi algo errado no `config.yaml` e o site parou de atualizar.** Isso é
+esperado e não quebra nada: a verificação recusa o arquivo antes de publicar, e
+a página no ar continua a de antes. Uma issue chamada **O config.yaml está com
+um erro** abre sozinha, em português, dizendo a linha e como arrumar. Corrija a
+linha citada e salve; a issue fecha sozinha.
+
 **Está tudo vermelho na aba Actions.** Abra a linha mais recente e leia a última
 mensagem. Se não fizer sentido, o `SECURITY.md` explica como pedir ajuda.
 

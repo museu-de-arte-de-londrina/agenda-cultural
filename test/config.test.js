@@ -237,7 +237,10 @@ test('loadConfigFile reporta arquivo ausente e YAML quebrado', async () => {
 
     const broken = join(dir, 'broken.yaml');
     await writeFile(broken, 'profile:\n  name: "sem fechar\n   - [\n');
-    await assert.rejects(() => loadConfigFile(broken), /não é YAML válido/);
+    // A mensagem é traduzida para quem edita o arquivo e não programa; a
+    // tradução em si tem os próprios testes em test/yaml-erro.test.js.
+    await assert.rejects(() => loadConfigFile(broken), /está com um erro de digitação/);
+    await assert.rejects(() => loadConfigFile(broken), /a página no ar continua a de antes/);
 
     const good = join(dir, 'good.yaml');
     await writeFile(good, 'profile:\n  name: Ada\nlinks:\n  - label: Site\n    url: https://example.com/\n');
