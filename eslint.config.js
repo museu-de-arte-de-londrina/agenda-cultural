@@ -14,6 +14,7 @@ export default [
         TextEncoder: 'readonly',
         fetch: 'readonly',
         Response: 'readonly',
+        URLSearchParams: 'readonly',
       },
     },
     rules: {
@@ -37,8 +38,8 @@ export default [
     },
   },
   {
-    // The only file that runs in a browser instead of in Node.
-    files: ['src/theme.js', 'src/compartilhar.js'],
+    // Os arquivos que rodam no navegador, e não no Node.
+    files: ['src/theme.js', 'src/compartilhar.js', 'src/calendario.js'],
     languageOptions: {
       ecmaVersion: 2019,
       sourceType: 'script',
@@ -50,6 +51,7 @@ export default [
         location: 'readonly',
         setTimeout: 'readonly',
         clearTimeout: 'readonly',
+        Array: 'readonly',
       },
     },
     rules: {

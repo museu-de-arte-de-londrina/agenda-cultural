@@ -103,6 +103,7 @@ export default function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy('src/CNAME');
   eleventyConfig.addPassthroughCopy('src/theme.js');
   eleventyConfig.addPassthroughCopy('src/compartilhar.js');
+  eleventyConfig.addPassthroughCopy('src/calendario.js');
 
   return {
     dir: {

@@ -516,8 +516,13 @@ h1 {
   gap: 0.75rem;
 }
 
+/* O <summary> nasce com um triângulo e com display: list-item. Os dois saem:
+   aqui ele tem que parecer o botão que já era, e o estado aberto ou fechado
+   quem conta é o menu que aparece embaixo. */
 .entry__calendar {
   display: grid;
+  list-style: none;
+  cursor: pointer;
   place-items: center;
   width: var(--media);
   height: var(--media);
@@ -686,14 +691,86 @@ h1 {
   inset: 0;
 }
 
-.entry__calendar {
+.entry__calendar::-webkit-details-marker {
+  display: none;
+}
+
+/* Sobe acima da camada que faz o cartão inteiro abrir o evento, senão o clique
+   no botão abriria o evento em vez do menu.
+
+   A caixa do <details> é quadrada e a do botão é arredondada, então sobra uma
+   lasca em cada canto. Sem o pointer-events, essa lasca ficava por cima da
+   camada do cartão e virava o único ponto do evento que não levava a lugar
+   nenhum. Transparente ao ponteiro, ela devolve o clique ao cartão; quem
+   recebe são os filhos. */
+.entry__cal {
   position: relative;
   z-index: 1;
+  pointer-events: none;
+}
+
+.entry__cal > * {
+  pointer-events: auto;
+}
+
+/* Ancorado pela direita: o botão fica na beirada do cartão, e um menu que
+   crescesse para a direita sairia da tela no celular. */
+/* O display fica no estado aberto, e não aqui. Declarado solto, ele passava
+   por cima do que o navegador usa para esconder o conteúdo de um <details>
+   fechado, e o menu continuava ocupando caixa mesmo invisível. */
+.entry__cal-menu {
+  position: absolute;
+  top: calc(100% + 0.375rem);
+  right: 0;
+  z-index: 2;
+  min-width: 10.5rem;
+  padding: 0.25rem;
+  border: 1px solid var(--border);
+  border-radius: 0.625rem;
+  background: var(--surface);
+  box-shadow: var(--shadow-2), var(--ring);
+}
+
+.entry__cal[open] > .entry__cal-menu {
+  display: grid;
+}
+
+/* 2,75rem de piso: são os 44px de alvo de toque que o resto da página
+   respeita, e o menu é justamente o que se usa com o polegar. */
+.entry__cal-item {
+  display: flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0.375rem 0.625rem;
+  border-radius: 0.4375rem;
+  color: var(--text);
+  font-size: 0.875rem;
+  text-align: left;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.entry__cal-item:hover {
+  color: var(--accent-text);
+  background: var(--surface-hover);
+}
+
+/* Aberto, o botão fica marcado: sem isso, com dois cartões na tela, não dá
+   para saber de qual evento é o menu que está aberto. */
+.entry__cal[open] > .entry__calendar {
+  color: var(--accent-text);
+  border-color: var(--accent-text);
+  background: var(--surface-hover);
 }
 
 /* O cartão é um botão grande, e o cursor precisa dizer isso em toda a área. */
 .entry {
   cursor: pointer;
+}
+
+/* O menu passa por cima dos cartões vizinhos, e não por baixo. */
+.entry:has(.entry__cal[open]) {
+  z-index: 3;
 }
 
 /* Space alone separates the two parts. A rule or a dot between them lands at
@@ -1011,6 +1088,16 @@ h1 {
      different amounts, which is what makes it read as depth. */
   .entry:hover .entry__media {
     transform: perspective(900px) translateZ(14px) scale(1.03);
+  }
+
+  /* Com o menu de calendário aberto, o cartão para de inclinar. Um transform
+     cria contexto de empilhamento, e dentro dele nenhum z-index do menu
+     alcança o cartão seguinte: o menu era cortado ao meio pelo evento de
+     baixo. Parar a inclinação também é o certo visualmente, porque um menu
+     de leitura não deveria estar tombado junto com o cartão. */
+  .entry:has(.entry__cal[open]):hover,
+  .entry:has(.entry__cal[open]):hover .entry__media {
+    transform: none;
   }
 
   /* The link already runs the scroll-driven `lift` animation, and an animation

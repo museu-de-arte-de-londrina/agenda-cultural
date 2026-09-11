@@ -17,6 +17,7 @@ import {
   wallClockNow,
 } from '../../lib/datetime.js';
 import { slugify } from '../../lib/slug.js';
+import { googleCalendarUrl, outlookCalendarUrl } from '../../lib/calendar-links.js';
 
 const DEFAULT_CONFIG = new URL('../../config.yaml', import.meta.url);
 
@@ -66,12 +67,14 @@ function absoluteUrl(source, baseUrl) {
  * each entry only has to say what time it starts.
  */
 function buildAgenda(config, now) {
+  const local = { location: config.profile.location };
   const upcoming = config.events
     .map((event) => {
       // Already validated by the schema, so these parses cannot fail.
       const start = parseDateTime(event.start);
       const end = event.end ? parseDateTime(event.end) : null;
       const when = formatEventWhen(start, end, config.lang);
+      const comDatas = { ...event, start, end };
       return {
         ...event,
         start,
@@ -79,6 +82,10 @@ function buildAgenda(config, now) {
         slug: slugify(event.title, event.start),
         iso: toIsoString(start),
         time: when.time,
+        // Os dois calendários de navegador mais usados por aqui. Quem usa
+        // outro continua tendo o arquivo .ics no mesmo menu.
+        googleUrl: googleCalendarUrl(comDatas, local),
+        outlookUrl: outlookCalendarUrl(comDatas, local),
         // A season spanning several days says so; a one-off does not repeat itself.
         runsUntil: end && !isSameDay(start, end) ? formatShortDate(end, config.lang) : null,
         startsAt: toDate(start).getTime(),

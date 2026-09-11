@@ -314,12 +314,34 @@ direto pelo `actions/deploy-pages`, sem branch `gh-pages`.
 
 ## Calendário
 
-Cada evento publica um arquivo `.ics` próprio, e a agenda inteira publica um
-feed em `agenda.ics` que pode ser assinado num aplicativo de calendário.
+O botão de cada evento abre um menu com três caminhos: Google Agenda, Outlook e
+baixar o arquivo. Os dois primeiros levam direto para a tela de novo evento já
+preenchida, que é o que resolve para quem usa calendário no navegador; o
+arquivo continua ali para Apple Calendar e para qualquer outro aplicativo.
+
+O menu é um `<details>`, então abre, fecha e anda pelo teclado sem script. O
+`calendario.js` só acrescenta fechar ao clicar fora, fechar no Esc e fechar o
+anterior quando outro abre.
+
+Os endereços do Google e do Outlook ficam em atributo `href` e só saem do
+navegador quando alguém clica. Nada é carregado desses domínios ao abrir a
+página, e a CSP continua em `default-src 'self'`.
+
+Fora do menu, cada evento publica um arquivo `.ics` próprio, e a agenda inteira
+publica um feed em `agenda.ics` que pode ser assinado num aplicativo de
+calendário.
 
 Os horários levam o fuso do local em vez de serem convertidos para UTC: 19:00
 continua 19:00 para quem está na porta do museu, não importa o que o celular
-da pessoa ache do assunto.
+da pessoa ache do assunto. As mesmas regras de data valem para os três
+caminhos, escritas uma vez em `lib/calendar.js` e espelhadas em
+`lib/calendar-links.js`: se o arquivo e o link discordassem sobre quando o
+evento começa, o visitante teria duas respostas para a mesma pergunta.
+
+Evento com hora de início e sem hora de término é o único ponto em que eles
+divergem, por imposição de fora: o `.ics` omite o fim e deixa cada aplicativo
+decidir, enquanto o Google e o Outlook exigem os dois lados, e ali ele recebe
+uma hora de duração.
 
 ## Dados estruturados
 

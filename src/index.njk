@@ -72,6 +72,9 @@ permalink: /index.html
     <script src="theme.js"></script>
     {#- Com defer: nada aqui precisa acontecer antes da primeira pintura. -#}
     <script src="compartilhar.js" defer></script>
+    {%- if site.agenda.length %}
+    <script src="calendario.js" defer></script>
+    {%- endif %}
     {%- if site.structuredData %}
     {#- A data block, not executable script: CSP script-src does not apply. -#}
     <script type="application/ld+json">{{ site.structuredData | safe }}</script>
@@ -256,15 +259,27 @@ permalink: /index.html
                       <img class="entry__image" src="{{ event.image }}" width="256" height="256" alt="" loading="lazy" decoding="async">
                     </div>
                     {%- endif %}
-                    {#- Só o ícone, com rótulo no aria-label: com texto, cada cartão
-                        ganhava uma linha inteira e a agenda voltava a caber um
-                        evento por tela de celular. -#}
-                    <a
-                      class="entry__calendar"
-                      href="eventos/{{ event.slug }}.ics"
-                      download
-                      aria-label="Adicionar “{{ event.title }}” ao calendário"
-                    >{{ calendarIcon() }}</a>
+                    {#- <details> e não um menu montado por script: assim o
+                        botão funciona com JavaScript desligado, que é a regra
+                        do resto da página. O script só acrescenta fechar ao
+                        clicar fora e ao apertar Esc.
+
+                        Só o ícone no botão, com o rótulo no aria-label: com
+                        texto, cada cartão ganhava uma linha inteira e a agenda
+                        voltava a caber um evento por tela de celular. -#}
+                    <details class="entry__cal">
+                      <summary
+                        class="entry__calendar"
+                        aria-label="Adicionar “{{ event.title }}” ao calendário"
+                      >{{ calendarIcon() }}</summary>
+                      <div class="entry__cal-menu" role="group" aria-label="Adicionar ao calendário">
+                        <a class="entry__cal-item" href="{{ event.googleUrl }}" target="_blank" rel="noopener noreferrer">Google Agenda</a>
+                        <a class="entry__cal-item" href="{{ event.outlookUrl }}" target="_blank" rel="noopener noreferrer">Outlook</a>
+                        {#- Apple Calendar e o resto: o arquivo continua sendo o
+                            caminho que funciona em qualquer aplicativo. -#}
+                        <a class="entry__cal-item" href="eventos/{{ event.slug }}.ics" download>Baixar o arquivo</a>
+                      </div>
+                    </details>
                   </div>
 
                 </article>

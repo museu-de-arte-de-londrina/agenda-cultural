@@ -130,9 +130,11 @@ test('o cartão inteiro do evento é clicável', async () => {
         for (let x = caixa.left + 4; x < caixa.right - 4; x += 12) {
           for (let y = topo; y < base; y += 10) {
             const alvo = document.elementFromPoint(x, y);
-            const link = alvo && alvo.closest('a');
-            if (!link) contagem.morto += 1;
-            else if (link.classList.contains('entry__calendar')) contagem.calendario += 1;
+            // summary junto de a: o botão de calendário abre um menu em vez de
+            // navegar, mas continua sendo um controle, e não um ponto morto.
+            const controle = alvo && alvo.closest('a, summary');
+            if (!controle) contagem.morto += 1;
+            else if (controle.classList.contains('entry__calendar')) contagem.calendario += 1;
             else contagem.evento += 1;
           }
         }
