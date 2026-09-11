@@ -183,6 +183,16 @@ events:
     description: Muito Hip Hop "pé vermelho" com o DJ Mister Rei. A apresentação faz parte do
       projeto "Hip Hopé" Londrina/Promic - Promove batalhas competitivas nas modalidades de MCs,
       Breaking, Open Style e Tag.
+  - title: AULA ABERTA Cotidiano, o reflexo da vida urbana.
+    start: 2026-09-19T10:00
+    end: 2026-09-19T11:00
+    kind: Oficina
+    image: assets/eventos/aula-aberta-cotidiano-o-reflexo-da-vida-urbana-202609191000.webp
+    url: https://blog.londrina.pr.gov.br/?p=205956
+    description: "Projeto A Rua Dança, Dança a Cidade/Promic: oficinas de Dança de Rua (Hip-Hop)
+      para crianças, adolescentes, jovens e adultos, com conteúdos técnicos, históricos e
+      lúdicos. Promove integração entre gerações, com aulas, workshops e apresentações,
+      culminando no espetáculo “COTIDIANO”."
 links:
   - label: Programação oficial no Londrina Cultura
     url: https://londrinacultura.londrina.pr.gov.br/espaco/1/
