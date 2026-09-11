@@ -29,33 +29,33 @@ theme:
 # Agenda. Eventos que já terminaram somem sozinhos no próximo build.
 events:
   - title: Programa Museu Educativo
-    start: 2026-09-21T09:00
-    end: 2026-09-21T10:00
+    start: 2026-09-12T09:00
+    end: 2026-12-30T10:00
     kind: Ação Educativa
     image: assets/eventos/programa-museu-educativo-4.webp
     url: https://visite.museus.gov.br/20a-primavera-dos-museus/atendimento-pelo-programa-museu-educativo/
     description: Contação de histórias do livro “A mão livre do vovô”, visita mediada e atividade
       arte-educativa. Para alunos da Escola Municipal Corina Mantovan.
   - title: '“A Riqueza de um patrimônio em movimento: por dentro da vida e da coleção Vladimir Kozák”'
-    start: 2026-09-21T11:00
-    end: 2026-09-25T17:00
+    start: 2026-09-12T11:00
+    end: 2026-12-30T17:00
     kind: Exposição
     image: assets/eventos/a-riqueza-de-um-patrimonio-em-movimento-por-.webp
     url: https://visite.museus.gov.br/20a-primavera-dos-museus/a-riqueza-de-um-patrimonio-em-movimento-por-dentro-da-vida-e-da-colecao-vladimir-kozak/
     description: Acervo do Museu Paranaense sobre Vladimir Kozák (1897–1979), ligado à história do
       Norte do Paraná e aos povos indígenas.
   - title: Exposição Gira Mundo
-    start: 2026-09-21T11:00
-    end: 2026-09-27T17:00
+    start: 2026-09-12T11:00
+    end: 2026-12-30T17:00
     kind: Exposição
     image: assets/eventos/exposicao-gira-mundo.webp
     url: https://visite.museus.gov.br/20a-primavera-dos-museus/exposicao-gira-mundo/
     description: 22 obras do acervo, entre telas, gravuras e esculturas de 18 artistas, que
       rememoram as mostras do período de restauro do prédio.
-  - title: Apresentação de Taiko
+  - title: Apresentação de Taiko - 20° Primavera dos Museus
     start: 2026-09-21T19:00
     end: 2026-09-21T20:00
-    kind: Show Musical
+    kind: Show Musical - 20° Primavera dos Museus
     image: assets/eventos/apresentacao-de-taiko.webp
     url: https://visite.museus.gov.br/20a-primavera-dos-museus/apresentacao-de-taiko/
     description: Tambores japoneses, pelo 22º Londrina Matsuri – Festival da Primavera.
@@ -67,21 +67,21 @@ events:
     url: https://visite.museus.gov.br/20a-primavera-dos-museus/abertura-oficial-da-programacao-local-da-20a-primavera-dos-museus/
     description: Sessão de abertura com representantes do Museu de Arte, do Museu do Café/Sesc
       Cadeião e do Museu Histórico de Londrina/UEL.
-  - title: Mostra de curta-metragens
+  - title: Mostra de curta-metragens - 20° Primavera dos Museus
     start: 2026-09-21T21:00
     end: 2026-09-21T22:00
     kind: Exibição de Filme
     image: assets/eventos/mostra-de-curta-metragens.webp
     url: https://visite.museus.gov.br/20a-primavera-dos-museus/mostra-de-curta-metragens/
     description: Sessão de curtas exibida pelo 28º Festival Kinoarte de Cinema.
-  - title: Estúdio de Rádio Móvel
+  - title: Estúdio de Rádio Móvel - 20° Primavera dos Museus
     start: 2026-09-22T14:00
     end: 2026-09-22T17:00
     kind: Oficina
     image: assets/eventos/estudio-de-radio-movel.webp
     url: https://visite.museus.gov.br/20a-primavera-dos-museus/estudio-de-radio-movel/
     description: Oficina de criação e produção de podcast, pelo projeto AlmA Londrina Rádio Web.
-  - title: Roda de conversa “Os desafios dos museus na contemporaneidade”
+  - title: Roda de conversa “Os desafios dos museus na contemporaneidade” - 20° Primavera dos Museus
     start: 2026-09-23T09:00
     end: 2026-09-23T11:00
     kind: Ação Educativa
@@ -89,7 +89,7 @@ events:
     url: https://visite.museus.gov.br/20a-primavera-dos-museus/museu-em-audio-um-guia-inclusivo-sobre-a-historia-de-londrina/
     description: Conversa aberta sobre inclusão, acessibilidade, diversidade e novas tecnologias nos
       museus. Ação formativa do projeto Museu em Áudio.
-  - title: Espetáculo teatral “Mundus Eurídice”
+  - title: Espetáculo teatral “Mundus Eurídice” - 20° Primavera dos Museus
     start: 2026-09-23T19:30
     end: 2026-09-23T21:00
     kind: Teatro
@@ -97,7 +97,7 @@ events:
     url: https://visite.museus.gov.br/20a-primavera-dos-museus/espetaculo-teatral-mundus-euridice/
     description: Duas cientistas nadam pelo cosmos atrás de rastros de uma memória de amor,
       revisitando o mito de Orfeu e Eurídice.
-  - title: Programa Museu Educativo
+  - title: Programa Museu Educativo - 20° Primavera dos Museus
     start: 2026-09-24T14:00
     end: 2026-09-24T15:30
     kind: Ação Educativa
@@ -105,7 +105,7 @@ events:
     url: https://visite.museus.gov.br/20a-primavera-dos-museus/atendimento-programa-museu-educativo/
     description: Contação de histórias do livro “Perigo na Floresta”, visita mediada e atividade
       arte-educativa. Para alunos da Escola Ateliê de Artes.
-  - title: Show musical “Novo Caminho”
+  - title: Show musical “Novo Caminho” - 20° Primavera dos Museus
     start: 2026-09-24T16:00
     end: 2026-09-24T17:30
     kind: Show Musical
@@ -113,7 +113,7 @@ events:
     url: https://visite.museus.gov.br/20a-primavera-dos-museus/show-musical-novo-caminho/
     description: Choro com composições de artistas locais, pelo projeto Novo Caminho de Regional
       Simplicidade.
-  - title: '“BRISA: Saraus Artísticos 6ª Temporada”'
+  - title: '“BRISA: Saraus Artísticos 6ª Temporada”'- 20° Primavera dos Museus
     start: 2026-09-24T18:00
     end: 2026-09-24T20:00
     kind: Sarau
@@ -121,7 +121,7 @@ events:
     url: https://visite.museus.gov.br/20a-primavera-dos-museus/brisa-saraus-artisticos-6a-temporada/
     description: Sarau com apresentações e atividades culturais junto a pessoas em situação de rua
       ou acolhimento institucional.
-  - title: Programa Museu Educativo
+  - title: Programa Museu Educativo - 20° Primavera dos Museus
     start: 2026-09-25T10:00
     end: 2026-09-25T11:30
     kind: Ação Educativa
@@ -129,7 +129,7 @@ events:
     url: https://visite.museus.gov.br/20a-primavera-dos-museus/programa-museu-educativo/
     description: Contação de histórias do livro “Perigo na Floresta”, visita mediada e atividade
       arte-educativa. Para alunos da Escola Municipal Profª Tereza Canhadas Bertan.
-  - title: Programa Museu Educativo
+  - title: Programa Museu Educativo - 20° Primavera dos Museus
     start: 2026-09-25T14:00
     end: 2026-09-25T15:30
     kind: Ação Educativa
@@ -201,7 +201,7 @@ events:
     description: "Projeto Circo Livre: oficinas de práticas circenses/Promic - Promove aprendizagem,
       criação artística e formação cidadã por meio de aulas gratuitas de técnicas circenses para
       a comunidade da zona norte, ministradas pelo coletivo Hiber Circus"
-  - title: Show Novo Caminho com Regional Simplicidade - Primavera dos Museus
+  - title: Show Novo Caminho com Regional Simplicidade - 20° Primavera dos Museus
     start: 2026-09-24T16:00
     end: 2026-09-24T17:00
     kind: Show Musical
@@ -212,7 +212,7 @@ events:
       lança seu primeiro álbum, “Amizade”, celebrando o Choro e a música instrumental
       brasileira.
 links:
-  - label: Programação oficial no Londrina Cultura
+  - label: Programação Londrina Cultura
     url: https://londrinacultura.londrina.pr.gov.br/espaco/1/
     icon: website
   - label: O museu no portal da Prefeitura
