@@ -201,6 +201,16 @@ events:
     description: "Projeto Circo Livre: oficinas de práticas circenses/Promic - Promove aprendizagem,
       criação artística e formação cidadã por meio de aulas gratuitas de técnicas circenses para
       a comunidade da zona norte, ministradas pelo coletivo Hiber Circus"
+  - title: Show Novo Caminho com Regional Simplicidade - Primavera dos Museus
+    start: 2026-09-24T16:00
+    end: 2026-09-24T17:00
+    kind: Show Musical
+    image: assets/eventos/show-novo-caminho-com-regional-simplicidade-prim-202609241600.webp
+    url: https://www.instagram.com/regionalsimplicidade_amizade/
+    description: O Regional Simplicidade é um grupo de Choro de Londrina, formado em 2025. Com
+      repertório que une clássicos e autorais, homenageia grandes mestres do gênero. Em 2026,
+      lança seu primeiro álbum, “Amizade”, celebrando o Choro e a música instrumental
+      brasileira.
 links:
   - label: Programação oficial no Londrina Cultura
     url: https://londrinacultura.londrina.pr.gov.br/espaco/1/
