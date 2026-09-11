@@ -299,14 +299,6 @@ permalink: /index.html
       </main>
 
       <footer class="footer">
-        {%- if site.updatedAt %}
-        {#- Dentro do rodapé porque ele é landmark: solto entre main e footer,
-            este parágrafo ficava fora de qualquer região da página. -#}
-        <p class="updated">
-          Programação atualizada em <time datetime="{{ site.updatedAt.iso }}">{{ site.updatedAt.label }}</time>
-        </p>
-        {%- endif %}
-
       {%- if site.footer %}
       {%- set footerTag = 'a' if site.footer.url else 'div' %}
         <{{ footerTag }} class="footer__inner"{% if site.footer.url %} href="{{ site.footer.url }}" target="_blank" rel="noopener noreferrer"{% endif %}>

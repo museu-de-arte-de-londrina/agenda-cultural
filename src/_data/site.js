@@ -2,9 +2,6 @@
  * Eleventy global data: reads config.yaml at build time, validates it, and
  * derives everything the template needs. A throw here fails the build.
  */
-import { execFile } from 'node:child_process';
-import { promisify } from 'node:util';
-
 import { loadConfigFile } from '../../schema/config.schema.js';
 import { resolveIcon } from '../../lib/icons.js';
 import { bestContrast, contrastRatio, readableOn } from '../../lib/color.js';
@@ -18,7 +15,6 @@ import {
   formatShortDate,
   isSameDay,
   wallClockNow,
-  TIMEZONE,
 } from '../../lib/datetime.js';
 import { slugify } from '../../lib/slug.js';
 
@@ -163,49 +159,6 @@ function structuredData(config, agenda) {
   return JSON.stringify(entidades).replace(/</g, '\\u003c').replace(/>/g, '\\u003e').replace(/&/g, '\\u0026');
 }
 
-/**
- * When the programming itself was last edited, taken from the last commit that
- * touched config.yaml.
- *
- * Not the build date: the site rebuilds on a daily schedule, so a build stamp
- * would claim the agenda was updated today no matter how old it is. A visitor
- * deciding whether to trust the page needs the date of the content, not of
- * the deploy. Returns null outside a git checkout, and the line is dropped.
- */
-async function programmingUpdatedAt() {
-  try {
-    const { stdout } = await promisify(execFile)(
-      'git',
-      ['log', '-1', '--format=%cI', '--', 'config.yaml'],
-      { cwd: new URL('../../', import.meta.url) },
-    );
-    return stdout.trim() || null;
-  } catch {
-    return null;
-  }
-}
-
-/**
- * @param {string|null} iso
- * @param {string} locale
- * @returns {{iso: string, label: string} | null}
- */
-function formatUpdatedAt(iso, locale) {
-  if (!iso) return null;
-  const date = new Date(iso);
-  if (Number.isNaN(date.getTime())) return null;
-  return {
-    iso,
-    // The venue's clock, so a late-evening edit does not show tomorrow's date.
-    label: new Intl.DateTimeFormat(locale, {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric',
-      timeZone: TIMEZONE,
-    }).format(date),
-  };
-}
-
 export default async function site() {
   // Read at call time, not import time, so tests can point at a fixture.
   const config = await loadConfigFile(process.env.CONFIG_FILE ?? DEFAULT_CONFIG);
@@ -217,7 +170,6 @@ export default async function site() {
     initials: initials(config.profile.name),
     agenda,
     structuredData: structuredData(config, agenda),
-    updatedAt: formatUpdatedAt(await programmingUpdatedAt(), config.lang),
     links: config.links.map((link) => ({ ...link, iconData: link.icon ? resolveIcon(link.icon) : null })),
     social: config.social.map((entry) => ({ ...entry, iconData: resolveIcon(entry.platform) })),
     canonical: config.seo.base_url ?? null,
