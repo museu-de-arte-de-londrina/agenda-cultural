@@ -110,18 +110,35 @@ test('o cartão inteiro do evento é clicável', async () => {
     const { contexto, pagina } = await abrir({ largura, altura: 900 });
     const resultado = await pagina.evaluate(() => {
       const cartao = document.querySelector('.entry');
-      const caixa = cartao.getBoundingClientRect();
       const contagem = { evento: 0, calendario: 0, morto: 0 };
+      const tela = window.innerHeight;
 
-      for (let x = caixa.left + 4; x < caixa.right - 4; x += 12) {
-        for (let y = caixa.top + 4; y < caixa.bottom - 4; y += 10) {
-          const alvo = document.elementFromPoint(x, y);
-          const link = alvo && alvo.closest('a');
-          if (!link) contagem.morto += 1;
-          else if (link.classList.contains('entry__calendar')) contagem.calendario += 1;
-          else contagem.evento += 1;
+      // Em faixas, rolando entre uma e outra: elementFromPoint só responde por
+      // coordenada que está na tela, e devolve null para o resto. Um cartão com
+      // descrição longa passa da altura da janela em tela estreita, e varrer a
+      // altura inteira de uma vez contava como ponto morto tudo o que estava
+      // abaixo da dobra, sem que houvesse buraco nenhum ali.
+      const inicio = cartao.getBoundingClientRect().top + window.scrollY;
+      const altura = cartao.getBoundingClientRect().height;
+
+      for (let faixa = 0; faixa < altura; faixa += tela) {
+        window.scrollTo(0, inicio + faixa);
+        const caixa = cartao.getBoundingClientRect();
+        const topo = Math.max(caixa.top + 4, 0);
+        const base = Math.min(caixa.bottom - 4, tela);
+
+        for (let x = caixa.left + 4; x < caixa.right - 4; x += 12) {
+          for (let y = topo; y < base; y += 10) {
+            const alvo = document.elementFromPoint(x, y);
+            const link = alvo && alvo.closest('a');
+            if (!link) contagem.morto += 1;
+            else if (link.classList.contains('entry__calendar')) contagem.calendario += 1;
+            else contagem.evento += 1;
+          }
         }
       }
+
+      window.scrollTo(0, 0);
       return contagem;
     });
 
