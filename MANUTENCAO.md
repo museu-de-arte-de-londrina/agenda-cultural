@@ -82,8 +82,10 @@ A automação baixa essa imagem e guarda junto com o site, então a miniatura
 continua funcionando mesmo que a foto saia do ar na origem, e o navegador de
 quem visita a agenda não precisa buscar nada em servidor de terceiro.
 
-Aceita JPG, PNG e WebP, até 5 MB. Uma imagem de 800 pixels de largura já é mais
-que suficiente para a miniatura.
+Aceita JPG, PNG e WebP, até 5 MB. Pode mandar a foto como ela saiu do celular:
+a automação reduz e reconverte antes de guardar, então você não precisa mexer na
+imagem antes. Uma que chegou com 1,9 MB foi para o site com 155 kB, sem
+diferença visível no cartão.
 
 Se o endereço não devolver uma imagem, se a foto passar do limite de peso ou se
 o link for privado, nada é publicado e a automação comenta na issue explicando o

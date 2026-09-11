@@ -69,8 +69,10 @@ certo, fecha a issue. O fechamento é o gesto que manda publicar. Aí uma
 automação confere os dados, reconstrói o site para garantir que o evento não
 quebra a página, escreve no `config.yaml` e publica, cerca de um minuto do
 fechamento até o ar. A foto do evento pode ser arrastada para dentro do
-formulário: a automação baixa a imagem e guarda no repositório, em vez de deixar
-a página do museu dependendo de um servidor de terceiro. Se algum campo estiver
+formulário: a automação baixa a imagem, reduz para no máximo 1200 pixels de
+largura, reconverte para WebP e guarda no repositório, em vez de deixar a página
+do museu dependendo de um servidor de terceiro. Quem preenche pode mandar a foto
+como ela saiu da câmera. Se algum campo estiver
 errado, nada é publicado e ela comenta na própria issue dizendo o quê.
 
 Fechar por **Close as not planned** recusa o pedido sem publicar nada.

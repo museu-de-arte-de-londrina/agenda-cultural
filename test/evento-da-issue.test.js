@@ -1,9 +1,12 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { mkdtemp, readFile, rm } from 'node:fs/promises';
+import { existsSync } from 'node:fs';
+import { execFile } from 'node:child_process';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import process from 'node:process';
+import { promisify } from 'node:util';
 
 import {
   parseIssueForm,
@@ -179,7 +182,71 @@ test('recusa foto que não seja https', () => {
   assert.equal(extrairUrlDaFoto('tenho uma foto mas não sei o link'), null);
 });
 
-test('baixa a foto e devolve o caminho relativo', async (t) => {
+/** O mesmo ffmpeg de que o baixarFoto depende. Sem ele, o teste não tem o que provar. */
+async function temFfmpeg() {
+  try {
+    await promisify(execFile)('ffmpeg', ['-version']);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+test('reduz a foto grande para WebP, dentro do limite de largura', async (t) => {
+  if (!(await temFfmpeg())) {
+    t.skip('ffmpeg não está nesta máquina');
+    return;
+  }
+
+  const pasta = await mkdtemp(path.join(tmpdir(), 'fotos-'));
+  process.env.PASTA_FOTOS = pasta;
+  const original = globalThis.fetch;
+  t.after(async () => {
+    delete process.env.PASTA_FOTOS;
+    globalThis.fetch = original;
+    await rm(pasta, { recursive: true, force: true });
+  });
+
+  // Uma foto de câmera, no espírito: larga demais e em PNG, que é o formato
+  // que chegou duas vezes pelo formulário.
+  const fonte = path.join(pasta, 'camera.png');
+  await promisify(execFile)('ffmpeg', [
+    '-v', 'error', '-y',
+    '-f', 'lavfi', '-i', 'testsrc=size=2400x1600:duration=1:rate=1',
+    '-frames:v', '1',
+    fonte,
+  ]);
+  const entrada = await readFile(fonte);
+
+  globalThis.fetch = async () =>
+    new Response(new Uint8Array(entrada), { headers: { 'content-type': 'image/png' } });
+
+  const caminho = await baixarFoto('https://exemplo.org/camera.png', {
+    title: 'Coral',
+    start: '2026-10-03T14:00',
+  });
+
+  assert.equal(caminho, 'assets/eventos/coral-202610031400.webp', 'o PNG vira webp no config.yaml');
+
+  const arquivo = path.join(pasta, 'coral-202610031400.webp');
+  const gravado = await readFile(arquivo);
+  // RIFF....WEBP: prova que o arquivo é webp de verdade, e não o PNG renomeado.
+  assert.equal(gravado.subarray(0, 4).toString('latin1'), 'RIFF');
+  assert.equal(gravado.subarray(8, 12).toString('latin1'), 'WEBP');
+  assert.ok(gravado.byteLength < entrada.byteLength, 'tinha que ficar menor que o original');
+
+  const { stdout } = await promisify(execFile)('ffprobe', [
+    '-v', 'error', '-select_streams', 'v:0',
+    '-show_entries', 'stream=width', '-of', 'csv=p=0',
+    arquivo,
+  ]);
+  assert.equal(Number(stdout.trim()), 1200, 'a largura é limitada, e não o que a câmera mandou');
+
+  // O arquivo de trabalho não pode ficar para trás na pasta do site.
+  assert.equal(existsSync(`${arquivo}.original`), false);
+});
+
+test('sem ffmpeg, guarda o arquivo como veio em vez de barrar a publicação', async (t) => {
   const pasta = await mkdtemp(path.join(tmpdir(), 'fotos-'));
   process.env.PASTA_FOTOS = pasta;
   t.after(async () => {
@@ -199,6 +266,7 @@ test('baixa a foto e devolve o caminho relativo', async (t) => {
     start: '2026-10-03T14:00',
   });
 
+  // Três bytes não são imagem nenhuma, então o ffmpeg recusa e cai no plano B.
   assert.equal(caminho, 'assets/eventos/oficina-de-gravura-202610031400.webp');
   const gravado = await readFile(path.join(pasta, 'oficina-de-gravura-202610031400.webp'));
   assert.deepEqual([...gravado], [1, 2, 3], 'o arquivo chegou inteiro');

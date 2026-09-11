@@ -11,8 +11,10 @@
  * The result is validated against the same schema the site build uses, so an
  * event that would break the page is rejected here instead of on main.
  */
-import { readFile, writeFile, mkdir } from 'node:fs/promises';
+import { readFile, writeFile, mkdir, rm, stat } from 'node:fs/promises';
+import { execFile } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { promisify } from 'node:util';
 import path from 'node:path';
 import process from 'node:process';
 import YAML from 'yaml';
@@ -35,6 +37,15 @@ const TIPOS_DE_IMAGEM = {
 
 /** Acima disso a miniatura não vale o que custa no celular de quem visita. */
 const PESO_MAXIMO = 5 * 1024 * 1024;
+
+/**
+ * Largura máxima da miniatura guardada.
+ *
+ * O cartão do evento mostra a foto num quadrado de 4rem, 64 pixels. 1200
+ * cobre com folga qualquer tela densa e ainda serve se o cartão crescer um
+ * dia, sem guardar os 4000 pixels que uma câmera de celular entrega.
+ */
+const LARGURA_MAXIMA = 1200;
 
 /** GitHub writes this into every field the person left empty. */
 const VAZIO = '_No response_';
@@ -180,6 +191,47 @@ export function montarEvento(campos) {
 }
 
 /**
+ * Reduz a imagem para WebP com no máximo LARGURA_MAXIMA de largura.
+ *
+ * Quem preenche o formulário manda a foto como ela saiu do celular, e é isso
+ * mesmo que se espera de quem cuida da programação e não de imagem. Duas
+ * chegaram assim em uma hora, uma de 545 kB e outra de 1,9 MB, cada uma
+ * pesando mais que a página inteira e segurando o carregamento no celular.
+ *
+ * Por ffmpeg e não por biblioteca: ele já vem instalado nas máquinas do
+ * GitHub Actions e evita acrescentar uma dependência nativa ao projeto só
+ * para isto. Se por algum motivo ele não estiver lá, a publicação não pode
+ * parar por causa disso: o original é guardado como veio, com um aviso.
+ *
+ * @param {Uint8Array} bytes
+ * @param {string} destino caminho do arquivo .webp a escrever
+ * @returns {Promise<boolean>} se a conversão aconteceu
+ */
+async function reduzir(bytes, destino) {
+  const entrada = `${destino}.original`;
+  await writeFile(entrada, bytes);
+  try {
+    await promisify(execFile)('ffmpeg', [
+      '-v', 'error',
+      '-y',
+      '-i', entrada,
+      // Só encolhe: uma foto menor que o limite passa sem ser esticada.
+      '-vf', `scale='min(${LARGURA_MAXIMA},iw)':-2`,
+      '-c:v', 'libwebp',
+      '-quality', '78',
+      '-compression_level', '6',
+      destino,
+    ]);
+    return true;
+  } catch (causa) {
+    console.error(`Não consegui reduzir a foto (${causa.message}). Guardando o arquivo como veio.`);
+    return false;
+  } finally {
+    await rm(entrada, { force: true });
+  }
+}
+
+/**
  * Baixa a foto para dentro do repositório. Guardar a imagem aqui, em vez de
  * apontar para o endereço de origem, evita que o navegador de quem visita a
  * agenda entregue o IP a um servidor de terceiro, e evita que o cartão quebre
@@ -216,12 +268,24 @@ export async function baixarFoto(url, evento) {
     throw new Error(`A foto tem ${mb} MB, e o limite é 5 MB. Reduza a imagem e envie de novo.`);
   }
 
-  const nome = `${slugify(evento.title, evento.start)}.${extensao}`;
+  const base = slugify(evento.title, evento.start);
   const pasta = process.env.PASTA_FOTOS ?? PASTA_FOTOS;
   await mkdir(pasta, { recursive: true });
-  await writeFile(path.join(pasta, nome), bytes);
 
-  console.log(`Foto guardada: src/assets/eventos/${nome} (${Math.round(bytes.byteLength / 1024)} kB)`);
+  const alvo = path.join(pasta, `${base}.webp`);
+  const reduziu = await reduzir(bytes, alvo);
+
+  let nome = `${base}.webp`;
+  if (!reduziu) {
+    // Sem ffmpeg, o arquivo sai com a extensão do que o servidor mandou.
+    nome = `${base}.${extensao}`;
+    await writeFile(path.join(pasta, nome), bytes);
+  }
+
+  const kB = Math.round((await stat(path.join(pasta, nome))).size / 1024);
+  const antes = Math.round(bytes.byteLength / 1024);
+  const nota = reduziu && antes > kB ? `, de ${antes} kB` : '';
+  console.log(`Foto guardada: src/assets/eventos/${nome} (${kB} kB${nota})`);
   return `assets/eventos/${nome}`;
 }
 

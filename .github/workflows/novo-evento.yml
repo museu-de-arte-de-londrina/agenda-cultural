@@ -105,6 +105,18 @@ jobs:
       - name: Install
         run: npm ci
 
+      # A foto que chega pelo formulário é reduzida com ffmpeg antes de entrar
+      # no repositório. A imagem do ubuntu-latest já traz ele, mas isso é
+      # promessa de terceiro: sem a garantia aqui, no dia em que mudarem a
+      # imagem o evento continuaria publicando, só que com a foto de 2 MB da
+      # câmera. Instala só quando falta, então no caso normal não custa nada.
+      - name: Garantir o ffmpeg
+        run: |
+          if ! command -v ffmpeg > /dev/null; then
+            sudo apt-get update && sudo apt-get install -y --no-install-recommends ffmpeg
+          fi
+          ffmpeg -version | head -1
+
       - name: Montar o evento a partir da issue
         id: montar
         continue-on-error: true
