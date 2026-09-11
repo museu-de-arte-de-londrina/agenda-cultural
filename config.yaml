@@ -165,6 +165,15 @@ events:
     description: 'Sábado de Cultura para TODA A FAMÍLIA. Além das exposições "Gira Mundo" e "A
       riqueza de um patrimônio em movimento: por dentro da vida e da coleção Vladmir Kozák"
       teremos um dia com muitos eventos em parceria com o "Dia da Sergipe".'
+  - title: AULA ABERTA DE MUSICALIZAÇÃO
+    start: 2026-09-17T15:00
+    end: 2026-09-17T17:00
+    kind: Oficina
+    image: assets/eventos/aula-aberta-de-musicalizacao-202609171500.webp
+    url: https://www.orquestrandoofuturo.com.br/
+    description: "Projeto Orquestrando o Futuro – oficinas e concertos – 3ª edição/Promic: voltado a
+      crianças de 6 a 11 anos da Rede Municipal de Ensino, sem experiência musical. Promove a
+      prática coletiva de instrumentos de cordas, com foco no folclore brasileiro e universal."
 links:
   - label: Programação oficial no Londrina Cultura
     url: https://londrinacultura.londrina.pr.gov.br/espaco/1/
