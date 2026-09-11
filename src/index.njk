@@ -247,6 +247,7 @@ permalink: /index.html
                   </h3>
                   <p class="entry__meta">
                     {%- if event.kind %}<span class="entry__kind">{{ event.kind }}</span>{% endif %}
+                    {%- if event.program %}<span class="entry__program">{{ event.program }}</span>{% endif %}
                     {%- if event.runsUntil %}<span class="entry__until">até {{ event.runsUntil }}</span>{% endif %}
                   </p>
                   {%- if event.description %}

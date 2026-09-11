@@ -134,7 +134,7 @@ export function jaTemEvento(eventos, evento) {
  * depois do download, e sem isto ela cairia no fim do bloco, diferente dos
  * eventos escritos à mão.
  */
-const ORDEM = ['title', 'start', 'end', 'kind', 'image', 'url', 'description'];
+const ORDEM = ['title', 'start', 'end', 'kind', 'program', 'image', 'url', 'description'];
 
 /**
  * @param {object} evento

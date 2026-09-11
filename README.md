@@ -179,6 +179,7 @@ hora e título.
 | `start` | `AAAA-MM-DD` ou `AAAA-MM-DDTHH:MM` | **sim** | (sem default) | Início. Data impossível (`2026-02-31`) quebra o build. |
 | `end` | mesmo formato | não | nenhum | Fim. Precisa ser depois do `start`. |
 | `kind` | texto, até 40 | não | nenhum | Etiqueta do tipo (Oficina, Exposição...). |
+| `program` | texto, até 60 | não | nenhum | Festival, temporada ou projeto de que o evento faz parte, como `20ª Primavera dos Museus`. Aparece em destaque ao lado do tipo. Use em vez de repetir o nome no título de cada evento. |
 | `image` | caminho ou URL `https://` | não | ladrilho com a data | Miniatura quadrada; 320×320 basta. |
 | `url` | URL `https:`, `mailto:` ou `tel:` | não | nenhum | Página do evento. Com ela, o cartão inteiro vira clicável. |
 | `description` | texto, até 300 | não | nenhum | Uma ou duas frases sobre o que acontece. Aparece em todos os eventos, então não repita o título. |

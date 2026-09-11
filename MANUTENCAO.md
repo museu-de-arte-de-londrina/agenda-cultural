@@ -111,6 +111,27 @@ files**, depois acrescente uma linha `image:` no bloco do evento:
 Repare que o caminho escrito no `config.yaml` começa em `assets/`, e não em
 `src/assets/`. O `src` fica de fora.
 
+## Vários eventos da mesma programação
+
+Quando uma semana inteira faz parte do mesmo festival, a vontade é escrever o
+nome dele no título de cada evento. Não faça isso: os títulos ficam longos e
+repetidos, e foi assim que o arquivo quebrou uma vez, porque o nome colou do
+lado de fora das aspas de um título.
+
+Existe um campo para isso. Acrescente uma linha `program:` no bloco do evento,
+logo abaixo do `kind:`:
+
+```yaml
+  - title: Apresentação de Taiko
+    start: 2026-09-21T19:00
+    end: 2026-09-21T20:00
+    kind: Show Musical
+    program: 20ª Primavera dos Museus
+```
+
+O nome aparece no cartão em destaque, ao lado do tipo de atividade, e repete
+igual em todos os eventos daquela programação.
+
 ## Os eventos somem sozinhos
 
 Você não precisa tirar nada da agenda depois que a data passa. O site publica só

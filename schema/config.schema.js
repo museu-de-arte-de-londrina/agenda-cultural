@@ -224,6 +224,11 @@ const eventSchema = z
       start: dateTimeField,
       end: dateTimeField.optional(),
       kind: text(40).optional(),
+      // O festival, temporada ou projeto de que o evento faz parte. Existe
+      // para não virar sufixo repetido no título: uma semana inteira dentro da
+      // mesma programação deixava nove títulos carregando as mesmas quatro
+      // palavras, e a linha de etiquetas do cartão já é o lugar disso.
+      program: text(60).optional(),
       image: imageField.optional(),
       url: urlField.optional(),
       description: text(300).optional(),
