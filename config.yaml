@@ -11,6 +11,16 @@ profile:
   handle_url: https://www.instagram.com/museudeartedelondrina/
   avatar: assets/museu-33-anos.webp
   avatar_shape: square
+  hero: assets/museu-hero.webp
+
+# Horário de funcionamento, mostrado logo abaixo dos ícones de contato.
+# `note` é a condição que não cabe no nome dos dias.
+hours:
+  - days: Terça a sexta
+    time: 11h às 17h
+  - days: 2 primeiros sábados do mês
+    time: 9h às 13h
+    note: a partir do 5º dia útil
 
 theme:
   mode: auto

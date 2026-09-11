@@ -106,11 +106,51 @@ Campos sem "obrigatório" podem ser omitidos: o default entra no lugar.
 | `profile.handle` | texto começando com `@` | não | nenhum | Arroba mostrada abaixo do nome. Precisa de aspas no YAML. |
 | `profile.handle_url` | URL `https:`, `mailto:` ou `tel:` | não | nenhum | Destino da arroba. Sem isso, ela é só texto. |
 | `profile.avatar` | caminho ou URL `https://` | não | nenhum | Sem avatar, aparece um círculo com as iniciais do nome. |
+| `profile.hero` | caminho ou URL `https://` | não | nenhum | Faixa larga no topo do cartão, no lugar do avatar. Veja [A faixa do topo](#a-faixa-do-topo). |
 | `profile.location` | texto, até 160 | não | nenhum | Endereço do local. Só aparece nos arquivos de calendário, junto do evento salvo. |
 | `profile.avatar_shape` | `circle` \| `square` | não | `circle` | `square` para logotipos: o círculo corta os cantos e come o nome da marca. |
 
 Imagens locais vão em `src/assets/` e são referenciadas como
 `assets/nome-do-arquivo.png`.
+
+### `hours`
+
+Lista do horário de funcionamento, mostrada logo abaixo dos ícones de contato.
+No máximo 4 faixas. Sem a chave, a seção inteira não aparece.
+
+| Campo | Tipo | Obrigatório | Default | O que faz |
+| --- | --- | --- | --- | --- |
+| `days` | texto, até 60 | **sim** | (sem default) | Os dias, como se fala. Fica na coluna da esquerda. |
+| `time` | texto, até 40 | **sim** | (sem default) | O horário. Fica alinhado na coluna da direita. |
+| `note` | texto, até 80 | não | nenhum | A condição que não cabe no nome dos dias, em letra menor embaixo. |
+
+```yaml
+hours:
+  - days: Terça a sexta
+    time: 11h às 17h
+  - days: 2 primeiros sábados do mês
+    time: 9h às 13h
+    note: a partir do 5º dia útil
+```
+
+#### A faixa do topo
+
+`profile.hero` troca o avatar redondo por uma faixa que sangra até a borda do
+cartão. Serve para a arte que o museu já tem pronta, com o nome desenhado nela.
+
+A imagem entra inteira, na proporção do arquivo, sem recorte: qualquer corte
+comeria o letreiro. Uma faixa 2:1 é o que fecha melhor, e 1600 pixels de
+largura bastam. Com a faixa no lugar, o `<h1>` continua na página com o nome do
+museu, mas sai da tela: a arte já desenha o nome, e repetir em texto logo
+abaixo seria dizer duas vezes a mesma coisa. Quem usa leitor de tela e os
+buscadores continuam recebendo o nome normalmente.
+
+Vale olhar o canto de cima da arte antes de subir o arquivo. Logotipo sobre
+fundo branco ali vira uma mancha clara no tema escuro; a faixa do museu foi
+recortada por isso, e o logotipo da Prefeitura aparece no rodapé.
+
+`profile.avatar` continua valendo mesmo com a faixa: é ele que vira favicon e
+imagem de compartilhamento, para os quais uma faixa deitada não serve.
 
 ### `theme`
 
@@ -448,7 +488,7 @@ são todos do museu e têm termos próprios:
 | Arquivo | Origem | Termos |
 | --- | --- | --- |
 | `fonts/archivo-*.woff2` | Archivo, da Omnibus-Type | SIL Open Font License 1.1, texto em [`fonts/OFL.txt`](src/assets/fonts/OFL.txt) |
-| `museu-33-anos.webp`, `museu-de-arte-de-londrina.webp`, `og-museu-33-anos.jpg` | Museu de Arte de Londrina | Marca do museu |
+| `museu-33-anos.webp`, `museu-de-arte-de-londrina.webp`, `og-museu-33-anos.jpg`, `museu-hero.webp` | Museu de Arte de Londrina | Marca do museu |
 | `prefeitura-londrina.png` | Prefeitura de Londrina | Marca do município |
 | `fundo-museu.webp` | Foto de Emerson Dias, do portal da Prefeitura | Direitos do autor e da Prefeitura |
 | `eventos/*.webp` | Fichas do museu no catálogo da Primavera dos Museus (IBRAM) | Direitos dos respectivos autores |

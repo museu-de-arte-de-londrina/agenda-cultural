@@ -117,6 +117,53 @@ test('sem avatar, cai para as iniciais e não gera img quebrada', async () => {
   assert.match(html, /avatar--initials[^>]*>AL</);
 });
 
+test('com hero, a faixa substitui o avatar e o h1 sai da tela sem sair da página', async () => {
+  const html = await render(
+    'profile:\n  name: Museu de Arte\n  avatar: assets/museu-33-anos.webp\n  hero: assets/museu-hero.webp\n',
+  );
+
+  assert.match(html, /<img class="hero" src="assets\/museu-hero\.webp"/);
+  assert.ok(!html.includes('class="avatar'), 'com hero não deveria sobrar avatar no cabeçalho');
+  // O nome continua na página para leitor de tela e buscador: a faixa desenha
+  // o nome, mas uma imagem não é texto.
+  assert.match(html, /<h1 class="visually-hidden">Museu de Arte<\/h1>/);
+  // alt vazio de propósito: o h1 ao lado já diz o nome.
+  assert.match(html, /<img class="hero"[^>]*alt=""/);
+});
+
+test('sem hero, o avatar e o h1 visível continuam como antes', async () => {
+  const html = await render('profile:\n  name: Museu de Arte\n  avatar: assets/museu-33-anos.webp\n');
+
+  assert.match(html, /<img class="avatar avatar--circle"/);
+  assert.match(html, /<h1>Museu de Arte<\/h1>/, 'sem faixa, o nome é o título visível');
+  assert.ok(!html.includes('class="hero"'));
+});
+
+test('horário de funcionamento vira uma lista de definição, com a condição junto', async () => {
+  const html = await render(`
+profile:
+  name: Museu
+hours:
+  - days: Terça a sexta
+    time: 11h às 17h
+  - days: 2 primeiros sábados do mês
+    time: 9h às 13h
+    note: a partir do 5º dia útil
+`);
+
+  assert.match(html, /<dt class="horario__dias">\s*Terça a sexta/);
+  assert.match(html, /<dd class="horario__hora">11h às 17h<\/dd>/);
+  assert.match(html, /<span class="horario__nota">a partir do 5º dia útil<\/span>/);
+  // O <dt> e o <dd> precisam continuar dentro do mesmo <dl> para a associação valer.
+  assert.match(html, /<dl class="horario__lista">[\s\S]*<\/dl>/);
+});
+
+test('sem horário no config, a seção inteira some', async () => {
+  const html = await render('profile:\n  name: Museu\n');
+
+  assert.ok(!html.includes('horario'), 'seção de horário não deveria sobrar vazia');
+});
+
 test('cada logotipo do rodapé carrega seu próprio texto alternativo', async () => {
   const html = await render(`
 profile:

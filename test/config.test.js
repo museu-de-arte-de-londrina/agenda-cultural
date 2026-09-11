@@ -85,6 +85,31 @@ test('URL com javascript: quebra o build em vez de virar página', () => {
   rejects({ profile: { name: 'Ada', avatar: 'javascript:alert(1)' } }, /profile\.avatar: imagem inválida/);
 });
 
+test('hours aceita a condição opcional e recusa faixa sem hora', () => {
+  const config = parseConfig({
+    ...minimal(),
+    hours: [
+      { days: 'Terça a sexta', time: '11h às 17h' },
+      { days: '2 primeiros sábados do mês', time: '9h às 13h', note: 'a partir do 5º dia útil' },
+    ],
+  });
+  assert.equal(config.hours.length, 2);
+  assert.equal(config.hours[0].note, undefined);
+  assert.equal(config.hours[1].note, 'a partir do 5º dia útil');
+
+  assert.deepEqual(parseConfig(minimal()).hours, [], 'sem a chave, vira lista vazia');
+  rejects({ ...minimal(), hours: [{ days: 'Terça a sexta' }] }, /hours\[0\]\.time: campo obrigatório/);
+  rejects({ ...minimal(), hours: [{ days: 'Seg', time: '9h', turno: 'manhã' }] }, /chave desconhecida/);
+});
+
+test('hero passa pela mesma checagem de imagem do avatar', () => {
+  assert.equal(
+    parseConfig({ ...minimal(), profile: { name: 'Museu', hero: 'assets/museu-hero.webp' } }).profile.hero,
+    'assets/museu-hero.webp',
+  );
+  rejects({ profile: { name: 'Museu', hero: 'javascript:alert(1)' } }, /profile\.hero: imagem inválida/);
+});
+
 test('avatar_shape tem default e recusa valor fora do enum', () => {
   assert.equal(parseConfig(minimal()).profile.avatar_shape, 'circle');
   assert.equal(

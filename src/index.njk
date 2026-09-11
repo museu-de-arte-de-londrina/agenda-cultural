@@ -15,6 +15,9 @@ permalink: /index.html
 {%- macro icon(data) -%}
 <svg class="icon{% if not data.fill %} icon--stroke{% endif %}" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">{% for d in data.paths %}<path d="{{ d }}"/>{% endfor %}</svg>
 {%- endmacro -%}
+{%- macro clockIcon() -%}
+<svg class="icon icon--stroke" viewBox="0 0 24 24" width="15" height="15" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+{%- endmacro -%}
 {%- macro calendarIcon() -%}
 <svg class="icon icon--stroke" viewBox="0 0 24 24" width="15" height="15" aria-hidden="true" focusable="false"><path d="M8 2v4"/><path d="M16 2v4"/><path d="M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z"/><path d="M3 10h18"/><path d="M12 14v4"/><path d="M10 16h4"/></svg>
 {%- endmacro -%}
@@ -87,6 +90,7 @@ permalink: /index.html
     <div class="backdrop" aria-hidden="true"></div>
 
     <div class="frame">
+      <header class="profile{% if site.profile.hero %} profile--hero{% endif %}">
       <div class="acoes">
       {#- Revealed by theme.js; without JavaScript it would be a dead control. -#}
       <button
@@ -131,14 +135,19 @@ permalink: /index.html
       </button>
       <p id="compartilhar-aviso" class="visually-hidden" role="status" aria-live="polite"></p>
       </div>
-
-      <header class="profile">
-        {%- if site.profile.avatar %}
+        {#- A faixa do topo já traz o nome do museu desenhado. Repetir o mesmo
+            nome em texto logo abaixo seria dizer a mesma coisa duas vezes, então
+            o h1 fica só para quem lê por leitor de tela e para os buscadores. O
+            alt da imagem fica vazio pelo mesmo motivo: o h1 ao lado já anuncia
+            o nome, e um alt repetido faria o leitor dizer tudo em dobro. -#}
+        {%- if site.profile.hero %}
+        <img class="hero" src="{{ site.profile.hero }}" width="1600" height="800" alt="" fetchpriority="high">
+        {%- elif site.profile.avatar %}
         <img class="avatar avatar--{{ site.profile.avatar_shape }}" src="{{ site.profile.avatar }}" width="112" height="112" alt="{{ site.profile.name }}">
         {%- else %}
         <p class="avatar avatar--{{ site.profile.avatar_shape }} avatar--initials" aria-hidden="true">{{ site.initials }}</p>
         {%- endif %}
-        <h1>{{ site.profile.name }}</h1>
+        <h1{% if site.profile.hero %} class="visually-hidden"{% endif %}>{{ site.profile.name }}</h1>
 
         {%- if site.profile.handle %}
         <p class="handle">
@@ -167,6 +176,28 @@ permalink: /index.html
             {%- endfor %}
           </ul>
         </nav>
+        {%- endif %}
+
+        {%- if site.hours.length %}
+        {#- <dl> porque é exatamente isto: o dia é o termo, a hora é o que ele
+            define. Cada par vem dentro de um <div> para poder virar uma linha
+            de grade sem quebrar a associação entre <dt> e <dd>. -#}
+        <section class="horario" aria-labelledby="horario-titulo">
+          <h2 class="horario__titulo" id="horario-titulo">
+            {{- clockIcon() }}<span>Horário de funcionamento</span>
+          </h2>
+          <dl class="horario__lista">
+            {%- for faixa in site.hours %}
+            <div class="horario__faixa">
+              <dt class="horario__dias">
+                {{ faixa.days }}
+                {%- if faixa.note %}<span class="horario__nota">{{ faixa.note }}</span>{% endif %}
+              </dt>
+              <dd class="horario__hora">{{ faixa.time }}</dd>
+            </div>
+            {%- endfor %}
+          </dl>
+        </section>
         {%- endif %}
       </header>
 

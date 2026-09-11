@@ -157,7 +157,9 @@ Tudo o que não é evento também mora no `config.yaml` e se edita do mesmo jeit
 | O que você quer mudar | Onde |
 | --- | --- |
 | Nome, frase de apresentação, endereço | `profile` |
-| Foto redonda do topo | `profile.avatar` |
+| Faixa de abertura no topo | `profile.hero` |
+| Horário de funcionamento | `hours` |
+| Ícone da aba do navegador | `profile.avatar` |
 | Ícones de contato do topo | `social` |
 | Links das páginas oficiais, lá embaixo | `links` |
 | Logotipos e link do rodapé | `footer` |

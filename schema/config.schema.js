@@ -163,6 +163,10 @@ const profileSchema = z
     name: text(80),
     tagline: text(160).optional(),
     avatar: imageField.optional(),
+    // A faixa larga do topo. Quando existe, ela substitui o avatar no
+    // cabeçalho; o avatar continua servindo de favicon e de imagem de
+    // compartilhamento, para os quais uma faixa 2:1 não serve.
+    hero: imageField.optional(),
     // Only surfaces in the calendar files, so a visitor who saves an event
     // gets the address with it.
     location: text(160).optional(),
@@ -235,6 +239,24 @@ const eventSchema = z
       ctx.addIssue({ code: 'custom', path: ['end'], message: 'termina antes de começar' });
     }
   });
+
+/**
+ * Uma faixa de horário de funcionamento.
+ *
+ * Em duas partes porque a página alinha os horários em coluna, e para isso
+ * precisa saber onde termina o dia e começa a hora. `note` carrega a condição
+ * que não cabe no nome dos dias, como "a partir do 5º dia útil".
+ */
+const hoursSchema = z
+  .object(
+    {
+      days: text(60),
+      time: text(40),
+      note: text(80).optional(),
+    },
+    objectError,
+  )
+  .strict();
 
 /** One institutional mark in the footer strip. */
 const footerLogoSchema = z
@@ -318,6 +340,10 @@ export const configSchema = z
       .regex(/^[a-z]{2,3}(-[A-Za-z0-9]{2,8})*$/, 'deve ser uma tag BCP 47, ex: pt-BR')
       .default('pt-BR'),
     profile: profileSchema,
+    hours: z
+      .array(hoursSchema, { error: message('deve ser uma lista de horários') })
+      .max(4, 'no máximo 4 faixas de horário')
+      .default([]),
     events: z.array(eventSchema, { error: message('deve ser uma lista de eventos') }).default([]),
     links: z.array(linkSchema, { error: message('deve ser uma lista de links') }).default([]),
     social: z.array(socialSchema, { error: message('deve ser uma lista') }).default([]),

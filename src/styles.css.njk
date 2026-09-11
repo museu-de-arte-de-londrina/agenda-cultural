@@ -192,6 +192,21 @@ body {
   gap: 0.375rem;
 }
 
+/* Com a faixa no topo, os botões desciam em cima do letreiro do museu: em
+   tela de celular a foto ocupa a largura toda e o nome chega perto do canto.
+   Aqui eles saem do posicionamento absoluto, entram na grade do cabeçalho
+   depois da faixa e sobem só o suficiente para montar na beirada de baixo
+   dela, onde a foto é prédio e não letra. */
+.profile--hero .hero {
+  order: -1;
+}
+
+.profile--hero .acoes {
+  position: static;
+  justify-self: end;
+  margin: -2.125rem 0 0;
+}
+
 .theme-toggle {
   display: grid;
   place-items: center;
@@ -220,9 +235,15 @@ body {
   width: 100%;
   max-width: 46rem;
   margin: 0 auto;
-  padding: 1.5rem 1.125rem 1.25rem;
+  /* Em variável porque a faixa do topo sangra até a borda do cartão e precisa
+     desta medida exata como margem negativa. Dois números soltos acabariam
+     divergindo na primeira vez que alguém mexesse no espaçamento. */
+  --pad-x: 1.125rem;
+  --pad-top: 1.5rem;
+  --raio: 1.5rem;
+  padding: var(--pad-top) var(--pad-x) 1.25rem;
   border: 1px solid var(--border);
-  border-radius: 1.5rem;
+  border-radius: var(--raio);
   background: var(--surface);
   box-shadow: var(--shadow-3), var(--ring);
 }
@@ -236,6 +257,31 @@ body {
   text-align: center;
   padding-bottom: 1rem;
   border-bottom: 1px solid var(--hairline);
+}
+
+/* A faixa do topo. Sangra até a borda do cartão: um retrato do museu com
+   margem dos dois lados viraria mais um cartãozinho dentro do cartão, e o que
+   se quer aqui é que a foto seja a beirada de cima da página.
+
+   O raio desconta 1px para encostar por dentro da borda do cartão. Sem isso
+   sobra um fio claro entre a foto e a borda em cada canto de cima. */
+.hero {
+  /* Largura explícita, e não justify-self: stretch. Numa imagem, width: auto
+     vale a largura intrínseca do arquivo, que aqui é 1600px: a faixa vazava do
+     cartão e empurrava a página inteira para o lado. */
+  display: block;
+  width: calc(100% + 2 * var(--pad-x));
+  /* Sem isto o atributo height do HTML fixa a altura em 800px e a faixa vira
+     um bloco quase quadrado que corta o letreiro nas laterais. Os atributos
+     continuam no HTML, que é o que reserva o espaço antes da imagem carregar. */
+  height: auto;
+  margin: calc(-1 * var(--pad-top)) calc(-1 * var(--pad-x)) 0.25rem;
+  /* A imagem entra inteira, na proporção dela: qualquer recorte comeria o
+     letreiro. O teto só existe para o caso de alguém trocar o arquivo por um
+     mais alto, e nessa hora recortar é melhor que ocupar a tela toda. */
+  max-height: 24rem;
+  object-fit: cover;
+  border-radius: calc(var(--raio) - 1px) calc(var(--raio) - 1px) 0 0;
 }
 
 .avatar {
@@ -344,6 +390,82 @@ h1 {
 .social__link:hover {
   color: var(--accent-text);
   background: var(--surface-hover);
+}
+
+/* --------------------------------------------------------------- horário -- */
+
+/* Quem abre a agenda no celular quer saber duas coisas: o que tem, e se dá
+   para ir. Isto responde a segunda, e por isso fica no topo e não no rodapé.
+
+   Plano, como tudo dentro do cartão: separado por um fio, sem caixa nem
+   sombra própria. */
+.horario {
+  width: 100%;
+  max-width: 24rem;
+  margin-top: 0.125rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--hairline);
+}
+
+.horario__titulo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  margin: 0 0 0.375rem;
+  font-family: var(--body);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--muted);
+}
+
+.horario__titulo .icon {
+  width: 0.9375rem;
+  height: 0.9375rem;
+  flex: none;
+}
+
+.horario__lista {
+  margin: 0;
+}
+
+/* Dias à esquerda, hora à direita. Centralizado como o resto do cabeçalho, o
+   olho teria que procurar cada horário; em duas colunas ele desce a coluna da
+   direita e lê tudo de uma vez. */
+.horario__faixa {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: baseline;
+  gap: 0 1rem;
+  padding: 0.3125rem 0;
+  text-align: left;
+}
+
+.horario__faixa + .horario__faixa {
+  border-top: 1px solid var(--hairline);
+}
+
+.horario__dias {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.35;
+}
+
+.horario__nota {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+/* tabular-nums: os horários formam uma coluna, e com o "1" estreito da fonte
+   proporcional as linhas não se alinhavam entre si. */
+.horario__hora {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 }
 
 /* ---------------------------------------------------------------- agenda -- */
@@ -752,7 +874,9 @@ h1 {
   }
 
   .frame {
-    padding: 1.75rem 1.75rem 1.5rem;
+    --pad-x: 1.75rem;
+    --pad-top: 1.75rem;
+    padding: var(--pad-top) var(--pad-x) 1.5rem;
   }
 
   .acoes {
