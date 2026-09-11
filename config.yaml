@@ -127,6 +127,16 @@ events:
     url: https://visite.museus.gov.br/20a-primavera-dos-museus/programa-museu-educativo-2/
     description: Contação de histórias do livro “Perigo na Floresta”, visita mediada e atividade
       arte-educativa. Para alunos da Escola Municipal Profª Tereza Canhadas Bertan.
+  - title: SABADART (Sábado no Museu de Arte)
+    start: 2026-09-12T09:00
+    end: 2026-09-12T13:00
+    kind: Exposição
+    image: assets/eventos/sabadart-sabado-no-museu-de-arte-202609120900.png
+    url: https://blog.londrina.pr.gov.br/?p=219810
+    description: Um sábado de cultura PARA TODA A FAMÍLIA. Conheça as exposições "Gira Mundo", com
+      22 obras do acervo do Museu, e "A riqueza de um patrimônio em movimento", sobre a
+      trajetória de Vladimir Kozák (1897–1979), tcheco cuja obra tem forte ligação com o norte
+      do Paraná, especialmente os povos indígenas.
 links:
   - label: Programação oficial no Londrina Cultura
     url: https://londrinacultura.londrina.pr.gov.br/espaco/1/
