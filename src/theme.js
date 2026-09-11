@@ -50,7 +50,11 @@
     var isDark = effectiveTheme() === 'dark';
     button.setAttribute('aria-pressed', isDark ? 'true' : 'false');
     // Labels come from the template so the interface text stays in one place.
-    button.setAttribute('aria-label', isDark ? button.dataset.labelLight : button.dataset.labelDark);
+    var rotulo = isDark ? button.dataset.labelLight : button.dataset.labelDark;
+    button.setAttribute('aria-label', rotulo);
+    // O mesmo texto no title: o aria-label serve o leitor de tela, e o title é
+    // o que aparece ao passar o mouse.
+    button.setAttribute('title', rotulo);
   }
 
   document.addEventListener('DOMContentLoaded', function () {

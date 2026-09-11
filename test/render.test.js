@@ -360,7 +360,7 @@ test('cada evento abre um menu com os três caminhos de calendário', async () =
   assert.match(html, /href="https:\/\/calendar\.google\.com\/calendar\/render\?[^"]*"[^>]*>Google Agenda</);
   assert.match(html, /href="https:\/\/outlook\.live\.com\/calendar\/[^"]*"[^>]*>Outlook</);
   // O arquivo continua ali para Apple Calendar e o resto.
-  assert.match(html, /href="eventos\/show-de-taiko-209905041900\.ics" download>Baixar o arquivo</);
+  assert.match(html, /href="eventos\/show-de-taiko-209905041900\.ics"[^>]*download>Baixar o arquivo</);
 
   // Saem da página, então precisam da mesma proteção dos outros links externos.
   for (const link of html.match(/<a class="entry__cal-item"[^>]*>/g)) {
@@ -369,7 +369,7 @@ test('cada evento abre um menu com os três caminhos de calendário', async () =
     assert.match(link, /rel="noopener noreferrer"/);
   }
 
-  assert.match(html, /href="agenda\.ics" download/);
+  assert.match(html, /href="agenda\.ics"[^>]*download/);
 });
 
 test('o menu de calendário some junto com a agenda vazia, e o script com ele', async () => {

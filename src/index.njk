@@ -103,6 +103,7 @@ permalink: /index.html
         hidden
         aria-pressed="false"
         aria-label="Mudar para o tema escuro"
+        title="Mudar para o tema escuro"
         data-label-dark="Mudar para o tema escuro"
         data-label-light="Mudar para o tema claro"
       >
@@ -124,6 +125,7 @@ permalink: /index.html
         type="button"
         hidden
         aria-label="Compartilhar esta página"
+        title="Compartilhar esta página"
         data-titulo="{{ site.seo.title }}"
         data-texto="{{ site.seo.description }}"
         {% if site.canonical %}data-url="{{ site.canonical }}"{% endif %}
@@ -155,7 +157,7 @@ permalink: /index.html
         {%- if site.profile.handle %}
         <p class="handle">
           {%- if site.profile.handle_url -%}
-          <a href="{{ site.profile.handle_url }}" target="_blank" rel="noopener noreferrer">{{ site.profile.handle }}</a>
+          <a href="{{ site.profile.handle_url }}" title="{{ site.handleDica }}" target="_blank" rel="noopener noreferrer">{{ site.profile.handle }}</a>
           {%- else -%}
           {{ site.profile.handle }}
           {%- endif -%}
@@ -171,7 +173,7 @@ permalink: /index.html
           <ul>
             {%- for entry in site.social %}
             <li>
-              <a class="social__link" href="{{ entry.url }}" target="_blank" rel="noopener noreferrer">
+              <a class="social__link" href="{{ entry.url }}" title="{{ entry.dica }}" target="_blank" rel="noopener noreferrer">
                 {{ icon(entry.iconData) }}
                 <span class="visually-hidden">{{ entry.iconData.title }}</span>
               </a>
@@ -209,7 +211,7 @@ permalink: /index.html
           <div class="agenda__head">
             <h2 class="agenda__title" id="agenda-title">Programação</h2>
             {%- if site.agenda.length %}
-            <a class="agenda__subscribe" href="agenda.ics" download>
+            <a class="agenda__subscribe" href="agenda.ics" title="Baixar a programação inteira num arquivo para abrir no seu calendário" download>
               {{- calendarIcon() }}<span>Assinar a agenda</span>
             </a>
             {%- endif %}
@@ -238,7 +240,7 @@ permalink: /index.html
                   </p>
                   <h3 class="entry__title">
                     {%- if event.url -%}
-                    <a class="entry__link" href="{{ event.url }}" target="_blank" rel="noopener noreferrer">{{ event.title }}</a>
+                    <a class="entry__link" href="{{ event.url }}" title="{{ event.dicaDoLink }}" target="_blank" rel="noopener noreferrer">{{ event.title }}</a>
                     {%- else -%}
                     {{ event.title }}
                     {%- endif -%}
@@ -271,13 +273,14 @@ permalink: /index.html
                       <summary
                         class="entry__calendar"
                         aria-label="Adicionar “{{ event.title }}” ao calendário"
+                        title="Adicionar ao seu calendário"
                       >{{ calendarIcon() }}</summary>
                       <div class="entry__cal-menu" role="group" aria-label="Adicionar ao calendário">
-                        <a class="entry__cal-item" href="{{ event.googleUrl }}" target="_blank" rel="noopener noreferrer">Google Agenda</a>
-                        <a class="entry__cal-item" href="{{ event.outlookUrl }}" target="_blank" rel="noopener noreferrer">Outlook</a>
+                        <a class="entry__cal-item" href="{{ event.googleUrl }}" title="Abrir no Google Agenda com os dados já preenchidos" target="_blank" rel="noopener noreferrer">Google Agenda</a>
+                        <a class="entry__cal-item" href="{{ event.outlookUrl }}" title="Abrir no Outlook com os dados já preenchidos" target="_blank" rel="noopener noreferrer">Outlook</a>
                         {#- Apple Calendar e o resto: o arquivo continua sendo o
                             caminho que funciona em qualquer aplicativo. -#}
-                        <a class="entry__cal-item" href="eventos/{{ event.slug }}.ics" download>Baixar o arquivo</a>
+                        <a class="entry__cal-item" href="eventos/{{ event.slug }}.ics" title="Baixar o arquivo para Apple Calendar e outros aplicativos" download>Baixar o arquivo</a>
                       </div>
                     </details>
                   </div>
@@ -302,7 +305,7 @@ permalink: /index.html
           <ul class="links">
             {%- for link in site.links %}
             <li>
-              <a class="link{% if link.highlight %} link--highlight{% endif %}" href="{{ link.url }}" target="_blank" rel="noopener noreferrer">
+              <a class="link{% if link.highlight %} link--highlight{% endif %}" href="{{ link.url }}" title="{{ link.dica }}" target="_blank" rel="noopener noreferrer">
                 {%- if link.iconData %}{{ icon(link.iconData) }}{% endif %}
                 <span class="link__label">{{ link.label }}</span>
               </a>
@@ -316,7 +319,7 @@ permalink: /index.html
       <footer class="footer">
       {%- if site.footer %}
       {%- set footerTag = 'a' if site.footer.url else 'div' %}
-        <{{ footerTag }} class="footer__inner"{% if site.footer.url %} href="{{ site.footer.url }}" target="_blank" rel="noopener noreferrer"{% endif %}>
+        <{{ footerTag }} class="footer__inner"{% if site.footer.url %} href="{{ site.footer.url }}" title="{{ site.footerDica }}" target="_blank" rel="noopener noreferrer"{% endif %}>
           {%- if site.footer.logos.length %}
           <span class="footer__logos">
             {%- for mark in site.footer.logos %}

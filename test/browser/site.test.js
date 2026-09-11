@@ -103,6 +103,28 @@ test('todo alvo de toque cabe num polegar', async () => {
   }
 });
 
+test('todo controle diz o que faz ao passar o mouse', async () => {
+  const { contexto, pagina } = await abrir({ largura: 1280 });
+
+  // Abre um menu de calendário, senão os itens dele nem existem para conferir.
+  await pagina.locator('.entry__calendar').first().click();
+
+  const semDica = await pagina.evaluate(() =>
+    [...document.querySelectorAll('a, button, summary')]
+      .filter((el) => {
+        if (el.classList.contains('skip-link')) return false;
+        // Escondido pelo script quando o navegador não sabe compartilhar.
+        if (el.hasAttribute('hidden')) return false;
+        const dica = (el.getAttribute('title') || '').trim();
+        return dica === '';
+      })
+      .map((el) => `${el.tagName}.${el.className || '(sem classe)'}`),
+  );
+
+  assert.deepEqual(semDica, [], 'todo controle precisa de um title explicando o que faz');
+  await contexto.close();
+});
+
 test('o cartão inteiro do evento é clicável', async () => {
   // Varre o cartão numa grade em vez de conferir uns poucos pontos: o buraco
   // que existia ficava justamente sobre a foto, que uma amostra rala não pega.

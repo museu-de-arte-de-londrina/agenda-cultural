@@ -34,6 +34,33 @@ const SURFACE_HOVER = { light: '#e8eef7', dark: '#1a2540' };
 const SURFACE = { light: '#ffffff', dark: '#0d1524' };
 
 
+/**
+ * O domínio para onde um link leva, para o texto de ajuda dizer onde a pessoa
+ * vai parar antes de ela clicar. Sem o "www.", que não informa nada.
+ * @param {string} url
+ * @returns {string | null}
+ */
+function dominio(url) {
+  try {
+    return new URL(url).hostname.replace(/^www\./, '');
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * O texto que aparece ao passar o mouse por cima de um contato do topo.
+ *
+ * O rótulo sozinho diz o nome do serviço e não o que o botão faz. Aqui o
+ * esquema do endereço decide o verbo: escrever, ligar ou abrir.
+ * @param {{url: string, iconData: {title: string}}} entrada
+ */
+function dicaDoContato(entrada) {
+  if (entrada.url.startsWith('mailto:')) return 'Escrever para o museu por e-mail';
+  if (entrada.url.startsWith('tel:')) return 'Ligar para o museu';
+  return `Abrir o ${entrada.iconData.title} do museu`;
+}
+
 /** Two initials, used when no avatar is set. */
 function initials(name) {
   return name
@@ -84,6 +111,7 @@ function buildAgenda(config, now) {
         time: when.time,
         // Os dois calendários de navegador mais usados por aqui. Quem usa
         // outro continua tendo o arquivo .ics no mesmo menu.
+        dicaDoLink: event.url ? `Abrir a página do evento em ${dominio(event.url)}` : null,
         googleUrl: googleCalendarUrl(comDatas, local),
         outlookUrl: outlookCalendarUrl(comDatas, local),
         // A season spanning several days says so; a one-off does not repeat itself.
@@ -177,8 +205,19 @@ export default async function site() {
     initials: initials(config.profile.name),
     agenda,
     structuredData: structuredData(config, agenda),
-    links: config.links.map((link) => ({ ...link, iconData: link.icon ? resolveIcon(link.icon) : null })),
-    social: config.social.map((entry) => ({ ...entry, iconData: resolveIcon(entry.platform) })),
+    links: config.links.map((link) => ({
+      ...link,
+      iconData: link.icon ? resolveIcon(link.icon) : null,
+      dica: dominio(link.url) ? `Abrir em ${dominio(link.url)}, numa nova aba` : 'Abrir numa nova aba',
+    })),
+    social: config.social.map((entry) => {
+      const iconData = resolveIcon(entry.platform);
+      return { ...entry, iconData, dica: dicaDoContato({ ...entry, iconData }) };
+    }),
+    footerDica: config.footer?.url ? `Abrir ${dominio(config.footer.url)}, numa nova aba` : null,
+    handleDica: config.profile.handle_url
+      ? `Abrir o perfil do museu em ${dominio(config.profile.handle_url)}`
+      : null,
     canonical: config.seo.base_url ?? null,
     ogImage: absoluteUrl(config.seo.og_image, config.seo.base_url),
     // Derived so contrast holds for any accent the user picks.
