@@ -138,16 +138,19 @@ hours:
 `profile.hero` troca o avatar redondo por uma faixa que sangra até a borda do
 cartão. Serve para a arte que o museu já tem pronta, com o nome desenhado nela.
 
-A imagem entra inteira, na proporção do arquivo, sem recorte: qualquer corte
-comeria o letreiro. Uma faixa 2:1 é o que fecha melhor, e 1600 pixels de
-largura bastam. Com a faixa no lugar, o `<h1>` continua na página com o nome do
-museu, mas sai da tela: a arte já desenha o nome, e repetir em texto logo
-abaixo seria dizer duas vezes a mesma coisa. Quem usa leitor de tela e os
-buscadores continuam recebendo o nome normalmente.
+A imagem entra inteira, na proporção do arquivo, sem recorte. É de propósito:
+a arte institucional costuma ter o letreiro embaixo e a marca da Prefeitura em
+cima, e recortar por cima ou por baixo tira uma das duas. Uma faixa 16:9 ou 2:1
+fecha bem, e 1600 pixels de largura bastam.
 
-Vale olhar o canto de cima da arte antes de subir o arquivo. Logotipo sobre
-fundo branco ali vira uma mancha clara no tema escuro; a faixa do museu foi
-recortada por isso, e o logotipo da Prefeitura aparece no rodapé.
+Com a faixa no lugar, o `<h1>` continua na página com o nome do museu, mas sai
+da tela: a arte já desenha o nome, e repetir em texto logo abaixo seria dizer
+duas vezes a mesma coisa. Quem usa leitor de tela e os buscadores continuam
+recebendo o nome normalmente.
+
+Uma marca sobre fundo branco no alto da arte aparece como um bloco claro no
+tema escuro. É assim que a arte foi feita, e ela vai para a página como está;
+quem for trocar o arquivo pode contar com isso em vez de se assustar.
 
 `profile.avatar` continua valendo mesmo com a faixa: é ele que vira favicon e
 imagem de compartilhamento, para os quais uma faixa deitada não serve.

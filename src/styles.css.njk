@@ -276,10 +276,15 @@ body {
      continuam no HTML, que é o que reserva o espaço antes da imagem carregar. */
   height: auto;
   margin: calc(-1 * var(--pad-top)) calc(-1 * var(--pad-x)) 0.25rem;
-  /* A imagem entra inteira, na proporção dela: qualquer recorte comeria o
-     letreiro. O teto só existe para o caso de alguém trocar o arquivo por um
-     mais alto, e nessa hora recortar é melhor que ocupar a tela toda. */
-  max-height: 24rem;
+  /* A imagem entra inteira, na proporção dela: recortar comeria o letreiro em
+     baixo ou o logotipo da Prefeitura em cima, e os dois precisam aparecer.
+
+     O teto é folgado de propósito. Na largura máxima do cartão, 46rem, uma
+     faixa 16:9 fecha em pouco menos de 26rem; 28rem deixa margem para o
+     arquivo ser trocado por outro de proporção parecida sem cortar nada, e só
+     entra em ação se alguém subir uma imagem alta demais, quando recortar é
+     melhor que ocupar a tela inteira. */
+  max-height: 28rem;
   object-fit: cover;
   border-radius: calc(var(--raio) - 1px) calc(var(--raio) - 1px) 0 0;
 }

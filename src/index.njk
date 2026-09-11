@@ -144,7 +144,7 @@ permalink: /index.html
             alt da imagem fica vazio pelo mesmo motivo: o h1 ao lado já anuncia
             o nome, e um alt repetido faria o leitor dizer tudo em dobro. -#}
         {%- if site.profile.hero %}
-        <img class="hero" src="{{ site.profile.hero }}" width="1600" height="800" alt="" fetchpriority="high">
+        <img class="hero" src="{{ site.profile.hero }}" width="1600" height="900" alt="" fetchpriority="high">
         {%- elif site.profile.avatar %}
         <img class="avatar avatar--{{ site.profile.avatar_shape }}" src="{{ site.profile.avatar }}" width="112" height="112" alt="{{ site.profile.name }}">
         {%- else %}
