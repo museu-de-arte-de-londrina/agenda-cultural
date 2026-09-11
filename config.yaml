@@ -147,20 +147,11 @@ events:
       22 obras do acervo do Museu, e "A riqueza de um patrimônio em movimento", sobre a
       trajetória de Vladimir Kozák (1897–1979), cuja obra tem forte ligação com o norte do
       Paraná, especialmente os povos indígenas.
-  - title: Apresentação do CORAL VOZ VIVA
-    start: 2026-09-12T11:00
-    end: 2026-09-12T13:00
-    kind: Show Musical
-    image: assets/eventos/apresentacao-do-coral-voz-viva-202609121100.webp
-    url: https://www.instagram.com/umbrasilquecantaeencanta/
-    description: "Projeto Um Brasil que Canta e Encanta/Promic: apresentações gratuitas de canto
-      coral em espaços públicos, com cerca de 40 integrantes entre coralistas, músicos e
-      convidados. O espetáculo reúne 10 músicas brasileiras das cinco regiões do país."
   - title: Apresentação do Coro Voz Viva
     start: 2026-09-12T11:00
     end: 2026-09-12T13:00
     kind: Show Musical
-    image: assets/eventos/apresentacao-do-coro-voz-viva-202609121100.png
+    image: assets/eventos/apresentacao-do-coro-voz-viva-202609121100.webp
     url: https://www.instagram.com/corovozviva/
     description: "Projeto Um Brasil que Canta e Encanta/Promic: apresentações gratuitas de canto
       coral em espaços públicos, com cerca de 40 integrantes entre coralistas, músicos e
