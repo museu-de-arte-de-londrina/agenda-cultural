@@ -5,6 +5,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
 import { parseConfig, loadConfigFile, ConfigError, DEFAULT_ACCENT } from '../schema/config.schema.js';
+import { resolveIcon, GENERIC_ICON_NAMES } from '../lib/icons.js';
 
 const minimal = () => ({
   profile: { name: 'Ada Lovelace' },
@@ -205,10 +206,23 @@ test('footer é opcional e passa pela mesma allowlist de URL', () => {
 });
 
 test('ícone desconhecido quebra o build e sugere alternativas', () => {
-  rejects(
+  const erro = rejects(
     { ...minimal(), links: [{ label: 'x', url: 'https://a.example.com', icon: 'naoexiste' }] },
-    /icon: ícone desconhecido: "naoexiste".+email, website, link/s,
+    /icon: ícone desconhecido: "naoexiste"/,
   );
+  // Por nome e não pela lista inteira em ordem: acrescentar um genérico não
+  // pode quebrar este teste, só deixar de citá-lo pode.
+  for (const nome of GENERIC_ICON_NAMES) assert.match(erro.message, new RegExp(`\\b${nome}\\b`));
+});
+
+test('os ícones genéricos resolvem, inclusive o de formulário', () => {
+  for (const nome of GENERIC_ICON_NAMES) {
+    const icone = resolveIcon(nome);
+    assert.ok(icone, `${nome} deveria resolver`);
+    assert.ok(icone.paths.length > 0, `${nome} está sem desenho`);
+    assert.ok(icone.title, `${nome} está sem título, que vira o rótulo acessível`);
+  }
+  assert.ok(GENERIC_ICON_NAMES.includes('form'), 'o ícone de formulário precisa estar na lista');
 });
 
 test('chave desconhecida quebra o build (pega erro de digitação)', () => {

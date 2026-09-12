@@ -231,6 +231,13 @@ links:
   - label: Notícias do museu no blog da Prefeitura
     url: https://blog.londrina.pr.gov.br/?s=museu+de+arte
     icon: link
+  # Mesma página do link de programação de propósito: ela é a página do museu
+  # no Londrina Cultura, e carrega tanto a agenda quanto os critérios de uso do
+  # espaço com o formulário em anexo. Quem procura o formulário procura por
+  # "espaços", não por "programação".
+  - label: Solicitação do uso de Espaços
+    url: https://londrinacultura.londrina.pr.gov.br/espaco/1/
+    icon: form
   - label: Instagram da Secretaria Municipal de Cultura
     url: https://www.instagram.com/secretariadeculturalondrina/
     icon: instagram

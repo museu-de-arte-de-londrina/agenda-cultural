@@ -150,7 +150,7 @@ madrugada de terça para quarta, e some na primeira reconstrução seguinte.
 
 Quando não sobra nenhum evento futuro, a página não fica quebrada nem vazia. Ela
 mostra um aviso dizendo que não há atividade marcada por enquanto e aponta para
-as páginas oficiais logo abaixo.
+os links logo abaixo.
 
 ## Tirar ou corrigir um evento antes da data
 
@@ -184,7 +184,7 @@ Tudo o que não é evento também mora no `config.yaml` e se edita do mesmo jeit
 | Horário de funcionamento | `hours` |
 | Ícone da aba do navegador | `profile.avatar` |
 | Ícones de contato do topo | `social` |
-| Links das páginas oficiais, lá embaixo | `links` |
+| Links úteis, lá embaixo | `links` |
 | Logotipos e link do rodapé | `footer` |
 | Cor de destaque do site | `theme.accent` |
 
