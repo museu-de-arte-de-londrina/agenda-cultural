@@ -29,6 +29,7 @@ Preencha o que souber. Só o título e a data são obrigatórios:
 | Hora de término | não | `20:00` |
 | Último dia | não | só para o que dura vários dias, como exposição |
 | Tipo de atividade | não | escolha da lista |
+| Faz parte de alguma programação? | não | nome do festival, como `20ª Primavera dos Museus` |
 | Descrição | não | uma ou duas frases, até 300 caracteres |
 | Foto do evento | não | arraste a imagem para a caixa, ou cole o endereço |
 | Link para mais informações | não | endereço começando com `https://` |
@@ -118,7 +119,10 @@ nome dele no título de cada evento. Não faça isso: os títulos ficam longos e
 repetidos, e foi assim que o arquivo quebrou uma vez, porque o nome colou do
 lado de fora das aspas de um título.
 
-Existe um campo para isso. Acrescente uma linha `program:` no bloco do evento,
+Existe um campo para isso, e ele está no próprio formulário: **Faz parte de
+alguma programação?**. Basta escrever o nome do festival ali.
+
+Num evento que já está publicado, acrescente uma linha `program:` no bloco dele,
 logo abaixo do `kind:`:
 
 ```yaml

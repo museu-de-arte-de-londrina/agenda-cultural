@@ -67,6 +67,17 @@ body:
         - Visita Mediada
         - Outro
 
+  - type: input
+    id: programacao
+    attributes:
+      label: Faz parte de alguma programação?
+      description: >-
+        O nome do festival, temporada ou projeto, quando o evento pertence a um.
+        Ele aparece em destaque no cartão. Não escreva esse nome no título: ele
+        tem lugar próprio aqui, e no título ficaria repetido em todos os eventos
+        da mesma programação.
+      placeholder: 20ª Primavera dos Museus
+
   - type: textarea
     id: descricao
     attributes:

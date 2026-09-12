@@ -181,6 +181,9 @@ export function montarEvento(campos) {
   const tipo = ler('Tipo de atividade');
   if (tipo && tipo !== 'Outro') evento.kind = tipo;
 
+  const programacao = ler('Faz parte de alguma programação?');
+  if (programacao) evento.program = programacao;
+
   const link = ler('Link para mais informações');
   if (link) evento.url = link;
 

@@ -32,6 +32,7 @@ const COMPLETO = {
   'Hora de término': '20:00',
   'Último dia': '',
   'Tipo de atividade': 'Show Musical',
+  'Faz parte de alguma programação?': '20ª Primavera dos Museus',
   Descrição: 'Tambores japoneses, pelo 22º Londrina Matsuri.',
   'Link para mais informações': 'https://example.org/taiko',
 };
@@ -40,7 +41,7 @@ test('lê os campos do formulário e trata os vazios', () => {
   const campos = parseIssueForm(corpo(COMPLETO));
   assert.equal(campos.get('Título do evento'), 'Apresentação de Taiko');
   assert.equal(campos.get('Último dia'), '', '_No response_ vira campo vazio');
-  assert.equal(campos.size, 8);
+  assert.equal(campos.size, 9);
 });
 
 test('converte data brasileira, com um ou dois dígitos', () => {
@@ -72,6 +73,7 @@ test('monta o evento com tudo preenchido', () => {
     start: '2026-09-21T19:00',
     end: '2026-09-21T20:00',
     kind: 'Show Musical',
+    program: '20ª Primavera dos Museus',
     url: 'https://example.org/taiko',
     description: 'Tambores japoneses, pelo 22º Londrina Matsuri.',
   });
@@ -289,6 +291,18 @@ test('explica em português por que a foto não serve', async (t) => {
   globalThis.fetch = async () =>
     new Response(new Uint8Array(6 * 1024 * 1024), { headers: { 'content-type': 'image/png' } });
   await assert.rejects(baixarFoto('https://exemplo.org/enorme.png', evento), /limite é 5 MB/);
+});
+
+test('a programação vem do campo próprio, e não colada no título', () => {
+  const { evento, erros } = montarEvento(parseIssueForm(corpo(COMPLETO)));
+
+  assert.deepEqual(erros, []);
+  assert.equal(evento.program, '20ª Primavera dos Museus');
+  assert.equal(evento.title, 'Apresentação de Taiko', 'o título fica só com o nome do evento');
+
+  // Em branco, o campo nem aparece no config.yaml.
+  const sem = montarEvento(parseIssueForm(corpo({ ...COMPLETO, 'Faz parte de alguma programação?': '' })));
+  assert.equal(sem.evento.program, undefined);
 });
 
 test('a foto fica no meio do bloco, e não no fim', () => {
