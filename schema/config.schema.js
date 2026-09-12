@@ -293,6 +293,35 @@ const footerSchema = z
   .strict()
   .optional();
 
+/**
+ * Medição de acesso, desligada por padrão.
+ *
+ * Sem esta chave a página não carrega script de fora e a CSP continua em
+ * `connect-src 'none'`. Preenchida, ela abre exatamente duas portas, e só
+ * essas: o script em gc.zgo.at e o envio para o subdomínio do próprio site no
+ * GoatCounter.
+ *
+ * O código é validado como slug apertado de propósito: ele entra num endereço
+ * e dentro da própria CSP, e um ponto ou uma barra ali deixariam de valer uma
+ * origem só.
+ */
+const analyticsSchema = z
+  .object(
+    {
+      goatcounter: z
+        .string({ error: message('deve ser um texto com o código do site no GoatCounter') })
+        .trim()
+        .regex(
+          /^[a-z0-9][a-z0-9-]{0,61}[a-z0-9]$/,
+          'deve ser o código do site no GoatCounter, só letras minúsculas, números e hífen, ex: museu-arte-londrina',
+        )
+        .optional(),
+    },
+    objectError,
+  )
+  .strict()
+  .prefault({});
+
 const socialSchema = z
   .object(
     {
@@ -354,6 +383,7 @@ export const configSchema = z
     links: z.array(linkSchema, { error: message('deve ser uma lista de links') }).default([]),
     social: z.array(socialSchema, { error: message('deve ser uma lista') }).default([]),
     theme: themeSchema,
+    analytics: analyticsSchema,
     seo: seoSchema,
     footer: footerSchema,
     },

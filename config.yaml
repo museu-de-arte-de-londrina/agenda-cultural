@@ -22,6 +22,15 @@ hours:
     time: 9h às 13h
     note: a partir do 5º dia útil
 
+# Contagem de acesso, desligada. Para ligar, crie uma conta em goatcounter.com,
+# escolha o código do site e escreva ele aqui:
+#
+# analytics:
+#   goatcounter: museu-arte-londrina
+#
+# Enquanto estiver comentado, a página não carrega nada de fora. Detalhes no
+# README, seção `analytics`, e no SECURITY.md.
+
 theme:
   mode: auto
   accent: "#004080"

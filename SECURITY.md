@@ -44,12 +44,42 @@ Está **fora** do escopo:
 ## Modelo de ameaça
 
 O site é estático, sem backend, sem banco e sem sessão de usuário. Não há dado
-de visitante para vazar: nenhuma requisição sai para terceiros, nenhum cookie é
-gravado, nenhum script roda.
+de visitante para vazar: nenhum cookie é gravado, e por padrão nenhuma
+requisição sai para terceiros.
 
-O site roda um único script próprio, `src/theme.js`, que só lê e grava a
-preferência de tema em `localStorage`. Ele não faz requisição nenhuma, não lê
-conteúdo da página e não recebe entrada de fora.
+Os scripts próprios são três, todos servidos pelo próprio site. O `theme.js` lê
+e grava a preferência de tema em `localStorage`. O `compartilhar.js` chama a
+folha de compartilhamento do sistema, ou copia o endereço. O `calendario.js`
+fecha o menu de calendário ao clicar fora. Nenhum deles faz requisição, lê
+conteúdo da página ou recebe entrada de fora.
+
+### Medição de acesso
+
+A chave `analytics.goatcounter` no `config.yaml` é a única coisa que faz o
+navegador de quem visita falar com um terceiro. Ela vem vazia, e enquanto
+estiver vazia a política continua em `script-src 'self'` e `connect-src 'none'`:
+nada de fora carrega e nada sai da página.
+
+Preenchida, ela abre exatamente duas origens, e a CSP é montada para não abrir
+mais que isso:
+
+- `script-src` passa a aceitar `https://gc.zgo.at`, de onde vem o `count.js`;
+- `connect-src` passa a aceitar `https://<código>.goatcounter.com`, para onde a
+  contagem é enviada.
+
+O código do site é validado como slug (`^[a-z0-9][a-z0-9-]{0,61}[a-z0-9]$`)
+justamente porque entra dentro da própria política: um ponto ou uma barra ali
+deixariam de nomear uma origem só.
+
+O que o GoatCounter recebe: caminho da página, referência, título, largura da
+tela, string de consulta e um sinal de robô. Ele não grava cookie, e o
+`localStorage` que usa serve só para a opção de não contar a própria visita,
+acessando a página com `#toggle-goatcounter` no fim do endereço. O IP chega ao
+servidor dele, como em qualquer requisição, e é descartado depois de virar hash
+para separar visitas do mesmo dia.
+
+Ligar isso é uma decisão de quem cuida do site, e muda o que este documento
+promete. Desligar é apagar a chave.
 
 A superfície real é o `config.yaml` virando HTML. As defesas são:
 

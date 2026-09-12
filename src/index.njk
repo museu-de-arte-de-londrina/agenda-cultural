@@ -29,7 +29,10 @@ permalink: /index.html
     {#- GitHub Pages cannot set response headers, so the policy ships as a meta tag.
         frame-ancestors is left out on purpose: a meta tag cannot deliver it, and
         including it only logged an error in every visitor's console. See SECURITY.md. -#}
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https:; style-src 'self'; script-src 'self'; font-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+    {#- As duas aberturas abaixo só existem quando analytics.goatcounter está
+        preenchido no config.yaml. Sem ele, a política continua exatamente a de
+        antes: nada de fora carrega e nada sai da página. -#}
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https:; style-src 'self'; script-src 'self'{% if site.analytics.goatcounter %} https://gc.zgo.at{% endif %}; font-src 'self'; connect-src {% if site.analytics.goatcounter %}https://{{ site.analytics.goatcounter }}.goatcounter.com{% else %}'none'{% endif %}; object-src 'none'; base-uri 'none'; form-action 'none'">
     <meta name="referrer" content="no-referrer">
     <meta name="color-scheme" content="{{ 'light dark' if site.theme.mode == 'auto' else site.theme.mode }}">
     {#- Pinta a barra do navegador no celular com a cor do cartão. -#}
@@ -74,6 +77,13 @@ permalink: /index.html
     <script src="compartilhar.js" defer></script>
     {%- if site.agenda.length %}
     <script src="calendario.js" defer></script>
+    {%- endif %}
+    {#- Contagem de acesso. Sem cookie e sem guardar IP: manda caminho,
+        referência, título, largura de tela e um sinal de robô. O localStorage
+        que ele usa serve só para a opção de não contar a própria visita, pelo
+        endereço com #toggle-goatcounter no fim. -#}
+    {%- if site.analytics.goatcounter %}
+    <script data-goatcounter="https://{{ site.analytics.goatcounter }}.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
     {%- endif %}
     {%- if site.structuredData %}
     {#- A data block, not executable script: CSP script-src does not apply. -#}

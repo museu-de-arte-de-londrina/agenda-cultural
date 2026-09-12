@@ -110,6 +110,46 @@ test('a CSP não abre exceção para inline', async () => {
   assert.ok(!tema.includes('defer'), 'defer faria o tema piscar antes de aplicar');
 });
 
+test('sem a chave de medição, nada de fora entra e a CSP não afrouxa', async () => {
+  const html = await render('profile:\n  name: Museu\n');
+
+  const csp = html.match(/http-equiv="Content-Security-Policy" content="([^"]+)"/)[1];
+  assert.match(csp, /script-src 'self';/, 'script-src não deveria citar host nenhum');
+  assert.match(csp, /connect-src 'none';/, 'a página não deveria poder falar com ninguém');
+  assert.ok(!html.includes('goatcounter'), 'nenhum vestígio do contador');
+  assert.ok(!html.includes('gc.zgo.at'));
+});
+
+test('com a chave, a CSP abre exatamente duas portas e mais nenhuma', async () => {
+  const html = await render('profile:\n  name: Museu\nanalytics:\n  goatcounter: museu-arte-londrina\n');
+
+  const csp = html.match(/http-equiv="Content-Security-Policy" content="([^"]+)"/)[1];
+  assert.match(csp, /script-src 'self' https:\/\/gc\.zgo\.at;/);
+  assert.match(csp, /connect-src https:\/\/museu-arte-londrina\.goatcounter\.com;/);
+
+  // O resto da política continua igual: é o ponto de deixar as partes fixas
+  // literais no template em vez de montar a linha inteira em código.
+  assert.match(csp, /default-src 'self';/);
+  assert.match(csp, /object-src 'none';/);
+  assert.match(csp, /base-uri 'none';/);
+  assert.match(csp, /form-action 'none'/);
+  assert.ok(!csp.includes('unsafe-inline'));
+
+  assert.match(
+    html,
+    /<script data-goatcounter="https:\/\/museu-arte-londrina\.goatcounter\.com\/count" async src="https:\/\/gc\.zgo\.at\/count\.js"><\/script>/,
+  );
+});
+
+test('código de medição inventado não vira host na CSP', async () => {
+  // O slug entra dentro da própria política, então o schema tem que barrar
+  // antes, e não deixar o build montar uma origem estranha.
+  await assert.rejects(
+    render('profile:\n  name: Museu\nanalytics:\n  goatcounter: "mau.exemplo.com"\n'),
+    /goatcounter: deve ser o código do site no GoatCounter/,
+  );
+});
+
 test('sem avatar, cai para as iniciais e não gera img quebrada', async () => {
   const html = await render('profile:\n  name: Ada Lovelace\n');
 

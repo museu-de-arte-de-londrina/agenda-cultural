@@ -162,6 +162,31 @@ quem for trocar o arquivo pode contar com isso em vez de se assustar.
 `profile.avatar` continua valendo mesmo com a faixa: é ele que vira favicon e
 imagem de compartilhamento, para os quais uma faixa deitada não serve.
 
+### `analytics`
+
+Contagem de acesso, desligada por padrão. Sem esta chave a página não carrega
+nada de fora e a CSP continua em `connect-src 'none'`.
+
+| Campo | Tipo | Obrigatório | Default | O que faz |
+| --- | --- | --- | --- | --- |
+| `analytics.goatcounter` | slug | não | vazio | Código do site no [GoatCounter](https://www.goatcounter.com). Ligado, a CSP passa a aceitar o script em `gc.zgo.at` e o envio para `<código>.goatcounter.com`, e nada além disso. |
+
+```yaml
+analytics:
+  goatcounter: museu-arte-londrina
+```
+
+Para ligar: crie uma conta gratuita em goatcounter.com, escolha o código do
+site, e escreva esse código aqui. O painel fica em
+`https://<código>.goatcounter.com`.
+
+Sem cookie e sem banner de consentimento: a contagem é agregada e não
+identifica ninguém. O que é enviado, e o que muda no modelo de ameaça, está
+detalhado no [`SECURITY.md`](SECURITY.md#medição-de-acesso).
+
+Para não contar as próprias visitas, abra o site com `#toggle-goatcounter` no
+fim do endereço. A escolha fica no navegador de quem clicou.
+
 ### `theme`
 
 | Campo | Tipo | Obrigatório | Default | Descrição |

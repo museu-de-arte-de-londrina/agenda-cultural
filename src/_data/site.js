@@ -214,6 +214,7 @@ export default async function site() {
       const iconData = resolveIcon(entry.platform);
       return { ...entry, iconData, dica: dicaDoContato({ ...entry, iconData }) };
     }),
+    analytics: config.analytics,
     footerDica: config.footer?.url ? `Abrir ${dominio(config.footer.url)}, numa nova aba` : null,
     handleDica: config.profile.handle_url
       ? `Abrir o perfil do museu em ${dominio(config.profile.handle_url)}`

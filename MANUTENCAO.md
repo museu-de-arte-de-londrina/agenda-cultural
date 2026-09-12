@@ -195,6 +195,32 @@ Tudo o que não é evento também mora no `config.yaml` e se edita do mesmo jeit
 O `README.md` explica campo por campo, com exemplos, na seção **Referência do
 `config.yaml`**.
 
+## Saber quantas pessoas acessam
+
+Vem desligado. Enquanto estiver assim, o site não conta nada e não conversa com
+empresa nenhuma, o que é proposital: a página é de uma instituição pública e não
+entrega o endereço de quem visita a ninguém.
+
+Para ligar, são dois passos:
+
+1. Crie uma conta gratuita em [goatcounter.com](https://www.goatcounter.com) e
+   escolha o código do site, por exemplo `museu-arte-londrina`.
+2. No `config.yaml`, escreva esse código:
+
+```yaml
+analytics:
+  goatcounter: museu-arte-londrina
+```
+
+O painel com os números fica em `https://<código>.goatcounter.com`: quantas
+visitas por dia, quais páginas, de onde vieram e por qual navegador.
+
+Não grava cookie e não identifica ninguém, então não precisa daquele aviso de
+consentimento. Para as suas próprias visitas não entrarem na conta, abra o site
+uma vez com `#toggle-goatcounter` no fim do endereço.
+
+Para desligar, apague as duas linhas. O site volta a não contar nada.
+
 ## Quem pode fazer o quê
 
 O repositório é público, então qualquer pessoa consegue abrir uma issue. Isso é
