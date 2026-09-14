@@ -238,6 +238,15 @@ events:
     description: '"Gira Mundo" (22 obras do acervo do Museu de Arte de Londrina) e “A Riqueza de um
       patrimônio em movimento”, sobre a vida, expedições e acervo de Vladimir Kozák, engenheiro
       e pesquisador tcheco que documentou povos indígenas brasileiros, especialmente no Paraná.'
+  - title: Editais de Ocupação do Museu de Arte de Londrina
+    start: 2026-08-10
+    end: 2026-10-09
+    image: assets/eventos/editais-de-ocupacao-do-museu-de-arte-de-londrina-20260810.webp
+    url: https://portal.londrina.pr.gov.br/espacos-culturais/museu-arte-sec-cultura
+    description: Seleção de propostas para a realização de Exposições nas variadas linguagens da
+      arte, incluindo trabalhos em pintura, desenhos, instalação, performance, fotografia,
+      objeto tridimensional, escultura, vídeo, gravura e suas possíveis derivações e
+      entrecruzamentos.
 links:
   - label: Programação Londrina Cultura
     url: https://londrinacultura.londrina.pr.gov.br/espaco/1/
