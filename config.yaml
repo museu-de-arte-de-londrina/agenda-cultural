@@ -32,6 +32,7 @@ analytics:
 theme:
   mode: auto
   accent: "#004080"
+
 # Em cartaz: o que o museu oferece sem dia marcado. Aparece acima da agenda,
 # sem data, sem horário e sem botão de calendário.
 # `until` não aparece na página: é só o dia em que o cartão sai sozinho. Sem
@@ -52,6 +53,15 @@ ongoing:
     description: Contação de histórias do livro “A mão livre do vovô”, visita mediada e atividade
       arte-educativa.
     until: 2026-12-31
+  - title: Editais de Ocupação do Museu de Arte de Londrina
+    image: assets/eventos/editais-de-ocupacao-do-museu-de-arte-de-londrina-20260810.webp
+    url: https://portal.londrina.pr.gov.br/espacos-culturais/museu-arte-sec-cultura
+    description: Seleção de propostas para a realização de Exposições nas variadas linguagens da
+      arte, incluindo trabalhos em pintura, desenhos, instalação, performance, fotografia,
+      objeto tridimensional, escultura, vídeo, gravura e suas possíveis derivações e
+      entrecruzamentos.
+    until: 2026-10-09
+    until_label: Inscrições até
 
 # Agenda. Eventos que já terminaram somem sozinhos no próximo build.
 events:
@@ -225,15 +235,6 @@ events:
     url: https://www.instagram.com/p/DdKIaRMlaOk/?img_index=6
     description: Passeio educativo onde um profissional acompanha os visitantes, explicando as obras
       de arte, a história do local e os temas das exposições.
-  - title: Editais de Ocupação do Museu de Arte de Londrina
-    start: 2026-08-10
-    end: 2026-10-09
-    image: assets/eventos/editais-de-ocupacao-do-museu-de-arte-de-londrina-20260810.webp
-    url: https://portal.londrina.pr.gov.br/espacos-culturais/museu-arte-sec-cultura
-    description: Seleção de propostas para a realização de Exposições nas variadas linguagens da
-      arte, incluindo trabalhos em pintura, desenhos, instalação, performance, fotografia,
-      objeto tridimensional, escultura, vídeo, gravura e suas possíveis derivações e
-      entrecruzamentos.
   - title: As multidançarinas
     start: 2026-09-29T15:00
     end: 2026-09-29T16:00

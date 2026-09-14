@@ -285,10 +285,19 @@ const ongoingSchema = z
       url: urlField.optional(),
       description: text(300).optional(),
       until: dateTimeField.optional(),
+      // Quando o prazo é a informação, como num edital, ele precisa aparecer.
+      // O texto vem daqui e a data vem do until, então os dois não têm como
+      // divergir: "Inscrições até" vira "Inscrições até 9 de outubro".
+      until_label: text(40).optional(),
     },
     objectError,
   )
-  .strict();
+  .strict()
+  .superRefine((item, ctx) => {
+    if (item.until_label && !item.until) {
+      ctx.addIssue({ code: 'custom', path: ['until_label'], message: 'precisa de until, que é a data mostrada junto' });
+    }
+  });
 
 /** One institutional mark in the footer strip. */
 const footerLogoSchema = z

@@ -200,6 +200,30 @@ ongoing:
   assert.match(html, />\s*Sem prazo\s*</, 'item sem until fica');
 });
 
+test('com until_label, o prazo aparece; sem ele, o until continua escondido', async () => {
+  const html = await render(`
+profile:
+  name: Museu
+ongoing:
+  - title: Edital
+    until: 2099-10-09
+    until_label: Inscrições até
+  - title: Exposição
+    until: 2099-12-31
+`);
+
+  const bloco = html.match(/<section class="cartaz"[\s\S]*?<\/section>/)[0];
+  assert.match(bloco, /entry__until">Inscrições até 9 de outubro</);
+  assert.ok(!bloco.includes('31 de dezembro'), 'sem until_label a data não pode aparecer');
+});
+
+test('until_label sem until é recusado, porque não teria data para mostrar', async () => {
+  await assert.rejects(
+    render('profile:\n  name: Museu\nongoing:\n  - title: X\n    until_label: Inscrições até\n'),
+    /until_label: precisa de until/,
+  );
+});
+
 test('sem nada em cartaz, o bloco inteiro some', async () => {
   const html = await render('profile:\n  name: Museu\n');
   assert.ok(!html.includes('class="cartaz"'));

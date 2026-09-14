@@ -105,6 +105,11 @@ function buildOngoing(config, now) {
     .map((item) => ({
       ...item,
       dicaDoLink: item.url ? `Abrir a página em ${dominio(item.url)}` : null,
+      // Só com until_label: sem ele, o until serve apenas para tirar o cartão.
+      prazo:
+        item.until_label && item.until
+          ? `${item.until_label} ${formatShortDate(parseDateTime(item.until), config.lang)}`
+          : null,
     }));
 }
 

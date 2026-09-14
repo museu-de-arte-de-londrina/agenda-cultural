@@ -135,6 +135,17 @@ ongoing:
 A linha `until` **não aparece para ninguém**. Ela só diz em que dia o cartão
 sai da página sozinho. Se apagar a linha, o item fica até alguém tirar.
 
+Quando o prazo **precisa** aparecer, como num edital com data de inscrição,
+acrescente uma linha `until_label` com o começo da frase. A data vem do `until`:
+
+```yaml
+  - title: Editais de Ocupação do Museu de Arte de Londrina
+    until: 2026-10-09
+    until_label: Inscrições até
+```
+
+No cartão aparece "Inscrições até 9 de outubro", e no dia 10 ele sai sozinho.
+
 Para tirar antes, apague o bloco inteiro, do `- title:` até a linha antes do
 próximo `- title:`.
 

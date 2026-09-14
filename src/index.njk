@@ -236,10 +236,11 @@ permalink: /index.html
                     {{ item.title }}
                     {%- endif -%}
                   </h3>
-                  {%- if item.kind or item.program %}
+                  {%- if item.kind or item.program or item.prazo %}
                   <p class="entry__meta">
                     {%- if item.kind %}<span class="entry__kind">{{ item.kind }}</span>{% endif %}
                     {%- if item.program %}<span class="entry__program">{{ item.program }}</span>{% endif %}
+                    {%- if item.prazo %}<span class="entry__until">{{ item.prazo }}</span>{% endif %}
                   </p>
                   {%- endif %}
                   {%- if item.description %}

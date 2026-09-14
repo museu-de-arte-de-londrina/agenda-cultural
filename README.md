@@ -218,6 +218,7 @@ nenhuma dessas.
 | `url` | URL `https:`, `mailto:` ou `tel:` | não | nenhum | Página do item. Com ela, o cartão inteiro vira clicável. |
 | `description` | texto, até 300 | não | nenhum | Uma ou duas frases. |
 | `until` | `AAAA-MM-DD` | não | nenhum | **Não aparece na página.** É o dia em que o cartão sai sozinho. Sem ele, o item fica até alguém apagar. |
+| `until_label` | texto, até 40 | não | nenhum | Faz o prazo aparecer, para quando ele é a informação, como num edital. `Inscrições até` com `until: 2026-10-09` vira "Inscrições até 9 de outubro" no cartão. Exige `until`. |
 
 Os itens daqui não entram no `agenda.ics` nem nos dados estruturados de
 evento, porque os dois exigem data.
