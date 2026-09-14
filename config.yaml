@@ -266,6 +266,14 @@ events:
     description: Projeto Ginga Viva Capoeira III/Promic utiliza a capoeira como ferramenta de
       desenvolvimento integral para crianças e adolescentes em situação de vulnerabilidade
       social
+  - title: Museu Educativo
+    start: 2026-09-29T14:00
+    end: 2026-09-29T17:00
+    kind: Ação Educativa
+    image: assets/eventos/museu-educativo-202609291400.webp
+    url: https://www.instagram.com/p/DFVVsnCxbaI/
+    description: Contação de história baseada no livro "Perigo na Floresta", visita mediada e
+      atividade arte-educativa. Para alunos do CEPAS.
 links:
   - label: Programação Londrina Cultura
     url: https://londrinacultura.londrina.pr.gov.br/espaco/1/
