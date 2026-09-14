@@ -274,6 +274,14 @@ events:
     url: https://www.instagram.com/p/DFVVsnCxbaI/
     description: Contação de história baseada no livro "Perigo na Floresta", visita mediada e
       atividade arte-educativa. Para alunos do CEPAS.
+  - title: Museu Educativo
+    start: 2026-09-30T15:30
+    end: 2026-09-30T17:00
+    kind: Ação Educativa
+    image: assets/eventos/museu-educativo-202609301530.webp
+    url: https://www.instagram.com/p/DW4iAIGES1i/
+    description: Contação de história baseada no livro "Perigo na Floresta", visita mediada e
+      atividade arte-educativa.
 links:
   - label: Programação Londrina Cultura
     url: https://londrinacultura.londrina.pr.gov.br/espaco/1/
