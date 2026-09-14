@@ -79,6 +79,13 @@ test('monta o evento com tudo preenchido', () => {
   });
 });
 
+test('tipo de atividade sem escolha não vira "None" no cartão', () => {
+  // É o que o GitHub escreve numa lista deixada em branco, e é diferente do
+  // _No response_ dos campos de texto. Veio assim na issue #33.
+  const { evento } = montarEvento(parseIssueForm(corpo({ ...COMPLETO, 'Tipo de atividade': 'None' })));
+  assert.equal(evento.kind, undefined);
+});
+
 test('o mínimo é título e data', () => {
   const { evento, erros } = montarEvento(
     parseIssueForm(corpo({ 'Título do evento': 'Visita mediada', Data: '21/09/2026' })),

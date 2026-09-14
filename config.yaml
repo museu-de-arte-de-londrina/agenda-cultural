@@ -177,7 +177,7 @@ events:
     image: assets/eventos/sabadart-sabado-no-museu-de-arte-202609170900.webp
     url: https://www.museuparanaense.pr.gov.br/Pagina/poesia-das-imagens-de-Vladimir-Kozak
     description: 'Sábado de Cultura para TODA A FAMÍLIA. Além das exposições "Gira Mundo" e "A
-      riqueza de um patrimônio em movimento: por dentro da vida e da coleção Vladmir Kozák"
+      riqueza de um patrimônio em movimento: por dentro da vida e da coleção Vladimir Kozák"
       teremos um dia com muitos eventos em parceria com o "Dia da Sergipe".'
   - title: AULA ABERTA DE MUSICALIZAÇÃO
     start: 2026-09-17T15:00
@@ -254,7 +254,7 @@ events:
     description: Projeto Ginga Viva Capoeira III/Promic utiliza a capoeira como ferramenta de
       desenvolvimento integral para crianças e adolescentes em situação de vulnerabilidade
       social
-  - title: Museu Educativo
+  - title: Programa Museu Educativo
     start: 2026-09-29T14:00
     end: 2026-09-29T17:00
     kind: Ação Educativa
@@ -262,7 +262,7 @@ events:
     url: https://www.instagram.com/p/DFVVsnCxbaI/
     description: Contação de história baseada no livro "Perigo na Floresta", visita mediada e
       atividade arte-educativa. Para alunos do CEPAS.
-  - title: Museu Educativo
+  - title: Programa Museu Educativo
     start: 2026-09-30T15:30
     end: 2026-09-30T17:00
     kind: Ação Educativa
@@ -293,16 +293,16 @@ events:
     description: Projeto Gungunzara nas Escolas/Promic é uma iniciativa artístico-cultural realizada
       pela Cia. Os Palhaços de Rua, leva apresentações de circo gratuitas e vivências práticas
       para estudantes da periferia.
-  - title: Museu Educativo
+  - title: Programa Museu Educativo
     start: 2026-10-08T14:00
     end: 2026-10-08T16:00
-    kind: None
+    kind: Ação Educativa
     image: assets/eventos/museu-educativo-202610081400.webp
     url: https://portal.londrina.pr.gov.br/espacos-culturais/museu-arte-sec-cultura
     description: Contação de História baseada no livro “Perigo na Floresta”, de Cláudia Rezende
       Barbeiro, Visita Mediada às exposições e à edificação, e Atividade Arte-Educativa para
       alunos da Escola Estadual Prof.Kazuco Ohara
-  - title: Museu Educativo
+  - title: Programa Museu Educativo
     start: 2026-10-16T14:00
     end: 2026-10-16T16:00
     kind: Ação Educativa
@@ -311,7 +311,7 @@ events:
     description: Contação de História baseada no livro “Perigo na Floresta”, de Cláudia Rezende
       Barbeiro, Visita Mediada às exposições e à edificação, e Atividade Arte-Educativa para
       alunos da Escola Municipal Dom Bosco (São Jerônimo da Serra)
-  - title: Museu Educativo
+  - title: Programa Museu Educativo
     start: 2026-10-20T11:00
     end: 2026-10-20T13:00
     kind: Ação Educativa

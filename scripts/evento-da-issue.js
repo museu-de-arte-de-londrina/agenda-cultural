@@ -51,6 +51,12 @@ const LARGURA_MAXIMA = 1200;
 const VAZIO = '_No response_';
 
 /**
+ * Mas não na lista de escolha: ali, sem opção marcada, o GitHub escreve
+ * "None". Passava como tipo de atividade e aparecia no cartão como "None".
+ */
+const LISTA_SEM_ESCOLHA = 'None';
+
+/**
  * Issue forms render as `### Label` followed by the value. Splitting on the
  * headings is enough, and avoids depending on a third-party parser action.
  * @param {string} body
@@ -179,7 +185,7 @@ export function montarEvento(campos) {
   if (fim) evento.end = fim;
 
   const tipo = ler('Tipo de atividade');
-  if (tipo && tipo !== 'Outro') evento.kind = tipo;
+  if (tipo && tipo !== 'Outro' && tipo !== LISTA_SEM_ESCOLHA) evento.kind = tipo;
 
   const programacao = ler('Faz parte de alguma programação?');
   if (programacao) evento.program = programacao;

@@ -240,7 +240,7 @@ export default async function site() {
       return { ...entry, iconData, dica: dicaDoContato({ ...entry, iconData }) };
     }),
     analytics: config.analytics,
-    footerDica: config.footer?.url ? `Abrir ${dominio(config.footer.url)}, numa nova aba` : null,
+    footerDica: config.footer?.url ? `Abrir em ${dominio(config.footer.url)}, numa nova aba` : null,
     handleDica: config.profile.handle_url
       ? `Abrir o perfil do museu em ${dominio(config.profile.handle_url)}`
       : null,
