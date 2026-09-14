@@ -229,6 +229,15 @@ events:
     url: https://www.instagram.com/p/DdKIaRMlaOk/?img_index=6
     description: Passeio educativo onde um profissional acompanha os visitantes, explicando as obras
       de arte, a história do local e os temas das exposições.
+  - title: Em Exposição
+    start: 2026-09-14T11:00
+    end: 2026-12-31T17:00
+    kind: Exposição
+    image: assets/eventos/em-exposicao-202609141100.webp
+    url: https://blog.londrina.pr.gov.br/?p=209580
+    description: '"Gira Mundo" (22 obras do acervo do Museu de Arte de Londrina) e “A Riqueza de um
+      patrimônio em movimento”, sobre a vida, expedições e acervo de Vladimir Kozák, engenheiro
+      e pesquisador tcheco que documentou povos indígenas brasileiros, especialmente no Paraná.'
 links:
   - label: Programação Londrina Cultura
     url: https://londrinacultura.londrina.pr.gov.br/espaco/1/
