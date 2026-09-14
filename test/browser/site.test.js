@@ -131,7 +131,9 @@ test('o cartão inteiro do evento é clicável', async () => {
   for (const largura of [320, 390, 1280]) {
     const { contexto, pagina } = await abrir({ largura, altura: 900 });
     const resultado = await pagina.evaluate(() => {
-      const cartao = document.querySelector('.entry');
+      // Da agenda com data: os cartões em cartaz vêm antes na página e não têm
+      // botão de calendário, então não servem para este teste.
+      const cartao = document.querySelector('.day .entry');
       const contagem = { evento: 0, calendario: 0, morto: 0 };
       const tela = window.innerHeight;
 

@@ -482,6 +482,21 @@ h1 {
   padding-top: 1rem;
 }
 
+/* Em cartaz: mesmo cartão da agenda, sem a coluna do dia. O fio embaixo
+   separa o que é permanente do que tem data, como o fio entre um dia e o
+   seguinte já faz dentro da agenda. */
+.cartaz {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--hairline);
+}
+
+.cartaz__lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
 .agenda__head {
   display: flex;
   flex-wrap: wrap;

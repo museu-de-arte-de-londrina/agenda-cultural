@@ -112,6 +112,32 @@ files**, depois acrescente uma linha `image:` no bloco do evento:
 Repare que o caminho escrito no `config.yaml` começa em `assets/`, e não em
 `src/assets/`. O `src` fica de fora.
 
+## Exposição em cartaz e programa permanente
+
+Nem tudo tem dia marcado. Uma exposição que fica meses em cartaz, ou um
+programa que o museu oferece o tempo todo, não é um evento: colocar data nele
+faz a agenda mostrar "sábado, 9h" em algo que dá para visitar a qualquer hora.
+
+Isso mora num bloco próprio, **Em cartaz no museu**, que aparece acima da
+agenda. Lá o cartão não tem data, horário nem botão de calendário. Não há
+formulário para ele: a edição é direto no `config.yaml`, na lista `ongoing`,
+logo antes de `events`.
+
+```yaml
+ongoing:
+  - title: Em Exposição
+    kind: Exposição
+    image: assets/eventos/em-exposicao-202609141100.webp
+    description: Uma ou duas frases sobre o que está em cartaz.
+    until: 2026-12-31
+```
+
+A linha `until` **não aparece para ninguém**. Ela só diz em que dia o cartão
+sai da página sozinho. Se apagar a linha, o item fica até alguém tirar.
+
+Para tirar antes, apague o bloco inteiro, do `- title:` até a linha antes do
+próximo `- title:`.
+
 ## Vários eventos da mesma programação
 
 Quando uma semana inteira faz parte do mesmo festival, a vontade é escrever o

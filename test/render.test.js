@@ -150,6 +150,68 @@ test('código de medição inventado não vira host na CSP', async () => {
   );
 });
 
+test('em cartaz sai acima da agenda, sem data, horário nem calendário', async () => {
+  const html = await render(`
+profile:
+  name: Museu
+ongoing:
+  - title: Exposição Permanente
+    kind: Exposição
+    program: Acervo
+    url: https://example.org/expo
+    description: Obras do acervo.
+    until: 2099-12-31
+events:
+  - title: Oficina
+    start: 2099-05-04T19:00
+`);
+
+  const cartaz = html.match(/<section class="cartaz"[\s\S]*?<\/section>/);
+  assert.ok(cartaz, 'o bloco em cartaz não apareceu');
+  const bloco = cartaz[0];
+
+  assert.match(bloco, /Em cartaz no museu/);
+  assert.match(bloco, />Exposição Permanente</);
+  assert.match(bloco, /entry__kind">Exposição</);
+  assert.match(bloco, /entry__program">Acervo</);
+  assert.match(bloco, /title="Abrir a página em example\.org"/);
+
+  // Nada de data em lugar nenhum do cartão, nem escondida no HTML.
+  assert.ok(!bloco.includes('<time'), 'em cartaz não tem horário');
+  assert.ok(!bloco.includes('entry__until'), 'em cartaz não mostra "até"');
+  assert.ok(!bloco.includes('2099-12-31'), 'o until não pode vazar para a página');
+  assert.ok(!bloco.includes('entry__cal'), 'sem data não há o que pôr no calendário');
+  assert.ok(!bloco.includes('day__rail'), 'sem coluna do dia');
+
+  assert.ok(html.indexOf('class="cartaz"') < html.indexOf('class="agenda"'), 'em cartaz vem antes da agenda');
+});
+
+test('em cartaz some sozinho depois do until, e sem until fica', async () => {
+  const html = await render(`
+profile:
+  name: Museu
+ongoing:
+  - title: Já acabou
+    until: 2000-01-01
+  - title: Sem prazo
+`);
+
+  assert.ok(!html.includes('Já acabou'), 'item com until no passado deveria ter saído');
+  assert.match(html, />\s*Sem prazo\s*</, 'item sem until fica');
+});
+
+test('sem nada em cartaz, o bloco inteiro some', async () => {
+  const html = await render('profile:\n  name: Museu\n');
+  assert.ok(!html.includes('class="cartaz"'));
+});
+
+test('em cartaz recusa data de início, que é justamente o que ele não tem', async () => {
+  await assert.rejects(
+    render('profile:\n  name: Museu\nongoing:\n  - title: X\n    start: 2099-01-01\n'),
+    /chave desconhecida: "start"/,
+  );
+});
+
 test('sem avatar, cai para as iniciais e não gera img quebrada', async () => {
   const html = await render('profile:\n  name: Ada Lovelace\n');
 

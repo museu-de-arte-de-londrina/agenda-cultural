@@ -32,33 +32,29 @@ analytics:
 theme:
   mode: auto
   accent: "#004080"
-
-# Agenda. Eventos que já terminaram somem sozinhos no próximo build.
-events:
+# Em cartaz: o que o museu oferece sem dia marcado. Aparece acima da agenda,
+# sem data, sem horário e sem botão de calendário.
+# `until` não aparece na página: é só o dia em que o cartão sai sozinho. Sem
+# `until`, o item fica até alguém apagar.
+ongoing:
+  - title: Em Exposição
+    kind: Exposição
+    image: assets/eventos/em-exposicao-202609141100.webp
+    url: https://blog.londrina.pr.gov.br/?p=209580
+    description: '"Gira Mundo" (22 obras do acervo do Museu de Arte de Londrina) e “A Riqueza de um
+      patrimônio em movimento”, sobre a vida, expedições e acervo de Vladimir Kozák, engenheiro
+      e pesquisador tcheco que documentou povos indígenas brasileiros, especialmente no Paraná.'
+    until: 2026-12-31
   - title: Programa Museu Educativo
-    start: 2026-04-01T11:00
-    end: 2026-12-31T17:00
     kind: Ação Educativa
     image: assets/eventos/programa-museu-educativo-4.webp
     url: https://www.instagram.com/p/DW4iAIGES1i/
     description: Contação de histórias do livro “A mão livre do vovô”, visita mediada e atividade
       arte-educativa.
-  - title: '“A Riqueza de um patrimônio em movimento: por dentro da vida e da coleção Vladimir Kozák”'
-    start: 2026-09-12T11:00
-    end: 2026-09-13T17:00
-    kind: Exposição
-    image: assets/eventos/a-riqueza-de-um-patrimonio-em-movimento-por-.webp
-    url: https://www.cultura.pr.gov.br/Pagina/museus-satelites
-    description: Acervo do Museu Paranaense sobre Vladimir Kozák (1897–1979), ligado à história do
-      Norte do Paraná e aos povos indígenas.
-  - title: Exposição Gira Mundo
-    start: 2026-09-12T11:00
-    end: 2026-09-13T17:00
-    kind: Exposição
-    image: assets/eventos/exposicao-gira-mundo.webp
-    url: https://blog.londrina.pr.gov.br/?p=219810
-    description: 22 obras do acervo, entre telas, gravuras e esculturas de 18 artistas, que
-      rememoram as mostras do período de restauro do prédio.
+    until: 2026-12-31
+
+# Agenda. Eventos que já terminaram somem sozinhos no próximo build.
+events:
   - title: Apresentação de Taiko
     start: 2026-09-21T19:00
     end: 2026-09-21T20:00
@@ -229,15 +225,6 @@ events:
     url: https://www.instagram.com/p/DdKIaRMlaOk/?img_index=6
     description: Passeio educativo onde um profissional acompanha os visitantes, explicando as obras
       de arte, a história do local e os temas das exposições.
-  - title: Em Exposição
-    start: 2026-08-14T11:00
-    end: 2026-12-31T17:00
-    kind: Exposição
-    image: assets/eventos/em-exposicao-202609141100.webp
-    url: https://blog.londrina.pr.gov.br/?p=209580
-    description: '"Gira Mundo" (22 obras do acervo do Museu de Arte de Londrina) e “A Riqueza de um
-      patrimônio em movimento”, sobre a vida, expedições e acervo de Vladimir Kozák, engenheiro
-      e pesquisador tcheco que documentou povos indígenas brasileiros, especialmente no Paraná.'
   - title: Editais de Ocupação do Museu de Arte de Londrina
     start: 2026-08-10
     end: 2026-10-09

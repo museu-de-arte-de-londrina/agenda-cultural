@@ -93,6 +93,21 @@ function absoluteUrl(source, baseUrl) {
  * otherwise print the same date six times. The date belongs to the day, and
  * each entry only has to say what time it starts.
  */
+/**
+ * O que está em cartaz: os itens de ongoing que ainda valem.
+ *
+ * Mesma regra de corte da agenda, e pela mesma função, contra a data escondida
+ * `until`. Sem ela o item fica. Nada de data sai daqui para a página.
+ */
+function buildOngoing(config, now) {
+  return config.ongoing
+    .filter((item) => !item.until || isUpcoming(parseDateTime(item.until), null, now))
+    .map((item) => ({
+      ...item,
+      dicaDoLink: item.url ? `Abrir a página em ${dominio(item.url)}` : null,
+    }));
+}
+
 function buildAgenda(config, now) {
   const local = { location: config.profile.location };
   const upcoming = config.events
@@ -198,12 +213,17 @@ export default async function site() {
   // Read at call time, not import time, so tests can point at a fixture.
   const config = await loadConfigFile(process.env.CONFIG_FILE ?? DEFAULT_CONFIG);
   const { accent } = config.theme;
-  const agenda = buildAgenda(config, wallClockNow());
+  // Um relógio só para os dois cortes, senão um item em cartaz e um evento
+  // com o mesmo fim poderiam discordar sobre se já passaram.
+  const agora = wallClockNow();
+  const agenda = buildAgenda(config, agora);
+  const emCartaz = buildOngoing(config, agora);
 
   return {
     ...config,
     initials: initials(config.profile.name),
     agenda,
+    emCartaz,
     structuredData: structuredData(config, agenda),
     links: config.links.map((link) => ({
       ...link,

@@ -198,6 +198,39 @@ A cor do texto sobre o `accent` é calculada no build (preto ou branco, o que
 tiver mais contraste), então o contraste AA vale para qualquer accent
 escolhido. Aspas no YAML são necessárias: `accent: "#a4343a"`.
 
+### `ongoing[]`
+
+O que o museu oferece sem dia marcado: uma exposição em cartaz, um programa
+permanente. Aparece num bloco **Em cartaz no museu**, acima da agenda, sem
+coluna do dia, sem horário, sem "até" e sem botão de calendário.
+
+Existe separado de `events[]` porque a agenda é montada em cima da data: é por
+ela que os eventos são agrupados por dia, ordenados, salvos no calendário e
+tirados da página quando passam. Um item sem data não teria onde entrar em
+nenhuma dessas.
+
+| Campo | Tipo | Obrigatório | Default | O que faz |
+| --- | --- | --- | --- | --- |
+| `title` | texto, até 140 | **sim** | (sem default) | Título do cartão. |
+| `kind` | texto, até 40 | não | nenhum | Etiqueta do tipo, como em `events[]`. |
+| `program` | texto, até 60 | não | nenhum | Programação de que faz parte, como em `events[]`. |
+| `image` | caminho ou URL `https://` | não | nenhum | Miniatura. |
+| `url` | URL `https:`, `mailto:` ou `tel:` | não | nenhum | Página do item. Com ela, o cartão inteiro vira clicável. |
+| `description` | texto, até 300 | não | nenhum | Uma ou duas frases. |
+| `until` | `AAAA-MM-DD` | não | nenhum | **Não aparece na página.** É o dia em que o cartão sai sozinho. Sem ele, o item fica até alguém apagar. |
+
+Os itens daqui não entram no `agenda.ics` nem nos dados estruturados de
+evento, porque os dois exigem data.
+
+```yaml
+ongoing:
+  - title: Em Exposição
+    kind: Exposição
+    image: assets/eventos/em-exposicao.webp
+    description: Obras do acervo em cartaz.
+    until: 2026-12-31
+```
+
 ### `events[]`
 
 A agenda, o miolo da página. Cada evento vira um cartão com miniatura, data,

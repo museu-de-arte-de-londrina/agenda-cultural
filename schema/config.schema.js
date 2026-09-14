@@ -264,6 +264,32 @@ const hoursSchema = z
   )
   .strict();
 
+/**
+ * O que o museu oferece sem dia marcado: uma exposição em cartaz, um programa
+ * permanente.
+ *
+ * Fica numa lista própria, e não em events, porque a agenda inteira é montada
+ * em cima da data: coluna do dia, ordem, horário, "até", botão de calendário.
+ * Um evento sem data não tem onde se pendurar em nenhuma dessas.
+ *
+ * `until` nunca aparece na página. Serve só para o cartão sair sozinho no dia
+ * certo; sem ele, o item fica até alguém apagar.
+ */
+const ongoingSchema = z
+  .object(
+    {
+      title: text(140),
+      kind: text(40).optional(),
+      program: text(60).optional(),
+      image: imageField.optional(),
+      url: urlField.optional(),
+      description: text(300).optional(),
+      until: dateTimeField.optional(),
+    },
+    objectError,
+  )
+  .strict();
+
 /** One institutional mark in the footer strip. */
 const footerLogoSchema = z
   .object(
@@ -379,6 +405,7 @@ export const configSchema = z
       .array(hoursSchema, { error: message('deve ser uma lista de horários') })
       .max(4, 'no máximo 4 faixas de horário')
       .default([]),
+    ongoing: z.array(ongoingSchema, { error: message('deve ser uma lista') }).default([]),
     events: z.array(eventSchema, { error: message('deve ser uma lista de eventos') }).default([]),
     links: z.array(linkSchema, { error: message('deve ser uma lista de links') }).default([]),
     social: z.array(socialSchema, { error: message('deve ser uma lista') }).default([]),
