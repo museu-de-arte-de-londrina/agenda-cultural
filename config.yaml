@@ -282,6 +282,14 @@ events:
     url: https://www.instagram.com/p/DW4iAIGES1i/
     description: Contação de história baseada no livro "Perigo na Floresta", visita mediada e
       atividade arte-educativa.
+  - title: SABADARTE (Sábado no Museu de Arte de Londrina)
+    start: 2026-09-10T09:00
+    end: 2026-09-10T13:00
+    kind: Exposição
+    image: assets/eventos/sabadarte-sabado-no-museu-de-arte-de-londrina-202609100900.webp
+    url: https://blog.londrina.pr.gov.br/?p=219810
+    description: 'Sábado de cultura para TODA A FAMÍLIA. Visite as exposições "Gira Mundo" e "A
+      Riqueza de um patrimônio em movimento: Por dentro da vida e da coleção Vladimir Kozák".'
 links:
   - label: Programação Londrina Cultura
     url: https://londrinacultura.londrina.pr.gov.br/espaco/1/
