@@ -36,8 +36,8 @@ theme:
 # Agenda. Eventos que já terminaram somem sozinhos no próximo build.
 events:
   - title: Programa Museu Educativo
-    start: 2026-09-12T09:00
-    end: 2026-12-30T10:00
+    start: 2026-04-01T11:00
+    end: 2026-12-31T17:00
     kind: Ação Educativa
     image: assets/eventos/programa-museu-educativo-4.webp
     url: https://www.instagram.com/p/DW4iAIGES1i/
