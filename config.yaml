@@ -314,6 +314,15 @@ events:
     description: Contação de História baseada no livro “Perigo na Floresta”, de Cláudia Rezende
       Barbeiro, Visita Mediada às exposições e à edificação, e Atividade Arte-Educativa para
       alunos da Escola Estadual Prof.Kazuco Ohara
+  - title: Museu Educativo
+    start: 2026-10-16T14:00
+    end: 2026-10-16T16:00
+    kind: Ação Educativa
+    image: assets/eventos/museu-educativo-202610161400.webp
+    url: https://portal.londrina.pr.gov.br/espacos-culturais/museu-arte-sec-cultura
+    description: Contação de História baseada no livro “Perigo na Floresta”, de Cláudia Rezende
+      Barbeiro, Visita Mediada às exposições e à edificação, e Atividade Arte-Educativa para
+      alunos da Escola Municipal Dom Bosco (São Jerônimo da Serra)
 links:
   - label: Programação Londrina Cultura
     url: https://londrinacultura.londrina.pr.gov.br/espaco/1/
