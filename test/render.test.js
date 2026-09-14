@@ -170,7 +170,7 @@ events:
   assert.ok(cartaz, 'o bloco em cartaz não apareceu');
   const bloco = cartaz[0];
 
-  assert.match(bloco, /Em cartaz no museu/);
+  assert.match(bloco, /id="cartaz-titulo">Destaques</);
   assert.match(bloco, />Exposição Permanente</);
   assert.match(bloco, /entry__kind">Exposição</);
   assert.match(bloco, /entry__program">Acervo</);

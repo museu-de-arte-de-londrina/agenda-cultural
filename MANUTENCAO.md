@@ -118,7 +118,7 @@ Nem tudo tem dia marcado. Uma exposição que fica meses em cartaz, ou um
 programa que o museu oferece o tempo todo, não é um evento: colocar data nele
 faz a agenda mostrar "sábado, 9h" em algo que dá para visitar a qualquer hora.
 
-Isso mora num bloco próprio, **Em cartaz no museu**, que aparece acima da
+Isso mora num bloco próprio, **Destaques**, que aparece acima da
 agenda. Lá o cartão não tem data, horário nem botão de calendário. Não há
 formulário para ele: a edição é direto no `config.yaml`, na lista `ongoing`,
 logo antes de `events`.

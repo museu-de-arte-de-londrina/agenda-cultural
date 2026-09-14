@@ -39,8 +39,33 @@ after(async () => {
 });
 
 /** @param {{largura?: number, altura?: number, tema?: 'light'|'dark'}} opcoes */
+/**
+ * Contexto de navegador isolado da internet.
+ *
+ * A página carrega o contador de acesso de gc.zgo.at, e o evento load espera
+ * esse script terminar. Medido daqui, ele levou de 90ms a mais de 5s, e um
+ * teste chegou a estourar os 30s de espera. Teste de site estático não pode
+ * depender da rede, então toda requisição para outra origem recebe um script
+ * vazio.
+ *
+ * Script vazio, e não requisição abortada: abortar registra "Failed to load
+ * resource" no console, e o teste de console reprovaria por algo que o
+ * visitante nunca vê. Se um dia a página buscar imagem ou folha de estilo de
+ * fora, este stub responde com o tipo errado, e o teste que depender dela vai
+ * mostrar isso.
+ */
+async function novoContexto(opcoes) {
+  const contexto = await navegador.newContext(opcoes);
+  const origem = new URL(site.url).origin;
+  await contexto.route(
+    (url) => url.origin !== origem,
+    (rota) => rota.fulfill({ status: 200, contentType: 'text/javascript', body: '' }),
+  );
+  return contexto;
+}
+
 async function abrir(opcoes = {}) {
-  const contexto = await navegador.newContext({
+  const contexto = await novoContexto({
     viewport: { width: opcoes.largura ?? 390, height: opcoes.altura ?? 844 },
     colorScheme: opcoes.tema ?? 'light',
   });
@@ -60,10 +85,24 @@ const LARGURAS = [320, 360, 390, 768, 1280];
 test('nenhuma largura provoca rolagem horizontal', async () => {
   for (const largura of LARGURAS) {
     const { contexto, pagina } = await abrir({ largura });
-    const transbordo = await pagina.evaluate(
-      () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
-    );
-    assert.equal(transbordo, 0, `${largura}px transborda ${transbordo}px na horizontal`);
+    // Quando falha, diz quem passou da borda. "Transborda 3px" sozinho não
+    // aponta para nada, e a falha às vezes só aparece uma vez em várias rodadas.
+    const { transbordo, detalhe } = await pagina.evaluate(() => {
+      const d = document.documentElement;
+      const transbordo = d.scrollWidth - d.clientWidth;
+      if (transbordo <= 0) return { transbordo, detalhe: '' };
+      const culpados = [...document.querySelectorAll('body *')]
+        .map((el) => ({ el, r: el.getBoundingClientRect() }))
+        .filter(({ r }) => r.width > 0 && r.right > d.clientWidth + 0.5)
+        .sort((a, b) => b.r.right - a.r.right)
+        .slice(0, 4)
+        .map(({ el, r }) => `${el.tagName.toLowerCase()}.${el.getAttribute('class') ?? ''} (borda direita em ${Math.round(r.right)}px)`);
+      return {
+        transbordo,
+        detalhe: ` | fontes: ${document.fonts.status} | passam da borda: ${culpados.join('; ') || 'nenhum elemento visível'}`,
+      };
+    });
+    assert.equal(transbordo, 0, `${largura}px transborda ${transbordo}px na horizontal${detalhe}`);
     await contexto.close();
   }
 });
@@ -193,7 +232,7 @@ test('o axe não encontra violação de acessibilidade', async () => {
     for (const largura of [320, 390, 1280]) {
       // bypassCSP só para conseguir injetar o axe: a política da página é
       // verificada pelo teste de CSP, e é ela que barra a injeção aqui.
-      const contexto = await navegador.newContext({
+      const contexto = await novoContexto({
         viewport: { width: largura, height: 900 },
         colorScheme: tema,
         bypassCSP: true,
@@ -277,7 +316,7 @@ test('a página não registra erro no console', async () => {
 });
 
 test('compartilhar usa a folha do sistema quando ela existe', async () => {
-  const contexto = await navegador.newContext({ viewport: { width: 390, height: 844 } });
+  const contexto = await novoContexto({ viewport: { width: 390, height: 844 } });
   const pagina = await contexto.newPage();
   await pagina.addInitScript(() => {
     window.__compartilhado = null;
@@ -300,7 +339,7 @@ test('compartilhar usa a folha do sistema quando ela existe', async () => {
 });
 
 test('sem a folha do sistema, copia o endereço e avisa', async () => {
-  const contexto = await navegador.newContext({
+  const contexto = await novoContexto({
     viewport: { width: 1280, height: 800 },
     permissions: ['clipboard-read', 'clipboard-write'],
   });
@@ -317,7 +356,7 @@ test('sem a folha do sistema, copia o endereço e avisa', async () => {
 
 test('sem suporte nenhum, o botão de compartilhar nem aparece', async () => {
   // Controle que não faz nada é pior que controle nenhum.
-  const contexto = await navegador.newContext({ viewport: { width: 1280, height: 800 } });
+  const contexto = await novoContexto({ viewport: { width: 1280, height: 800 } });
   const pagina = await contexto.newPage();
   await pagina.addInitScript(() => {
     // Os dois, explicitamente: o Chrome expõe um ou outro conforme a versão e
@@ -335,7 +374,7 @@ test('sem suporte nenhum, o botão de compartilhar nem aparece', async () => {
 });
 
 test('sem JavaScript, nenhum botão morto aparece na tela', async () => {
-  const contexto = await navegador.newContext({
+  const contexto = await novoContexto({
     viewport: { width: 1280, height: 800 },
     javaScriptEnabled: false,
   });

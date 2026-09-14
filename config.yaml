@@ -33,7 +33,7 @@ theme:
   mode: auto
   accent: "#004080"
 
-# Em cartaz: o que o museu oferece sem dia marcado. Aparece acima da agenda,
+# Destaques: o que o museu oferece sem dia marcado. Aparece acima da agenda,
 # sem data, sem horário e sem botão de calendário.
 # `until` não aparece na página: é só o dia em que o cartão sai sozinho. Sem
 # `until`, o item fica até alguém apagar.

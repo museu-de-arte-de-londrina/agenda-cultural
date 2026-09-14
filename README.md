@@ -201,7 +201,7 @@ escolhido. Aspas no YAML são necessárias: `accent: "#a4343a"`.
 ### `ongoing[]`
 
 O que o museu oferece sem dia marcado: uma exposição em cartaz, um programa
-permanente. Aparece num bloco **Em cartaz no museu**, acima da agenda, sem
+permanente. Aparece num bloco **Destaques**, acima da agenda, sem
 coluna do dia, sem horário, sem "até" e sem botão de calendário.
 
 Existe separado de `events[]` porque a agenda é montada em cima da data: é por
