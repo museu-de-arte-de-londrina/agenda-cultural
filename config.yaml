@@ -290,6 +290,12 @@ events:
     url: https://blog.londrina.pr.gov.br/?p=219810
     description: 'Sábado de cultura para TODA A FAMÍLIA. Visite as exposições "Gira Mundo" e "A
       Riqueza de um patrimônio em movimento: Por dentro da vida e da coleção Vladimir Kozák".'
+  - title: Feira de Arte
+    start: 2026-10-10T09:00
+    end: 2026-10-10T13:00
+    image: assets/eventos/feira-de-arte-202610100900.webp
+    url: https://www.instagram.com/p/DctSXh2OqL5/
+    description: Projeto Encontro Ilustre/Promic. Feira gráfica autoral.
 links:
   - label: Programação Londrina Cultura
     url: https://londrinacultura.londrina.pr.gov.br/espaco/1/
