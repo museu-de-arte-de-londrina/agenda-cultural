@@ -230,7 +230,7 @@ events:
     description: Passeio educativo onde um profissional acompanha os visitantes, explicando as obras
       de arte, a história do local e os temas das exposições.
   - title: Em Exposição
-    start: 2026-09-14T11:00
+    start: 2026-08-14T11:00
     end: 2026-12-31T17:00
     kind: Exposição
     image: assets/eventos/em-exposicao-202609141100.webp
