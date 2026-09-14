@@ -225,7 +225,7 @@ evento, porque os dois exigem data.
 
 ```yaml
 ongoing:
-  - title: Em Exposição
+  - title: Gira Mundo e Coleção Vladimir Kozák
     kind: Exposição
     image: assets/eventos/em-exposicao.webp
     description: Obras do acervo em cartaz.

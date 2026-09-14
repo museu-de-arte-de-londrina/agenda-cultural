@@ -38,7 +38,7 @@ theme:
 # `until` não aparece na página: é só o dia em que o cartão sai sozinho. Sem
 # `until`, o item fica até alguém apagar.
 ongoing:
-  - title: Em Exposição
+  - title: Gira Mundo e Coleção Vladimir Kozák
     kind: Exposição
     image: assets/eventos/em-exposicao-202609141100.webp
     url: https://blog.londrina.pr.gov.br/?p=209580

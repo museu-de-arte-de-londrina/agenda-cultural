@@ -125,7 +125,7 @@ logo antes de `events`.
 
 ```yaml
 ongoing:
-  - title: Em Exposição
+  - title: Gira Mundo e Coleção Vladimir Kozák
     kind: Exposição
     image: assets/eventos/em-exposicao-202609141100.webp
     description: Uma ou duas frases sobre o que está em cartaz.
