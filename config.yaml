@@ -320,6 +320,15 @@ events:
     description: Contação de História baseada no livro “Perigo na Floresta”, de Cláudia Rezende
       Barbeiro, Visita Mediada às exposições e à edificação, e Atividade Arte-Educativa para
       alunos do Colégio Sagrado Coração (Bela Vista)
+  - title: SABADARTE (Sábado no Museu de Arte de Londrina)
+    start: 2026-10-17T09:00
+    end: 2026-10-17T13:00
+    kind: Exposição
+    image: assets/eventos/sabadarte-sabado-no-museu-de-arte-de-londrina-202610170900.webp
+    url: https://blog.londrina.pr.gov.br/?p=209580
+    description: Sábado de Cultura para TODA A FAMÍLIA! Venha com a família e os amigos conhecer as
+      exposições Gira Mundo, com 22 obras, e A riqueza de um patrimônio em movimento, que
+      apresenta registros do pesquisador Vladimir Kozák sobre os povos indígenas do Brasil.
 links:
   - label: Programação Londrina Cultura
     url: https://londrinacultura.londrina.pr.gov.br/espaco/1/
