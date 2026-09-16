@@ -42,16 +42,15 @@ ongoing:
     kind: Exposição
     image: assets/eventos/em-exposicao-202609141100.webp
     url: https://blog.londrina.pr.gov.br/?p=209580
-    description: '"Gira Mundo" (22 obras do acervo do Museu de Arte de Londrina) e “A Riqueza de um
-      patrimônio em movimento”, sobre a vida, expedições e acervo de Vladimir Kozák, engenheiro
-      e pesquisador tcheco que documentou povos indígenas brasileiros, especialmente no Paraná.'
+    description: GIRA MUNDO, expõe obras do acervo do Museu de Arte de Londrina, e A RIQUESA DE UM PATRIMÔNIO EM MOVIMENTO, apresenta, em parceria com o MUPA, a vida, expedições e acervo de Vladimir Kozák, engenheiro
+      e pesquisador tcheco que documentou povos indígenas brasileiros, especialmente no Paraná.
     until: 2026-12-31
   - title: Programa Museu Educativo
     kind: Ação Educativa
     image: assets/eventos/programa-museu-educativo-4.webp
     url: https://www.instagram.com/p/DW4iAIGES1i/
-    description: Contação de histórias do livro “A mão livre do vovô”, visita mediada e atividade
-      arte-educativa.
+    description: Contação de histórias dos livros A MÃO LIVRE DO VOVÔ ou PERIGO NA FLORESTA, visita mediada e atividade
+      arte-educativa mediante agendamento.
     until: 2026-12-31
   - title: Editais de Ocupação do Museu de Arte de Londrina
     image: assets/eventos/editais-de-ocupacao-do-museu-de-arte-de-londrina-20260810.webp
@@ -97,7 +96,7 @@ events:
     image: assets/eventos/estudio-de-radio-movel.webp
     url: https://visite.museus.gov.br/20a-primavera-dos-museus/estudio-de-radio-movel/
     description: Oficina de criação e produção de podcast, pelo projeto AlmA Londrina Rádio Web.
-  - title: Roda de conversa “Os desafios dos museus na contemporaneidade”
+  - title: Roda de conversa Os desafios dos museus na contemporaneidade
     start: 2026-09-23T09:00
     end: 2026-09-23T11:00
     kind: Ação Educativa
@@ -106,7 +105,7 @@ events:
     url: https://visite.museus.gov.br/20a-primavera-dos-museus/museu-em-audio-um-guia-inclusivo-sobre-a-historia-de-londrina/
     description: Conversa aberta sobre inclusão, acessibilidade, diversidade e novas tecnologias nos
       museus. Ação formativa do projeto Museu em Áudio.
-  - title: Espetáculo teatral “Mundus Eurídice”
+  - title: Espetáculo teatral Mundus Eurídice
     start: 2026-09-23T19:30
     end: 2026-09-23T21:00
     kind: Teatro
@@ -123,16 +122,16 @@ events:
     image: assets/eventos/programa-museu-educativo-3.webp
     url: https://visite.museus.gov.br/20a-primavera-dos-museus/atendimento-programa-museu-educativo/
     description: Contação de histórias do livro “Perigo na Floresta”, visita mediada e atividade
-      arte-educativa. Para alunos da Escola Ateliê de Artes.
-  - title: '“BRISA: Saraus Artísticos 6ª Temporada”'
+      arte-educativa. Para alunos de escolas agendadas.
+  - title: BRISA: Saraus Artísticos 6ª Temporada
     start: 2026-09-24T18:00
     end: 2026-09-24T20:00
     kind: Sarau
     program: 20ª Primavera dos Museus
     image: assets/eventos/brisa-saraus-artisticos-6a-temporada.webp
     url: https://visite.museus.gov.br/20a-primavera-dos-museus/brisa-saraus-artisticos-6a-temporada/
-    description: Sarau com apresentações e atividades culturais junto a pessoas em situação de rua
-      ou acolhimento institucional.
+    description: Sarau com apresentações e atividades culturais junto às pessoas em situação de rua
+      ou acolhimento institucional e comunidade em geral.
   - title: Programa Museu Educativo
     start: 2026-09-25T10:00
     end: 2026-09-25T11:30
@@ -141,7 +140,7 @@ events:
     image: assets/eventos/programa-museu-educativo-2.webp
     url: https://visite.museus.gov.br/20a-primavera-dos-museus/programa-museu-educativo/
     description: Contação de histórias do livro “Perigo na Floresta”, visita mediada e atividade
-      arte-educativa. Para alunos da Escola Municipal Profª Tereza Canhadas Bertan.
+      arte-educativa. Para alunos de escolas agendadas.
   - title: Programa Museu Educativo
     start: 2026-09-25T14:00
     end: 2026-09-25T15:30
@@ -150,15 +149,15 @@ events:
     image: assets/eventos/programa-museu-educativo.webp
     url: https://visite.museus.gov.br/20a-primavera-dos-museus/programa-museu-educativo-2/
     description: Contação de histórias do livro “Perigo na Floresta”, visita mediada e atividade
-      arte-educativa. Para alunos da Escola Municipal Profª Tereza Canhadas Bertan.
+      arte-educativa. Para alunos de escolas agendadas.
   - title: SABADARTE (Sábado no Museu de Arte)
     start: 2026-09-12T09:00
     end: 2026-09-12T13:00
     kind: Exposição
     image: assets/eventos/sabadart-sabado-no-museu-de-arte-202609120900.webp
     url: https://blog.londrina.pr.gov.br/?p=219810
-    description: Um sábado de cultura PARA TODA A FAMÍLIA. Conheça as exposições "Gira Mundo", com
-      22 obras do acervo do Museu, e "A riqueza de um patrimônio em movimento", sobre a
+    description: Um sábado de cultura PARA TODA A FAMÍLIA. Conheça as exposições GIRA MUNDO, com
+      obras do acervo do Museu, e A RIQUESA DE UM PATRIMONIO EM MOVIMENTO, sobre a
       trajetória de Vladimir Kozák (1897–1979), cuja obra tem forte ligação com o norte do
       Paraná, especialmente os povos indígenas.
   - title: Apresentação do Coro Voz Viva
