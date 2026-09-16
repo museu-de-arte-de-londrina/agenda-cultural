@@ -299,8 +299,8 @@ events:
     image: assets/eventos/museu-educativo-202610081400.webp
     url: https://portal.londrina.pr.gov.br/espacos-culturais/museu-arte-sec-cultura
     description: Contação de História baseada no livro “Perigo na Floresta”, de Cláudia Rezende
-      Barbeiro, Visita Mediada às exposições e à edificação, e Atividade Arte-Educativa para
-      alunos da Escola Estadual Prof.Kazuco Ohara
+      Barbeiro, Visita Mediada às exposições e à edificação, e Atividade Arte-Educativa. Para
+      alunos de escolas agendadas.
   - title: Programa Museu Educativo
     start: 2026-10-16T14:00
     end: 2026-10-16T16:00
@@ -308,8 +308,8 @@ events:
     image: assets/eventos/museu-educativo-202610161400.webp
     url: https://portal.londrina.pr.gov.br/espacos-culturais/museu-arte-sec-cultura
     description: Contação de História baseada no livro “Perigo na Floresta”, de Cláudia Rezende
-      Barbeiro, Visita Mediada às exposições e à edificação, e Atividade Arte-Educativa para
-      alunos da Escola Municipal Dom Bosco (São Jerônimo da Serra)
+      Barbeiro, Visita Mediada às exposições e à edificação, e Atividade Arte-Educativa. Para
+      alunos da escolas agendadas.
   - title: Programa Museu Educativo
     start: 2026-10-20T11:00
     end: 2026-10-20T13:00
