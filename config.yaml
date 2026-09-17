@@ -81,8 +81,8 @@ events:
     description: Sessão de abertura com representantes do Museu de Arte, do Museu do Café/Sesc
       Cadeião e do Museu Histórico de Londrina/UEL.
   - title: Mostra de curta-metragens
-    start: 2026-09-21T21:00
-    end: 2026-09-21T22:00
+    start: 2026-09-17T13:00
+    end: 2026-09-17T16:10
     kind: Exibição de Filme
     program: 20ª Primavera dos Museus
     image: assets/eventos/mostra-de-curta-metragens.webp
