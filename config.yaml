@@ -64,17 +64,17 @@ ongoing:
 
 # Agenda. Eventos que já terminaram somem sozinhos no próximo build.
 events:
-  - title: Apresentação de Taiko
-    start: 2026-09-21T19:00
-    end: 2026-09-21T20:00
+  - title: Apresentação de Taiko e Abertura da 20° Primavera dos Museus
+    start: 2026-09-21T19:30
+    end: 2026-09-21T21:30
     kind: Show Musical
     program: 20ª Primavera dos Museus
     image: assets/eventos/apresentacao-de-taiko.webp
     url: https://visite.museus.gov.br/20a-primavera-dos-museus/apresentacao-de-taiko/
-    description: Tambores japoneses, pelo 22º Londrina Matsuri – Festival da Primavera.
+    description: Os museus de Arte de Londrina, Histórico de Londrina e do Café/SESC Cadeião, junto com o NDPH/UEL, convidam para a abertura da programação local da Primavera dos Museus. O evento contará com a apresentação de Taiko do Grupo Sansey, em celebração ao 22° Londrina Matsuri – Festival da PrimaveraTambores japoneses, pelo 22º Londrina Matsuri – Festival da Primavera.
   - title: Abertura da programação local da 20ª Primavera dos Museus
-    start: 2026-09-21T20:00
-    end: 2026-09-21T21:00
+    start: 2026-09-17T17:00
+    end: 2026-09-17T17:10
     kind: Abertura
     image: assets/eventos/abertura-da-programacao-local-da-20a-primave.webp
     url: https://visite.museus.gov.br/20a-primavera-dos-museus/abertura-oficial-da-programacao-local-da-20a-primavera-dos-museus/
