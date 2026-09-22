@@ -342,6 +342,13 @@ events:
     url: https://www.instagram.com/museudeartedelondrina/
     description: Visita mediada as exposições Gira Mundo e A riqueza de um patrimônio em movimento
       (coleção Vladimir Kozák - MUPA)
+  - title: Programa Museu Educativo
+    start: 2026-09-29T14:00
+    end: 2026-09-29T16:00
+    kind: Ação Educativa
+    url: https://www.instagram.com/p/DZaOePOxODC/
+    description: Contação de história baseada no livro "Perigo na Floresta", visita mediada e
+      atividade arte-educativa. Para alunos de escolas agendas.
 links:
   - label: Programação Londrina Cultura
     url: https://londrinacultura.londrina.pr.gov.br/espaco/1/
