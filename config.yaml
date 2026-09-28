@@ -366,6 +366,14 @@ events:
       improvisação. O projeto, financiado pelo PROMIC, engloba modalidades de danças baseadas na
       ancestralidade e na cultura negra, unindo dança, história e resistência, como a Capoeira e
       o Hip Hop.
+  - title: Visita Mediada
+    start: 2026-10-20T19:30
+    end: 2026-10-20T21:00
+    kind: Visita Mediada
+    image: assets/eventos/visita-mediada-202610201930.webp
+    url: https://londrinacultura.londrina.pr.gov.br/espaco/1/
+    description: Atividade Arte Educativa voltada aos alunos do curso de Artes Visuais da
+      Universidade Estadual de Londrina.
 links:
   - label: Programação Londrina Cultura
     url: https://londrinacultura.londrina.pr.gov.br/espaco/1/
