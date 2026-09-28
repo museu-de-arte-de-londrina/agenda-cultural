@@ -356,6 +356,16 @@ events:
     image: assets/eventos/visita-mediada-202610060900.webp
     description: Atividade Arte Educativa para alunos do curso de Artes Visuais da Universidade
       Estadual de Londrina.
+  - title: Oficina de Dança - Corpo que Luta é o Corpo que Dança
+    start: 2026-10-17T11:00
+    end: 2026-10-17T13:00
+    kind: Oficina
+    image: assets/eventos/oficina-de-danca-corpo-que-luta-e-o-corpo-que-da-202610171100.webp
+    url: https://blog.londrina.pr.gov.br/?p=208052
+    description: Apresentação e oficina que trabalha com técnica corporal, prática coletiva e
+      improvisação. O projeto, financiado pelo PROMIC, engloba modalidades de danças baseadas na
+      ancestralidade e na cultura negra, unindo dança, história e resistência, como a Capoeira e
+      o Hip Hop.
 links:
   - label: Programação Londrina Cultura
     url: https://londrinacultura.londrina.pr.gov.br/espaco/1/
