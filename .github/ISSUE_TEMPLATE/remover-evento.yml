@@ -1,0 +1,48 @@
+name: Remover evento da agenda
+description: Tira da página um evento cancelado ou publicado por engano. Não precisa mexer em código.
+title: "[remover] "
+labels: ["remover-evento"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Enviar ainda não remove. Depois de enviar, confira o título e a data e,
+        quando estiver certo, clique em **Close issue**. É o fechamento que
+        manda o robô tirar o evento da página.
+
+        Se ele não achar o evento, comenta aqui listando o que existe naquele
+        dia. Aí é reabrir a issue, corrigir este formulário e fechar de novo.
+
+  - type: input
+    id: titulo
+    attributes:
+      label: Título do evento
+      description: Copie da página, do jeito que aparece no cartão.
+      placeholder: Apresentação de Taiko
+    validations:
+      required: true
+
+  - type: input
+    id: data-inicio
+    attributes:
+      label: Data
+      description: >-
+        O dia em que o evento começa, no formato dia/mês/ano. Para uma exposição
+        de vários dias, é o primeiro dia.
+      placeholder: 21/09/2026
+    validations:
+      required: true
+
+  - type: input
+    id: hora-inicio
+    attributes:
+      label: Hora de início
+      description: Só precisa quando o mesmo evento tem mais de uma sessão no dia.
+      placeholder: "19:00"
+
+  - type: textarea
+    id: motivo
+    attributes:
+      label: Motivo
+      description: Opcional. Fica registrado aqui na issue, não aparece no site.
+      placeholder: Cancelado por causa da chuva.

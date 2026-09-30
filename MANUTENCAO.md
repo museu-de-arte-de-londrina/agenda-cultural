@@ -195,8 +195,23 @@ os links logo abaixo.
 
 ## Tirar ou corrigir um evento antes da data
 
-Isto acontece quando algo é cancelado, adiado ou saiu com erro. Aqui não tem
-formulário, é edição direta do arquivo, e continua sendo simples.
+Isto acontece quando algo é cancelado, adiado ou saiu com erro.
+
+### Cancelar: pelo formulário
+
+Em **Issues → New issue**, escolha **Remover evento da agenda**. Preencha o
+título, do jeito que aparece no cartão, e a data em que o evento começa. A hora
+só é necessária quando o mesmo evento tem mais de uma sessão no dia.
+
+Como na publicação, enviar não remove: confira e clique em **Close issue**. A
+automação tira o evento do `config.yaml`, apaga a foto dele quando nada mais a
+usa, reconstrói o site e comenta na issue. Se não achar o evento, o comentário
+lista o que existe naquele dia; reabra, corrija e feche de novo.
+
+### Corrigir, ou cancelar à mão
+
+Corrigir não tem formulário, é edição direta do arquivo, e continua sendo
+simples.
 
 1. Na página do repositório, abra o arquivo `config.yaml`.
 2. Clique no ícone de lápis, no canto superior direito.

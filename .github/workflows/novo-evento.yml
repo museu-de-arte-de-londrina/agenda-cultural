@@ -1,7 +1,9 @@
 name: Publicar evento
 
 # Uma issue preenchida pelo formulário vira uma proposta de alteração, e
-# fechar a issue é o gesto que manda publicar.
+# fechar a issue é o gesto que manda publicar. O formulário de remoção passa
+# pelo mesmo caminho, com a etiqueta remover-evento: mesma conferência de
+# quem pediu, mesma fila e mesmo build antes de ir para o ar.
 #
 # Só closed. Na criação o GitHub dispara opened e labeled com segundos de
 # diferença, porque o formulário aplica a etiqueta na mesma chamada que cria a
@@ -36,7 +38,8 @@ jobs:
     # duplicada não deve publicar duas vezes o mesmo evento. Só o fechamento
     # normal, o "completed", vale como ordem de publicar.
     if: >-
-      contains(github.event.issue.labels.*.name, 'evento') &&
+      (contains(github.event.issue.labels.*.name, 'evento') ||
+       contains(github.event.issue.labels.*.name, 'remover-evento')) &&
       github.event.issue.state_reason != 'not_planned' &&
       github.event.issue.state_reason != 'duplicate'
 
@@ -86,6 +89,9 @@ jobs:
       # Para pedir a publicação do site. Ver o comentário no passo final.
       actions: write
 
+    env:
+      REMOVER: ${{ contains(github.event.issue.labels.*.name, 'remover-evento') }}
+
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -111,6 +117,7 @@ jobs:
       # imagem o evento continuaria publicando, só que com a foto de 2 MB da
       # câmera. Instala só quando falta, então no caso normal não custa nada.
       - name: Garantir o ffmpeg
+        if: env.REMOVER != 'true'
         run: |
           if ! command -v ffmpeg > /dev/null; then
             sudo apt-get update && sudo apt-get install -y --no-install-recommends ffmpeg
@@ -124,7 +131,12 @@ jobs:
           # Por variável de ambiente, nunca interpolado no shell: o corpo da
           # issue é texto de fora e não pode virar comando.
           ISSUE_BODY: ${{ github.event.issue.body }}
-        run: node scripts/evento-da-issue.js 2> erro.txt
+        run: |
+          if [ "$REMOVER" = true ]; then
+            node scripts/remover-evento-da-issue.js 2> erro.txt
+          else
+            node scripts/evento-da-issue.js 2> erro.txt
+          fi
 
       - name: Avisar na issue o que deu errado
         if: steps.montar.outcome == 'failure'
@@ -133,7 +145,11 @@ jobs:
           NUMERO: ${{ github.event.issue.number }}
         run: |
           {
-            echo "Não consegui publicar ainda:"
+            if [ "$REMOVER" = true ]; then
+              echo "Não consegui remover ainda:"
+            else
+              echo "Não consegui publicar ainda:"
+            fi
             echo
             cat erro.txt
             echo
@@ -166,12 +182,23 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add config.yaml src/assets/eventos
 
-          cat > mensagem.txt <<FIM
+          if [ "$REMOVER" = true ]; then
+            cat > mensagem.txt <<FIM
+          feat(agenda): evento removido pelo formulário
+
+          Removido a partir da issue #$NUMERO, depois de passar pela validação
+          do schema, pelos testes e por um build completo.
+          FIM
+            feito="Removido. O site atualiza em cerca de um minuto: $SITE"
+          else
+            cat > mensagem.txt <<FIM
           feat(agenda): novo evento vindo do formulário
 
           Publicado a partir da issue #$NUMERO, depois de passar pela validação
           do schema, pelos testes e por um build completo.
           FIM
+            feito="Publicado. O site atualiza em cerca de um minuto: $SITE"
+          fi
           git commit --file mensagem.txt
           rm mensagem.txt
 
@@ -193,4 +220,4 @@ jobs:
           gh workflow run deploy.yml --ref main
 
           # A issue já veio fechada: foi o fechamento que disparou este trabalho.
-          gh issue comment "$NUMERO" --body "Publicado. O site atualiza em cerca de um minuto: $SITE"
+          gh issue comment "$NUMERO" --body "$feito"
