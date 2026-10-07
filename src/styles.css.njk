@@ -584,8 +584,9 @@ h1 {
   color: var(--muted);
 }
 
-/* Um mês da agenda. O <summary> vira um cabeçalho de linha inteira, com a
-   contagem à direita para quem olha um mês fechado saber o que tem dentro. */
+/* Um mês da agenda. O <summary> vira um cabeçalho de linha inteira: seta,
+   nome e, empurrada para a direita, a contagem, para quem olha um mês fechado
+   saber o que tem dentro. */
 .mes + .mes {
   margin-top: 1rem;
 }
@@ -593,17 +594,19 @@ h1 {
 .mes__titulo,
 .passados__abrir {
   display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 0.5rem;
+  align-items: center;
+  gap: 0.75rem;
   min-height: 2.75rem;
-  padding: 0.5rem 0;
   list-style: none;
   cursor: pointer;
-  border-bottom: 1px solid var(--hairline);
   font-family: var(--display);
   word-spacing: var(--display-word-spacing);
   font-weight: 600;
+}
+
+.mes__titulo {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--hairline);
 }
 
 .mes__titulo::-webkit-details-marker,
@@ -611,26 +614,37 @@ h1 {
   display: none;
 }
 
-/* O sinal de abrir e fechar, girado quando aberto, no lugar do triângulo do navegador. */
-.mes__nome::before,
+/* A seta é desenhada com duas bordas de um quadrado, e não com o caractere
+   "›": o glifo muda de altura e de peso de uma fonte para outra e ficava
+   colado e desalinhado do texto. Aqui ela tem caixa própria, centralizada na
+   linha, e gira para baixo quando o mês abre. */
+.mes__titulo::before,
 .passados__abrir::before {
-  content: '›';
-  display: inline-block;
-  width: 1em;
+  content: '';
+  flex: none;
+  width: 0.45rem;
+  height: 0.45rem;
+  margin: 0 0.15rem 0 0.25rem;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
   color: var(--muted);
+  transform: rotate(-45deg);
 }
 
-.mes[open] .mes__nome::before,
+.mes[open] > .mes__titulo::before,
 .passados[open] > .passados__abrir::before {
-  transform: rotate(90deg);
+  transform: rotate(45deg) translate(-0.1rem, -0.1rem);
 }
 
 .mes__titulo:hover,
-.passados__abrir:hover {
+.passados__abrir:hover,
+.mes__titulo:hover::before,
+.passados__abrir:hover::before {
   color: var(--accent-text);
 }
 
 .mes__total {
+  margin-left: auto;
   color: var(--muted);
   font-family: var(--body);
   font-size: 0.8125rem;
@@ -642,13 +656,30 @@ h1 {
   margin-bottom: 0.75rem;
 }
 
+/* Eventos passados: um cartão fechado no fim da agenda, com a mesma borda e o
+   mesmo fundo dos cartões de evento, para ler como um controle e não como mais
+   um título solto. Os meses ficam dentro, numa lista com fios entre as linhas. */
 .passados {
   margin-top: 2rem;
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  background: var(--surface);
+  box-shadow: var(--shadow-1);
+  overflow: hidden;
 }
 
 .passados__abrir {
-  justify-content: flex-start;
+  padding: 0.75rem 1rem;
   color: var(--muted);
+  font-size: 0.9375rem;
+}
+
+.passados__abrir:hover {
+  background: var(--surface-hover);
+}
+
+.passados[open] > .passados__abrir {
+  border-bottom: 1px solid var(--hairline);
 }
 
 .passados__lista {
@@ -657,20 +688,24 @@ h1 {
   padding: 0;
 }
 
+.passados__lista li + li {
+  border-top: 1px solid var(--hairline);
+}
+
 .passados__mes {
   display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 0.5rem;
+  align-items: center;
+  gap: 0.75rem;
   min-height: 2.75rem;
-  padding: 0.625rem 0 0.625rem 1em;
-  border-bottom: 1px solid var(--hairline);
+  /* Alinha o nome do mês com o texto do cabeçalho, depois da seta. */
+  padding: 0.625rem 1rem 0.625rem 2.35rem;
   color: inherit;
   text-decoration: none;
 }
 
 .passados__mes:hover {
   color: var(--accent-text);
+  background: var(--surface-hover);
 }
 
 .passados__voltar {
