@@ -15,80 +15,12 @@ permalink: /index.html
 {%- macro icon(data) -%}
 <svg class="icon{% if not data.fill %} icon--stroke{% endif %}" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">{% for d in data.paths %}<path d="{{ d }}"/>{% endfor %}</svg>
 {%- endmacro -%}
-{%- macro clockIcon() -%}
-<svg class="icon icon--stroke" viewBox="0 0 24 24" width="15" height="15" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
-{%- endmacro -%}
-{%- macro calendarIcon() -%}
-<svg class="icon icon--stroke" viewBox="0 0 24 24" width="15" height="15" aria-hidden="true" focusable="false"><path d="M8 2v4"/><path d="M16 2v4"/><path d="M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z"/><path d="M3 10h18"/><path d="M12 14v4"/><path d="M10 16h4"/></svg>
-{%- endmacro -%}
+{%- from "agenda.njk" import clockIcon, calendarIcon, dia -%}
 <!doctype html>
 <html lang="{{ site.lang }}"{% if site.theme.mode != 'auto' %} data-theme="{{ site.theme.mode }}"{% endif %}>
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    {#- GitHub Pages cannot set response headers, so the policy ships as a meta tag.
-        frame-ancestors is left out on purpose: a meta tag cannot deliver it, and
-        including it only logged an error in every visitor's console. See SECURITY.md. -#}
-    {#- As duas aberturas abaixo só existem quando analytics.goatcounter está
-        preenchido no config.yaml. Sem ele, a política continua exatamente a de
-        antes: nada de fora carrega e nada sai da página. -#}
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https:; style-src 'self'; script-src 'self'{% if site.analytics.goatcounter %} https://gc.zgo.at{% endif %}; font-src 'self'; connect-src {% if site.analytics.goatcounter %}https://{{ site.analytics.goatcounter }}.goatcounter.com{% else %}'none'{% endif %}; object-src 'none'; base-uri 'none'; form-action 'none'">
-    <meta name="referrer" content="no-referrer">
-    <meta name="color-scheme" content="{{ 'light dark' if site.theme.mode == 'auto' else site.theme.mode }}">
-    {#- Pinta a barra do navegador no celular com a cor do cartão. -#}
-    <meta name="theme-color" content="{{ site.surface.light }}" media="(prefers-color-scheme: light)">
-    <meta name="theme-color" content="{{ site.surface.dark }}" media="(prefers-color-scheme: dark)">
-
-    <title>{{ site.seo.title }}</title>
-    <meta name="description" content="{{ site.seo.description }}">
-    {%- if site.canonical %}
-    <link rel="canonical" href="{{ site.canonical }}">
-    {%- endif %}
-
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="{{ site.seo.title }}">
-    <meta property="og:description" content="{{ site.seo.description }}">
-    <meta property="og:site_name" content="{{ site.profile.name }}">
-    <meta property="og:locale" content="{{ site.lang | replace('-', '_') }}">
-    {%- if site.canonical %}
-    <meta property="og:url" content="{{ site.canonical }}">
-    {%- endif %}
-    {%- if site.ogImage %}
-    <meta property="og:image" content="{{ site.ogImage }}">
-    <meta property="og:image:alt" content="{{ site.profile.name }}">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image:alt" content="{{ site.profile.name }}">
-    {%- else %}
-    <meta name="twitter:card" content="summary">
-    {%- endif %}
-
-    {%- if site.profile.avatar %}
-    <link rel="icon" href="{{ site.profile.avatar }}">
-    {%- endif %}
-    <link rel="preload" href="assets/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="styles.css">
-    {%- if site.agenda.length %}
-    {#- Deixa a agenda descobrível sem precisar caçar o link na página. -#}
-    <link rel="alternate" type="text/calendar" href="agenda.ics" title="Agenda do {{ site.profile.name }}">
-    {%- endif %}
-    {#- Not deferred: it applies the saved theme before the first paint. -#}
-    <script src="theme.js"></script>
-    {#- Com defer: nada aqui precisa acontecer antes da primeira pintura. -#}
-    <script src="compartilhar.js" defer></script>
-    {%- if site.agenda.length %}
-    <script src="calendario.js" defer></script>
-    {%- endif %}
-    {#- Contagem de acesso. Sem cookie e sem guardar IP: manda caminho,
-        referência, título, largura de tela e um sinal de robô. O localStorage
-        que ele usa serve só para a opção de não contar a própria visita, pelo
-        endereço com #toggle-goatcounter no fim. -#}
-    {%- if site.analytics.goatcounter %}
-    <script data-goatcounter="https://{{ site.analytics.goatcounter }}.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
-    {%- endif %}
-    {%- if site.structuredData %}
-    {#- A data block, not executable script: CSP script-src does not apply. -#}
-    <script type="application/ld+json">{{ site.structuredData | safe }}</script>
-    {%- endif %}
+    {%- set inicio = true %}
+    {%- include "cabeca.njk" %}
   </head>
 
   <body>
@@ -271,86 +203,45 @@ permalink: /index.html
             {%- endif %}
           </div>
 
-          {%- if site.agenda.length %}
-          {%- for day in site.agenda %}
-          <section class="day" aria-label="{{ day.heading.full }}">
-            {#- A data completa já está no aria-label da seção; sem isto o
-                leitor de tela anunciava "seg. 21 set." logo depois dela. -#}
-            <p class="day__rail" aria-hidden="true">
-              <span class="day__weekday">{{ day.heading.weekday }}</span>
-              <span class="day__number">{{ day.heading.day }}</span>
-              <span class="day__month">{{ day.heading.month }}</span>
-            </p>
-
-            <ol class="day__entries">
-              {%- for event in day.events %}
-              <li>
-                {#- Um evento é conteúdo autocontido: sai da agenda e continua
-                    fazendo sentido sozinho, que é o que <article> significa. -#}
-                <article class="entry">
-                  <div class="entry__text">
-                  <p class="entry__time">
-                    <time datetime="{{ event.iso }}">{{ event.time if event.time else 'Dia todo' }}</time>
-                  </p>
-                  <h3 class="entry__title">
-                    {%- if event.url -%}
-                    <a class="entry__link" href="{{ event.url }}" title="{{ event.dicaDoLink }}" target="_blank" rel="noopener noreferrer">{{ event.title }}</a>
-                    {%- else -%}
-                    {{ event.title }}
-                    {%- endif -%}
-                  </h3>
-                  <p class="entry__meta">
-                    {%- if event.kind %}<span class="entry__kind">{{ event.kind }}</span>{% endif %}
-                    {%- if event.program %}<span class="entry__program">{{ event.program }}</span>{% endif %}
-                    {%- if event.runsUntil %}<span class="entry__until">até {{ event.runsUntil }}</span>{% endif %}
-                  </p>
-                  {%- if event.description %}
-                  <p class="entry__description">{{ event.description }}</p>
-                  {%- endif %}
-                </div>
-
-                  <div class="entry__lado">
-                    {%- if event.image %}
-                    {#- A moldura recorta; a foto desliza dentro dela ao rolar. -#}
-                    <div class="entry__media">
-                      <img class="entry__image" src="{{ event.image }}" width="256" height="256" alt="" loading="lazy" decoding="async">
-                    </div>
-                    {%- endif %}
-                    {#- <details> e não um menu montado por script: assim o
-                        botão funciona com JavaScript desligado, que é a regra
-                        do resto da página. O script só acrescenta fechar ao
-                        clicar fora e ao apertar Esc.
-
-                        Só o ícone no botão, com o rótulo no aria-label: com
-                        texto, cada cartão ganhava uma linha inteira e a agenda
-                        voltava a caber um evento por tela de celular. -#}
-                    <details class="entry__cal">
-                      <summary
-                        class="entry__calendar"
-                        aria-label="Adicionar “{{ event.title }}” ao calendário"
-                        title="Adicionar ao seu calendário"
-                      >{{ calendarIcon() }}</summary>
-                      <div class="entry__cal-menu" role="group" aria-label="Adicionar ao calendário">
-                        <a class="entry__cal-item" href="{{ event.googleUrl }}" title="Abrir no Google Agenda com os dados já preenchidos" target="_blank" rel="noopener noreferrer">Google Agenda</a>
-                        <a class="entry__cal-item" href="{{ event.outlookUrl }}" title="Abrir no Outlook com os dados já preenchidos" target="_blank" rel="noopener noreferrer">Outlook</a>
-                        {#- Apple Calendar e o resto: o arquivo continua sendo o
-                            caminho que funciona em qualquer aplicativo. -#}
-                        <a class="entry__cal-item" href="eventos/{{ event.slug }}.ics" title="Baixar o arquivo para Apple Calendar e outros aplicativos" download>Baixar o arquivo</a>
-                      </div>
-                    </details>
-                  </div>
-
-                </article>
-              </li>
-              {%- endfor %}
-            </ol>
-          </section>
+          {%- if site.meses.length %}
+          {#- Um mês por <details>: o que está perto vem aberto, o que está longe
+              vem fechado com a contagem à vista, para a agenda não virar uma
+              rolagem sem fim quando a programação for longa. -#}
+          {%- for mes in site.meses %}
+          <details class="mes"{% if mes.aberto %} open{% endif %}>
+            <summary class="mes__titulo" title="Mostrar ou esconder os eventos de {{ mes.nome }}">
+              <span class="mes__nome">{{ mes.nome }}</span>
+              <span class="mes__total">{{ mes.total }} {{ 'evento' if mes.total == 1 else 'eventos' }}</span>
+            </summary>
+            {%- for day in mes.days %}
+            {{ dia(day) }}
+            {%- endfor %}
+          </details>
           {%- endfor %}
           {%- else %}
           <p class="empty">
             Nenhuma atividade marcada por enquanto. Os links logo abaixo levam às
             páginas oficiais, com a programação em cartaz.
           </p>
+          {%- endif %}
+
+          {%- if site.arquivo.length %}
+          {#- O que já passou sai da agenda, mas não some: fica guardado aqui,
+              fechado, um link por mês. Cada mês tem página própria, para esta
+              não crescer junto com o histórico. -#}
+          <details class="passados">
+            <summary class="passados__abrir" title="Mostrar os meses com eventos que já aconteceram">Ver eventos passados</summary>
+            <ul class="passados__lista">
+              {%- for mes in site.arquivo %}
+              <li>
+                <a class="passados__mes" href="{{ mes.pagina }}" title="Ver o que aconteceu em {{ mes.nome }}">
+                  <span>{{ mes.nome }}</span>
+                  <span class="mes__total">{{ mes.total }} {{ 'evento' if mes.total == 1 else 'eventos' }}</span>
+                </a>
+              </li>
+              {%- endfor %}
+            </ul>
+          </details>
           {%- endif %}
         </section>
 

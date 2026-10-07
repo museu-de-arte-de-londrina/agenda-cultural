@@ -20,8 +20,9 @@ events:
     image: assets/taiko.png
 ```
 
-Cada evento vira um cartão com miniatura, data, hora e título. Quem já passou
-some sozinho no build seguinte.
+Cada evento vira um cartão com miniatura, data, hora e título. A agenda se
+divide por mês, e quem já passou sai dela no build seguinte e vai para **Ver
+eventos passados**, com uma página por mês (`passados-AAAA-MM.html`).
 
 ## Preview
 
@@ -91,8 +92,8 @@ de simular marcada.
 
 O [`MANUTENCAO.md`](MANUTENCAO.md) descreve esse ciclo inteiro passo a passo,
 para quem cuida da programação e não mexe em código: o que acontece depois que a
-issue é fechada, como acrescentar a foto, como cancelar um evento e por que os
-que já passaram somem sozinhos.
+issue é fechada, como acrescentar a foto, como cancelar um evento e para onde vão
+os que já passaram.
 
 ## Referência do `config.yaml`
 

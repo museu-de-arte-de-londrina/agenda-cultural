@@ -1,0 +1,71 @@
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {#- GitHub Pages cannot set response headers, so the policy ships as a meta tag.
+        frame-ancestors is left out on purpose: a meta tag cannot deliver it, and
+        including it only logged an error in every visitor's console. See SECURITY.md. -#}
+    {#- As duas aberturas abaixo só existem quando analytics.goatcounter está
+        preenchido no config.yaml. Sem ele, a política continua exatamente a de
+        antes: nada de fora carrega e nada sai da página. -#}
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https:; style-src 'self'; script-src 'self'{% if site.analytics.goatcounter %} https://gc.zgo.at{% endif %}; font-src 'self'; connect-src {% if site.analytics.goatcounter %}https://{{ site.analytics.goatcounter }}.goatcounter.com{% else %}'none'{% endif %}; object-src 'none'; base-uri 'none'; form-action 'none'">
+    <meta name="referrer" content="no-referrer">
+    <meta name="color-scheme" content="{{ 'light dark' if site.theme.mode == 'auto' else site.theme.mode }}">
+    {#- Pinta a barra do navegador no celular com a cor do cartão. -#}
+    <meta name="theme-color" content="{{ site.surface.light }}" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="{{ site.surface.dark }}" media="(prefers-color-scheme: dark)">
+
+    <title>{{ titulo if titulo else site.seo.title }}</title>
+    <meta name="description" content="{{ site.seo.description }}">
+    {#- Só a página principal se apresenta para buscadores e redes sociais.
+        A de cada mês passado é um arquivo, não outra porta de entrada. -#}
+    {%- if inicio %}
+    {%- if site.canonical %}
+    <link rel="canonical" href="{{ site.canonical }}">
+    {%- endif %}
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="{{ site.seo.title }}">
+    <meta property="og:description" content="{{ site.seo.description }}">
+    <meta property="og:site_name" content="{{ site.profile.name }}">
+    <meta property="og:locale" content="{{ site.lang | replace('-', '_') }}">
+    {%- if site.canonical %}
+    <meta property="og:url" content="{{ site.canonical }}">
+    {%- endif %}
+    {%- if site.ogImage %}
+    <meta property="og:image" content="{{ site.ogImage }}">
+    <meta property="og:image:alt" content="{{ site.profile.name }}">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image:alt" content="{{ site.profile.name }}">
+    {%- else %}
+    <meta name="twitter:card" content="summary">
+    {%- endif %}
+    {%- endif %}
+
+    {%- if site.profile.avatar %}
+    <link rel="icon" href="{{ site.profile.avatar }}">
+    {%- endif %}
+    <link rel="preload" href="assets/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="styles.css">
+    {%- if inicio and site.agenda.length %}
+    {#- Deixa a agenda descobrível sem precisar caçar o link na página. -#}
+    <link rel="alternate" type="text/calendar" href="agenda.ics" title="Agenda do {{ site.profile.name }}">
+    {%- endif %}
+    {#- Not deferred: it applies the saved theme before the first paint. -#}
+    <script src="theme.js"></script>
+    {#- Com defer: nada aqui precisa acontecer antes da primeira pintura. -#}
+    {%- if inicio %}
+    <script src="compartilhar.js" defer></script>
+    {%- endif %}
+    {%- if inicio and site.agenda.length %}
+    <script src="calendario.js" defer></script>
+    {%- endif %}
+    {#- Contagem de acesso. Sem cookie e sem guardar IP: manda caminho,
+        referência, título, largura de tela e um sinal de robô. O localStorage
+        que ele usa serve só para a opção de não contar a própria visita, pelo
+        endereço com #toggle-goatcounter no fim. -#}
+    {%- if site.analytics.goatcounter %}
+    <script data-goatcounter="https://{{ site.analytics.goatcounter }}.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+    {%- endif %}
+    {%- if inicio and site.structuredData %}
+    {#- A data block, not executable script: CSP script-src does not apply. -#}
+    <script type="application/ld+json">{{ site.structuredData | safe }}</script>
+    {%- endif %}
