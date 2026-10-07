@@ -53,7 +53,7 @@ jobs:
         run: npm test
 
       - name: Audit dependencies
-        run: npm audit --audit-level=low
+        run: node scripts/auditar.js
 
       - name: Build
         run: npm run build
