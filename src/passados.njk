@@ -1,0 +1,39 @@
+---
+pagination:
+  data: site.arquivo
+  size: 1
+  alias: mes
+permalink: "{{ mes.pagina }}"
+---
+{#- Uma página por mês que já passou. Fica na raiz, ao lado do index.html,
+    para os caminhos relativos do config.yaml (fotos, estilo) valerem igual
+    nas duas. Mesmo escape do index.njk: nada aqui é marcado `| safe`. -#}
+{%- from "agenda.njk" import dia -%}
+<!doctype html>
+<html lang="{{ site.lang }}"{% if site.theme.mode != 'auto' %} data-theme="{{ site.theme.mode }}"{% endif %}>
+  <head>
+    {%- set titulo = 'Eventos de ' + mes.nome + ' · ' + site.profile.name %}
+    {%- include "cabeca.njk" %}
+  </head>
+
+  <body>
+    <div class="backdrop" aria-hidden="true"></div>
+
+    <div class="frame">
+      <header><h1 class="visually-hidden">{{ site.profile.name }}</h1></header>
+      <main>
+        <section class="agenda" aria-labelledby="mes-titulo">
+          <a class="passados__voltar" href="./" title="Voltar para a página principal, com os próximos eventos">← Voltar para a agenda</a>
+          <h2 class="agenda__title" id="mes-titulo">Eventos de {{ mes.nome }}</h2>
+          <p class="empty">
+            {{ mes.total }} {{ 'evento que já aconteceu' if mes.total == 1 else 'eventos que já aconteceram' }}
+            no {{ site.profile.name }}.
+          </p>
+          {%- for day in mes.days %}
+          {{ dia(day, true) }}
+          {%- endfor %}
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

@@ -173,21 +173,32 @@ logo abaixo do `kind:`:
 O nome aparece no cartão em destaque, ao lado do tipo de atividade, e repete
 igual em todos os eventos daquela programação.
 
-## Os eventos somem sozinhos
+## Os eventos passados vão para o arquivo sozinhos
 
-Você não precisa tirar nada da agenda depois que a data passa. O site publica só
-o que ainda está por vir.
+Você não precisa tirar nada da agenda depois que a data passa. A agenda mostra
+só o que ainda está por vir, e o que já aconteceu vai para **Ver eventos
+passados**, no fim dela. Ali cada mês tem uma página própria, então o histórico
+pode crescer à vontade sem deixar a página principal pesada.
+
+Por isso **não mude a data de um evento para o passado para escondê-lo**: ele
+iria parar no arquivo como se tivesse acontecido. Evento cancelado se remove
+pelo formulário, como explicado logo abaixo.
 
 Como a conta é feita:
 
-- Evento com hora de término some depois dessa hora.
-- Evento sem hora de término some no fim do dia da data marcada.
-- Evento com **último dia** preenchido, como uma exposição, fica na página até o
+- Evento com hora de término vai para o arquivo depois dessa hora.
+- Evento sem hora de término vai no fim do dia da data marcada.
+- Evento com **último dia** preenchido, como uma exposição, fica na agenda até o
   fim daquele último dia.
 
 O site se reconstrói todo dia às 3h17 da manhã, e é nesse momento que o que
-passou cai da lista. Ou seja: um evento de terça à noite ainda aparece na
-madrugada de terça para quarta, e some na primeira reconstrução seguinte.
+passou sai da agenda. Ou seja: um evento de terça à noite ainda aparece na
+madrugada de terça para quarta, e muda de lugar na primeira reconstrução
+seguinte.
+
+A agenda também se divide por mês. O mês mais próximo, e qualquer mês com evento
+nos próximos 30 dias, já vem aberto. Os mais distantes vêm fechados, mostrando
+quantos eventos têm; um toque no nome do mês abre.
 
 Quando não sobra nenhum evento futuro, a página não fica quebrada nem vazia. Ela
 mostra um aviso dizendo que não há atividade marcada por enquanto e aponta para
@@ -326,7 +337,7 @@ mantém tudo funcionando. Se acontecer, a aba **Actions** tem um botão para
 reativar.
 
 Vale notar que isso não derruba o site. A página no ar continua publicada; o que
-para é a reconstrução automática que remove eventos vencidos.
+para é a reconstrução automática que leva os eventos vencidos para o arquivo.
 
 **Propostas de atualização de dependências.** De tempos em tempos aparecem
 propostas abertas por um robô chamado `dependabot`, atualizando bibliotecas
@@ -341,5 +352,5 @@ formulário  ->  você confere  ->  fecha a issue  ->  robô publica  ->  site n
 
                     o robô só entra depois que você fecha
                                     |
-               evento some sozinho depois que a data passa
+         evento vai sozinho para o arquivo depois que a data passa
 ```

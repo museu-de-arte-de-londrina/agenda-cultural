@@ -12,6 +12,7 @@ import {
   isUpcoming,
   formatEventWhen,
   formatDayHeading,
+  formatMonthHeading,
   formatShortDate,
   isSameDay,
   wallClockNow,
@@ -113,9 +114,44 @@ function buildOngoing(config, now) {
     }));
 }
 
+/** Dias consecutivos do mesmo dia viram um só, com os eventos dentro. */
+function porDia(events, lang) {
+  const days = [];
+  for (const event of events) {
+    const key = event.iso.slice(0, 10);
+    const last = days.at(-1);
+    if (last?.key === key) last.events.push(event);
+    else days.push({ key, heading: formatDayHeading(event.start, lang), events: [event] });
+  }
+  return days;
+}
+
+/**
+ * Os dias agrupados por mês. É o período em que a agenda se divide quando
+ * cresce: um mês fecha e abre inteiro, e cada mês passado ganha página própria.
+ */
+function porMes(days, lang) {
+  const meses = [];
+  for (const day of days) {
+    const key = day.key.slice(0, 7);
+    const last = meses.at(-1);
+    if (last?.key === key) {
+      last.days.push(day);
+      last.total += day.events.length;
+    } else {
+      const nome = formatMonthHeading(day.events[0].start, lang);
+      meses.push({ key, nome, days: [day], total: day.events.length });
+    }
+  }
+  return meses;
+}
+
+/** Quanto à frente um mês da agenda já vem aberto. Os mais distantes vêm fechados. */
+const JANELA_ABERTA = 30 * 24 * 60 * 60 * 1000;
+
 function buildAgenda(config, now) {
   const local = { location: config.profile.location };
-  const upcoming = config.events
+  const todos = config.events
     .map((event) => {
       // Already validated by the schema, so these parses cannot fail.
       const start = parseDateTime(event.start);
@@ -139,17 +175,24 @@ function buildAgenda(config, now) {
         startsAt: toDate(start).getTime(),
       };
     })
-    .filter((event) => isUpcoming(event.start, event.end, now))
     .sort((a, b) => a.startsAt - b.startsAt);
 
-  const days = [];
-  for (const event of upcoming) {
-    const key = event.iso.slice(0, 10);
-    const last = days.at(-1);
-    if (last?.key === key) last.events.push(event);
-    else days.push({ key, heading: formatDayHeading(event.start, config.lang), events: [event] });
-  }
-  return days;
+  const proximos = todos.filter((event) => isUpcoming(event.start, event.end, now));
+  const passados = todos.filter((event) => !isUpcoming(event.start, event.end, now));
+
+  const agenda = porDia(proximos, config.lang);
+  const meses = porMes(agenda, config.lang).map((mes, i) => ({
+    ...mes,
+    // O primeiro mês sempre abre, senão uma agenda só com eventos distantes
+    // apareceria toda fechada.
+    aberto: i === 0 || mes.days[0].events[0].startsAt <= now + JANELA_ABERTA,
+  }));
+  // O mais recente primeiro: quem procura um evento passado quase sempre
+  // procura um de pouco tempo atrás.
+  const arquivo = porMes(porDia(passados, config.lang), config.lang)
+    .reverse()
+    .map((mes) => ({ ...mes, pagina: `passados-${mes.key}.html` }));
+  return { agenda, meses, arquivo };
 }
 
 /**
@@ -221,13 +264,15 @@ export default async function site() {
   // Um relógio só para os dois cortes, senão um item em cartaz e um evento
   // com o mesmo fim poderiam discordar sobre se já passaram.
   const agora = wallClockNow();
-  const agenda = buildAgenda(config, agora);
+  const { agenda, meses, arquivo } = buildAgenda(config, agora);
   const emCartaz = buildOngoing(config, agora);
 
   return {
     ...config,
     initials: initials(config.profile.name),
     agenda,
+    meses,
+    arquivo,
     emCartaz,
     structuredData: structuredData(config, agenda),
     links: config.links.map((link) => ({

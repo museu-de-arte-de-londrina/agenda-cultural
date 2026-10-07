@@ -1,0 +1,89 @@
+{#- O que a agenda e as páginas de eventos passados desenham igual. -#}
+{%- macro clockIcon() -%}
+<svg class="icon icon--stroke" viewBox="0 0 24 24" width="15" height="15" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+{%- endmacro -%}
+{%- macro calendarIcon() -%}
+<svg class="icon icon--stroke" viewBox="0 0 24 24" width="15" height="15" aria-hidden="true" focusable="false"><path d="M8 2v4"/><path d="M16 2v4"/><path d="M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z"/><path d="M3 10h18"/><path d="M12 14v4"/><path d="M10 16h4"/></svg>
+{%- endmacro -%}
+
+{#- Um dia da agenda: a data uma vez só, na coluna, e os eventos ao lado.
+    `passado` tira o botão de calendário, que não serve para o que já foi. -#}
+{%- macro dia(day, passado=false) -%}
+  <section class="day" aria-label="{{ day.heading.full }}">
+    {#- A data completa já está no aria-label da seção; sem isto o
+        leitor de tela anunciava "seg. 21 set." logo depois dela. -#}
+    <p class="day__rail" aria-hidden="true">
+      <span class="day__weekday">{{ day.heading.weekday }}</span>
+      <span class="day__number">{{ day.heading.day }}</span>
+      <span class="day__month">{{ day.heading.month }}</span>
+    </p>
+
+    <ol class="day__entries">
+      {%- for event in day.events %}
+      <li>
+        {#- Um evento é conteúdo autocontido: sai da agenda e continua
+            fazendo sentido sozinho, que é o que <article> significa. -#}
+        <article class="entry">
+          <div class="entry__text">
+          <p class="entry__time">
+            <time datetime="{{ event.iso }}">{{ event.time if event.time else 'Dia todo' }}</time>
+          </p>
+          <h3 class="entry__title">
+            {%- if event.url -%}
+            <a class="entry__link" href="{{ event.url }}" title="{{ event.dicaDoLink }}" target="_blank" rel="noopener noreferrer">{{ event.title }}</a>
+            {%- else -%}
+            {{ event.title }}
+            {%- endif -%}
+          </h3>
+          <p class="entry__meta">
+            {%- if event.kind %}<span class="entry__kind">{{ event.kind }}</span>{% endif %}
+            {%- if event.program %}<span class="entry__program">{{ event.program }}</span>{% endif %}
+            {%- if event.runsUntil %}<span class="entry__until">até {{ event.runsUntil }}</span>{% endif %}
+          </p>
+          {%- if event.description %}
+          <p class="entry__description">{{ event.description }}</p>
+          {%- endif %}
+        </div>
+
+          {%- if event.image or not passado %}
+          <div class="entry__lado">
+            {%- if event.image %}
+            {#- A moldura recorta; a foto desliza dentro dela ao rolar. -#}
+            <div class="entry__media">
+              <img class="entry__image" src="{{ event.image }}" width="256" height="256" alt="" loading="lazy" decoding="async">
+            </div>
+            {%- endif %}
+            {#- <details> e não um menu montado por script: assim o
+                botão funciona com JavaScript desligado, que é a regra
+                do resto da página. O script só acrescenta fechar ao
+                clicar fora e ao apertar Esc.
+
+                Só o ícone no botão, com o rótulo no aria-label: com
+                texto, cada cartão ganhava uma linha inteira e a agenda
+                voltava a caber um evento por tela de celular. -#}
+            {#- Evento que já passou não tem o que salvar no calendário. -#}
+            {%- if not passado %}
+            <details class="entry__cal">
+              <summary
+                class="entry__calendar"
+                aria-label="Adicionar “{{ event.title }}” ao calendário"
+                title="Adicionar ao seu calendário"
+              >{{ calendarIcon() }}</summary>
+              <div class="entry__cal-menu" role="group" aria-label="Adicionar ao calendário">
+                <a class="entry__cal-item" href="{{ event.googleUrl }}" title="Abrir no Google Agenda com os dados já preenchidos" target="_blank" rel="noopener noreferrer">Google Agenda</a>
+                <a class="entry__cal-item" href="{{ event.outlookUrl }}" title="Abrir no Outlook com os dados já preenchidos" target="_blank" rel="noopener noreferrer">Outlook</a>
+                {#- Apple Calendar e o resto: o arquivo continua sendo o
+                    caminho que funciona em qualquer aplicativo. -#}
+                <a class="entry__cal-item" href="eventos/{{ event.slug }}.ics" title="Baixar o arquivo para Apple Calendar e outros aplicativos" download>Baixar o arquivo</a>
+              </div>
+            </details>
+            {%- endif %}
+          </div>
+          {%- endif %}
+
+        </article>
+      </li>
+      {%- endfor %}
+    </ol>
+  </section>
+{%- endmacro -%}

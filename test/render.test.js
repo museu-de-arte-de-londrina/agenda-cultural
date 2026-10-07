@@ -11,7 +11,7 @@ import Eleventy from '@11ty/eleventy';
  * This is the end-to-end guarantee: whatever escaping the template relies on
  * has to hold in the actual output, not just in theory.
  */
-async function render(configYaml) {
+async function render(configYaml, arquivo = 'index.html') {
   const dir = await mkdtemp(join(tmpdir(), 'linkrender-'));
   const configFile = join(dir, 'config.yaml');
   await writeFile(configFile, configYaml);
@@ -21,8 +21,8 @@ async function render(configYaml) {
   try {
     const eleventy = new Eleventy(null, null, { configPath: 'eleventy.config.js', quietMode: true });
     const results = await eleventy.toJSON();
-    const page = results.find((result) => result.outputPath.endsWith('index.html'));
-    assert.ok(page, 'index.html não foi gerado');
+    const page = results.find((result) => result.outputPath.endsWith(arquivo));
+    assert.ok(page, `${arquivo} não foi gerado`);
     return page.content;
   } finally {
     if (previous === undefined) delete process.env.CONFIG_FILE;
@@ -341,6 +341,31 @@ events:
 
   assert.match(html, /<time datetime="2098-03-05T10:00">/);
   assert.match(html, /class="entry__kind">Oficina</);
+});
+
+test('evento passado sai da agenda e fica na página do mês dele', async () => {
+  const yaml = `
+profile:
+  name: Museu
+events:
+  - title: Evento de 2099
+    start: 2099-12-01T19:00
+  - title: Evento de 2098
+    start: 2098-03-05T10:00
+  - title: Evento que já passou
+    start: 2000-01-01T19:00
+    end: 2000-01-01T20:00
+`;
+  const html = await render(yaml);
+  assert.match(html, /<a class="passados__mes" href="passados-2000-01.html"/);
+  // O mais próximo abre; o de quase um ano depois vem fechado.
+  assert.match(html, /<details class="mes" open>\s*<summary class="mes__titulo"[^>]*>\s*<span class="mes__nome">Março de 2098/);
+  assert.match(html, /<details class="mes">\s*<summary class="mes__titulo"[^>]*>\s*<span class="mes__nome">Dezembro de 2099/);
+
+  const mes = await render(yaml, 'passados-2000-01.html');
+  assert.match(mes, /class="entry__title">Evento que já passou/);
+  assert.ok(!mes.includes('Evento de 2099'), 'a página do mês só tem o que é daquele mês');
+  assert.ok(!mes.includes('entry__cal'), 'evento passado não tem o que salvar no calendário');
 });
 
 test('a data aparece uma vez por dia, não uma vez por evento', async () => {

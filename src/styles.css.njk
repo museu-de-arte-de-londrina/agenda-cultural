@@ -584,6 +584,109 @@ h1 {
   color: var(--muted);
 }
 
+/* Um mês da agenda. O <summary> vira um cabeçalho de linha inteira, com a
+   contagem à direita para quem olha um mês fechado saber o que tem dentro. */
+.mes + .mes {
+  margin-top: 1rem;
+}
+
+.mes__titulo,
+.passados__abrir {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  padding: 0.5rem 0;
+  list-style: none;
+  cursor: pointer;
+  border-bottom: 1px solid var(--hairline);
+  font-family: var(--display);
+  word-spacing: var(--display-word-spacing);
+  font-weight: 600;
+}
+
+.mes__titulo::-webkit-details-marker,
+.passados__abrir::-webkit-details-marker {
+  display: none;
+}
+
+/* O sinal de abrir e fechar, girado quando aberto, no lugar do triângulo do navegador. */
+.mes__nome::before,
+.passados__abrir::before {
+  content: '›';
+  display: inline-block;
+  width: 1em;
+  color: var(--muted);
+}
+
+.mes[open] .mes__nome::before,
+.passados[open] > .passados__abrir::before {
+  transform: rotate(90deg);
+}
+
+.mes__titulo:hover,
+.passados__abrir:hover {
+  color: var(--accent-text);
+}
+
+.mes__total {
+  color: var(--muted);
+  font-family: var(--body);
+  font-size: 0.8125rem;
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+.mes[open] > .mes__titulo {
+  margin-bottom: 0.75rem;
+}
+
+.passados {
+  margin-top: 2rem;
+}
+
+.passados__abrir {
+  justify-content: flex-start;
+  color: var(--muted);
+}
+
+.passados__lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.passados__mes {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  padding: 0.625rem 0 0.625rem 1em;
+  border-bottom: 1px solid var(--hairline);
+  color: inherit;
+  text-decoration: none;
+}
+
+.passados__mes:hover {
+  color: var(--accent-text);
+}
+
+.passados__voltar {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  margin-bottom: 0.5rem;
+  color: var(--accent-text);
+  font-size: 0.875rem;
+}
+
+/* Na página de um mês passado: espaço entre a contagem e o primeiro dia. */
+.agenda > .empty + .day {
+  margin-top: 1rem;
+}
+
 /* Day is the unit of the agenda. The date is printed once, on the rail, and
    the entries under it only have to say what time they start. */
 .day {
