@@ -374,6 +374,14 @@ events:
     description: Sábado de Cultura para TODA A FAMÍLIA! Venha curtir a Feira de Artes Ilustre, se
       jogar na oficina de Samba de Roda e se inspirar nas exposições Gira Mundo e A Riqueza de
       um Patrimônio em Movimento.
+  - title: Museu Educativo
+    start: 2026-10-15T15:00
+    end: 2026-10-15T17:00
+    kind: Ação Educativa
+    image: assets/eventos/museu-educativo-202610151500.webp
+    url: https://www.folhadelondrina.com.br/folha-2/museu-de-arte-de-londrina-amplia-atuacoes-educativas-3304269e.html
+    description: Programa museu educativo. Contação da história Perigo na Floresta, visita mediada e
+      atividade arte educativa. Para escolas agendadas.
 links:
   - label: Programação Londrina Cultura
     url: https://londrinacultura.londrina.pr.gov.br/espaco/1/
