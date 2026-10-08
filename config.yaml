@@ -382,6 +382,16 @@ events:
     url: https://www.folhadelondrina.com.br/folha-2/museu-de-arte-de-londrina-amplia-atuacoes-educativas-3304269e.html
     description: Programa museu educativo. Contação da história Perigo na Floresta, visita mediada e
       atividade arte educativa. Para escolas agendadas.
+  - title: Visita Mediada
+    start: 2026-10-21T10:00
+    end: 2026-10-21T11:00
+    kind: Visita Mediada
+    image: assets/eventos/visita-mediada-202610211000.webp
+    url: https://portal.londrina.pr.gov.br/espacos-culturais/museu-arte-sec-cultura
+    description: Atividade arte educativa voltada aos alunos de Arquitetura da UNICESUMAR, com
+      visita mediada às exposições e às estruturas do prédio do Museu de Arte de Londrina.
+      Realizada em parceria entre a DIRETORIA DE PATRIMÔNIO ARTÍSTICO E HISTÓRICO-CULTURAL e a
+      DIRETORIA DE AÇÃO CULTURAL.
 links:
   - label: Programação Londrina Cultura
     url: https://londrinacultura.londrina.pr.gov.br/espaco/1/
