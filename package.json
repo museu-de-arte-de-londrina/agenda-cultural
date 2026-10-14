@@ -20,14 +20,14 @@
   "devDependencies": {
     "@11ty/eleventy": "^3.1.6",
     "@eslint/js": "^10.0.1",
-    "axe-core": "^4.13.0",
+    "axe-core": "^4.14.0",
     "eslint": "^10.12.0",
     "lighthouse": "^13.5.0",
-    "playwright": "^1.63.0",
+    "playwright": "^1.64.0",
     "qrcode": "^1.5.4",
-    "simple-icons": "^16.34.0",
+    "simple-icons": "^16.35.0",
     "yaml": "^2.9.1",
-    "zod": "^4.6.5"
+    "zod": "^4.6.6"
   },
   "keywords": [
     "linktree",
