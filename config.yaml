@@ -442,6 +442,13 @@ events:
     description: Contação de História baseada no livro “Perigo na Floresta”, de Cláudia Rezende
       Barbeiro, Visita Mediada às exposições e à edificação, e Atividade Arte-Educativa. Para
       alunos da escolas agendadas.
+  - title: Sábado no Museu de Arte
+    start: 2026-11-14T09:00
+    end: 2026-11-14T13:00
+    image: assets/eventos/sabado-no-museu-de-arte-202611140900.webp
+    url: https://blog.londrina.pr.gov.br/?p=219810
+    description: Sábado de Cultura para TODA A FAMÍLIA! Venha com a família e os amigos conhecer a
+      exposição Gira Mundo
 links:
   - label: Programação Londrina Cultura
     url: https://londrinacultura.londrina.pr.gov.br/espaco/1/
