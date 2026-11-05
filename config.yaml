@@ -409,6 +409,14 @@ events:
     description: Contação de História baseada no livro “Perigo na Floresta”, de Cláudia Rezende
       Barbeiro, Visita Mediada às exposições e à edificação, e Atividade Arte-Educativa. Para
       alunos de escolas agendadas.
+  - title: Museu Educativo
+    start: 2026-11-05T09:00
+    end: 2026-11-05T11:00
+    image: assets/eventos/museu-educativo-202611050900.webp
+    url: https://www.instagram.com/p/DW4iAIGES1i/
+    description: Contação de História baseada no livro “Perigo na Floresta”, de Cláudia Rezende
+      Barbeiro, Visita Mediada às exposições e à edificação, e Atividade Arte-Educativa. Para
+      alunos da escolas agendadas.
 links:
   - label: Programação Londrina Cultura
     url: https://londrinacultura.londrina.pr.gov.br/espaco/1/
