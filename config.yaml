@@ -449,6 +449,14 @@ events:
     url: https://blog.londrina.pr.gov.br/?p=219810
     description: Sábado de Cultura para TODA A FAMÍLIA! Venha com a família e os amigos conhecer a
       exposição Gira Mundo
+  - title: Cortejo Brincante
+    start: 2026-11-14T11:00
+    end: 2026-11-14T12:00
+    image: assets/eventos/cortejo-brincante-202611141100.webp
+    url: https://www.instagram.com/derivaco/
+    description: O projeto Só se entra nessa mata duas vezes propõe a circulação do espetáculo
+      teatral de rua, criado pelo Coletivo Deriva, com direção de Alana Komatsu, a partir do
+      texto Curupira de Roger Mello.
 links:
   - label: Programação Londrina Cultura
     url: https://londrinacultura.londrina.pr.gov.br/espaco/1/
