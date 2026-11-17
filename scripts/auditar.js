@@ -13,13 +13,10 @@
 import { execFileSync } from 'node:child_process';
 
 const ACEITOS = {
-  // braces <=3.0.3, sem versão corrigida. Vem do Eleventy via chokidar, que
-  // só observa arquivos no `npm run dev`. Os padrões que ele lê são os do
+  // picomatch <=4.0.7, sem versão corrigida. Vem do Eleventy (tinyglobby e
+  // chokidar), no build e no `npm run dev`. Os globs que ele lê são os do
   // próprio repositório, nunca algo vindo de fora.
-  'GHSA-vfj7-8cjw-p6xm': 'braces, só no servidor local do Eleventy',
-  // sprintf-js <=1.1.3, sem versão corrigida. Vem do Eleventy via gray-matter,
-  // js-yaml 3 e argparse, no build. Não recebe entrada de fora.
-  'GHSA-hp3w-g68c-fv3c': 'sprintf-js, só no build do Eleventy',
+  'GHSA-fc5q-39xc-vjpf': 'picomatch, só nos globs do Eleventy',
 };
 
 function auditoria() {
