@@ -475,6 +475,15 @@ events:
     description: A exposição reúne obras do acervo do Museu Alfredo Andersen provenientes das varias
       edições do Salão Paranaense de Cerâmica, as peças revelam os diferentes modos de sentir e
       compreender o mundo e as possibilidades artísticas da terra e do fogo.
+  - title: Museu Educativo
+    start: 2026-11-18T10:00
+    end: 2026-11-18T12:00
+    kind: Ação Educativa
+    image: assets/eventos/museu-educativo-202611181000.webp
+    url: https://portal.londrina.pr.gov.br/espacos-culturais/museu-arte-sec-cultura
+    description: Contação de História baseada no livro “Perigo na Floresta”, de Cláudia Rezende
+      Barbeiro, Visita Mediada às exposições e à edificação, e Atividade Arte-Educativa. Para
+      alunos da escolas agendadas.
 links:
   - label: Programação Londrina Cultura
     url: https://londrinacultura.londrina.pr.gov.br/espaco/1/
