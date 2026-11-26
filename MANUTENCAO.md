@@ -125,9 +125,9 @@ logo antes de `events`.
 
 ```yaml
 ongoing:
-  - title: Gira Mundo e Coleção Vladimir Kozák
+  - title: Nordeste em Nós
     kind: Exposição
-    image: assets/eventos/em-exposicao-202609141100.webp
+    image: assets/eventos/nordeste-em-nos.webp
     description: Uma ou duas frases sobre o que está em cartaz.
     until: 2026-12-31
 ```

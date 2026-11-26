@@ -38,15 +38,14 @@ theme:
 # `until` não aparece na página: é só o dia em que o cartão sai sozinho. Sem
 # `until`, o item fica até alguém apagar.
 ongoing:
-  - title: Gira Mundo e Coleção Vladimir Kozák
+  - title: Nordeste em Nós
     kind: Exposição
-    image: assets/eventos/em-exposicao-202609141100.webp
-    url: https://blog.londrina.pr.gov.br/?p=209580
-    description: GIRA MUNDO, expõe obras do acervo do Museu de Arte de Londrina, e A RIQUEZA DE UM
-      PATRIMÔNIO EM MOVIMENTO, apresenta, em parceria com o MUPA, a vida, expedições e acervo de
-      Vladimir Kozák, engenheiro e pesquisador tcheco que documentou povos indígenas
-      brasileiros, especialmente no Paraná.
-    until: 2026-12-31
+    image: assets/eventos/nordeste-em-nos.webp
+    url: https://www.instagram.com/museudeartedelondrina/
+    description: NORDESTE EM NÓS expõe obras do acervo do museu, de artistas
+      nordestinos ou que representam a riqueza e a diversidade da cultura nordestina. A POÉTICA
+      TRANSFORMATIVA DO MUSEU ALFREDO ANDERSEN apresenta obras em cerâmica, revelando as
+      possibilidades expressivas e criativas dessa linguagem artística.
   - title: Programa Museu Educativo
     kind: Ação Educativa
     image: assets/eventos/programa-museu-educativo-4.webp
