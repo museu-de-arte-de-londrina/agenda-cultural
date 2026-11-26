@@ -475,6 +475,13 @@ events:
     description: Contação de História baseada no livro “Perigo na Floresta”, de Cláudia Rezende
       Barbeiro, Visita Mediada às exposições e à edificação, e Atividade Arte-Educativa. Para
       alunos da escolas agendadas.
+  - title: Festa Nordestina
+    start: 2026-11-27T11:00
+    end: 2026-11-27T21:00
+    image: assets/eventos/festa-nordestina-202611271100.webp
+    description: Venha celebrar a cultura nordestina na festa Nordeste em Nós! Uma programação com
+      arte, literatura de cordel, música, comidas típicas, bebidas e artesanato. Um encontro de
+      sabores, sons e tradições para celebrar a riqueza do Nordeste. Esperamos você!
 links:
   - label: Programação Londrina Cultura
     url: https://londrinacultura.londrina.pr.gov.br/espaco/1/
