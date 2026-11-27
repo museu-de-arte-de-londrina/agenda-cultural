@@ -495,6 +495,14 @@ events:
     image: assets/eventos/cerimonia-de-abertura-da-festa-nordestina-202612271200.webp
     url: https://www.instagram.com/p/DgOhfwqRRJe/
     description: Abertura oficial e show do Trio Mugunzá, com forró pé-de-serra
+  - title: Forró do Neto, com aula de dança
+    start: 2026-11-27T19:00
+    end: 2026-11-27T20:00
+    kind: Show Musical
+    program: Festa Nordestina
+    image: assets/eventos/forro-do-neto-com-aula-de-danca-202611271900.webp
+    url: https://www.instagram.com/reel/DgHZJ-4x1KO/
+    description: Forró do Neto, com aula de dança. Não sabe dançar? Chegue mais!
 links:
   - label: Programação Londrina Cultura
     url: https://londrinacultura.londrina.pr.gov.br/espaco/1/
