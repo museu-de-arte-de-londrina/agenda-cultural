@@ -526,6 +526,14 @@ events:
     image: assets/eventos/banda-forro-vilao-202611281630.webp
     url: https://www.instagram.com/forrovilao/
     description: Show, com muita animação para todos curtirem e dançarem um Forrozin bem gostoso!!!!
+  - title: Show musical com Jobe Junior
+    start: 2026-11-28T18:00
+    end: 2026-11-28T19:30
+    kind: Show Musical
+    program: Festa Nordestina
+    image: assets/eventos/show-musical-com-jobe-junior-202611281800.webp
+    url: https://www.instagram.com/jobe.junior/
+    description: Muita animação e músicas típicas.
 links:
   - label: Programação Londrina Cultura
     url: https://londrinacultura.londrina.pr.gov.br/espaco/1/
