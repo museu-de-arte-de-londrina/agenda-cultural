@@ -540,6 +540,14 @@ events:
     image: assets/eventos/grupo-lembrancas-nordestinas-202611282030.webp
     url: https://blog.londrina.pr.gov.br/?p=248049
     description: Muito Forró para curtir a saudade do Nordeste!
+  - title: Literatura de Cordel
+    start: 2026-11-27T11:00
+    end: 2027-02-28T17:00
+    kind: Exposição
+    image: assets/eventos/literatura-de-cordel-202611271100.webp
+    url: https://www.instagram.com/p/DgQODViJU_Q/
+    description: Literatura de Cordel do Acervo Professor Alcides Victor de Carvalho, da Biblioteca
+      Central da Universidade Estadual de Londrina.
 links:
   - label: Programação Londrina Cultura
     url: https://londrinacultura.londrina.pr.gov.br/espaco/1/
