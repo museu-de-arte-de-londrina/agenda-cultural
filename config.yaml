@@ -42,10 +42,10 @@ ongoing:
     kind: Exposição
     image: assets/eventos/nordeste-em-nos.webp
     url: https://www.instagram.com/museudeartedelondrina/
-    description: NORDESTE EM NÓS expõe obras do acervo do museu, de artistas
-      nordestinos ou que representam a riqueza e a diversidade da cultura nordestina. A POÉTICA
-      TRANSFORMATIVA DO MUSEU ALFREDO ANDERSEN apresenta obras em cerâmica, revelando as
-      possibilidades expressivas e criativas dessa linguagem artística.
+    description: NORDESTE EM NÓS expõe obras do acervo do museu, de artistas nordestinos ou que
+      representam a riqueza e a diversidade da cultura nordestina. A POÉTICA TRANSFORMATIVA DO
+      MUSEU ALFREDO ANDERSEN apresenta obras em cerâmica, revelando as possibilidades
+      expressivas e criativas dessa linguagem artística.
   - title: Programa Museu Educativo
     kind: Ação Educativa
     image: assets/eventos/programa-museu-educativo-4.webp
@@ -488,6 +488,13 @@ events:
     description: Venha participar da Festa Nordestina e visitar a exposição Nordeste em Nós! Um
       encontro de arte, literatura de cordel, música, comidas típicas, bebidas e artesanato para
       celebrar a riqueza, os sabores e as tradições da cultura nordestina. Esperamos você!
+  - title: Cerimônia de abertura da Festa Nordestina
+    start: 2026-12-27T12:00
+    end: 2026-12-27T13:00
+    program: Festa Nordestina
+    image: assets/eventos/cerimonia-de-abertura-da-festa-nordestina-202612271200.webp
+    url: https://www.instagram.com/p/DgOhfwqRRJe/
+    description: Abertura oficial e show do Trio Mugunzá, com forró pé-de-serra
 links:
   - label: Programação Londrina Cultura
     url: https://londrinacultura.londrina.pr.gov.br/espaco/1/
