@@ -503,6 +503,14 @@ events:
     image: assets/eventos/forro-do-neto-com-aula-de-danca-202611271900.webp
     url: https://www.instagram.com/reel/DgHZJ-4x1KO/
     description: Forró do Neto, com aula de dança. Não sabe dançar? Chegue mais!
+  - title: Show com o grupo Lembranças Nordestinas
+    start: 2026-11-27T20:00
+    end: 2026-11-27T21:00
+    kind: Show Musical
+    program: Festa Nordestina
+    image: assets/eventos/show-com-o-grupo-lembrancas-nordestinas-202611272000.webp
+    url: https://www.instagram.com/prefeituralondrina/p/DgOhfwqRRJe/
+    description: Muito Forró para curtir aquela saudade do Nordeste!
 links:
   - label: Programação Londrina Cultura
     url: https://londrinacultura.londrina.pr.gov.br/espaco/1/
