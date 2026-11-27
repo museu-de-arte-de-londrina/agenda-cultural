@@ -519,6 +519,13 @@ events:
     image: assets/eventos/show-musical-com-o-trio-mugunza-202611281500.webp
     url: https://www.instagram.com/mugunzabaiao/
     description: Show Musical com o Trio Mugunzá
+  - title: Banda Forró Vilão
+    start: 2026-11-28T16:30
+    end: 2026-11-28T18:00
+    kind: Show Musical
+    image: assets/eventos/banda-forro-vilao-202611281630.webp
+    url: https://www.instagram.com/forrovilao/
+    description: Show, com muita animação para todos curtirem e dançarem um Forrozin bem gostoso!!!!
 links:
   - label: Programação Londrina Cultura
     url: https://londrinacultura.londrina.pr.gov.br/espaco/1/
