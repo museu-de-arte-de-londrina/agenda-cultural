@@ -534,6 +534,12 @@ events:
     image: assets/eventos/show-musical-com-jobe-junior-202611281800.webp
     url: https://www.instagram.com/jobe.junior/
     description: Muita animação e músicas típicas.
+  - title: Grupo Lembranças Nordestinas
+    start: 2026-11-28T20:30
+    kind: Show Musical
+    image: assets/eventos/grupo-lembrancas-nordestinas-202611282030.webp
+    url: https://blog.londrina.pr.gov.br/?p=248049
+    description: Muito Forró para curtir a saudade do Nordeste!
 links:
   - label: Programação Londrina Cultura
     url: https://londrinacultura.londrina.pr.gov.br/espaco/1/
