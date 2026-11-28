@@ -548,6 +548,16 @@ events:
     url: https://www.instagram.com/p/DgQODViJU_Q/
     description: Literatura de Cordel do Acervo Professor Alcides Victor de Carvalho, da Biblioteca
       Central da Universidade Estadual de Londrina.
+  - title: Roda de conversa Literatura de Cordel
+    start: 2016-11-28T15:00
+    end: 2016-11-28T16:30
+    kind: Ação Educativa
+    program: Festa Nordestina
+    image: assets/eventos/roda-de-conversa-literatura-de-cordel-201611281500.webp
+    url: https://www.instagram.com/bibliotecasuel/
+    description: Venha participar de uma roda de conversa com o grupo de pesquisa “A Ciência da
+      Informação e a Literatura de Cordel na Saúde, no Bem-Estar e na Qualidade de Vida da
+      População Brasileira” e descubra a riqueza cultural e informativa do cordel!
 links:
   - label: Programação Londrina Cultura
     url: https://londrinacultura.londrina.pr.gov.br/espaco/1/
